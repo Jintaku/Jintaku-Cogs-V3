@@ -1,10 +1,12 @@
 import discord
-from discord.ext import commands
+from redbot.core import commands
 import aiohttp
 from numbers import Number
 from random import randint
 
-class xkcd:
+BaseCog = getattr(commands, "Cog", object)
+
+class xkcd(BaseCog):
     """Display XKCD entries"""
 
     @commands.command(pass_context=True)

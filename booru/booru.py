@@ -1,12 +1,13 @@
 import discord
-from discord.ext import commands
-from redbot.core import Config, checks
+from redbot.core import Config, checks, commands
 import aiohttp
 from random import randint
 import os
 import threading
 
-class booru:
+BaseCog = getattr(commands, "Cog", object)
+
+class booru(BaseCog):
     """Show a picture using image boards (Gelbooru, yandere, konachan)\n\n Usage: -booru [rating: mandatory] [tag: optional]"""
 
     def __init__(self):

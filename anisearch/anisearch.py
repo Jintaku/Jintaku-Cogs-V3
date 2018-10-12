@@ -4,8 +4,7 @@ import json
 import re
 import aiohttp
 import discord
-from discord.ext import commands
-from redbot.core.utils.menus import menu, DEFAULT_CONTROLS
+from redbot.core.utils.menus import menu, commands, DEFAULT_CONTROLS
 
 SEARCH_ANIME_MANGA_QUERY = '''
 query ($id: Int, $page: Int, $search: String, $type: MediaType) {
@@ -124,8 +123,9 @@ query ($id: Int, $page: Int, $search: String) {
 }
 '''
 
+BaseCog = getattr(commands, "Cog", object)
 
-class AniSearch:
+class AniSearch(BaseCog):
     """Search for anime, manga, characters and users using Anilist"""
 
     def __init__(self):
