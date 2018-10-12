@@ -1,10 +1,17 @@
 # Jintaku-Cogs-V3
 V3 Cogs made by the Jintaku community
 
+# Installation
+
+`[p]repo add Jintaku-Cogs https://github.com/Jintaku/Jintaku-Cogs-V3/`
+
+`[p]cog install Jintaku-Cogs <cog-name>`
+
+[p] is your prefix
+
 # Cog list
-​
 ## Anilist (Credit to Wyn for porting it initially)
-​
+
 * [p]anime <anime-name> - Displays character data using the anilist APIv2
 * [p]manga <manga-name> - Displays manga data using the anilist APIv2
 * [p]user <username> - Displays user data using the anilist APIv2
@@ -17,3 +24,7 @@ V3 Cogs made by the Jintaku community
 ## XKCD
 
 * [p]xkcd <entry_number : optional> - Displays XKCD entries (defaults to random)
+
+# Contact
+
+Write an issue or find me in the [Red - Cog support](https://discord.gg/GET4DVk)
