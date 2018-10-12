@@ -2,16 +2,10 @@ import asyncio
 import datetime
 import json
 import re
-
 import aiohttp
 import discord
 from discord.ext import commands
-
-numbs = {
-    "next": "➡",
-    "back": "⬅",
-    "exit": "❌"
-}
+from redbot.core.utils.menus import menu, DEFAULT_CONTROLS
 
 SEARCH_ANIME_MANGA_QUERY = '''
 query ($id: Int, $page: Int, $search: String, $type: MediaType) {
@@ -26,6 +20,7 @@ query ($id: Int, $page: Int, $search: String, $type: MediaType) {
             }
             coverImage {
             		medium
+
             }
             averageScore
             meanScore
@@ -133,8 +128,7 @@ query ($id: Int, $page: Int, $search: String) {
 class AniSearch:
     """Search for anime, manga, characters and users using Anilist"""
 
-    def __init__(self, bot):
-        self.bot = bot
+    def __init__(self):
         self.url = 'https://graphql.anilist.co'
 
     def format_name(self, first_name, last_name):  # Combines first_name and last_name and/or shows either of the two
@@ -216,8 +210,6 @@ class AniSearch:
 
         data = (await self._request(SEARCH_ANIME_MANGA_QUERY, variables))['data']['Page']['media']
 
-        print(data)
-
         if data is not None and len(data) > 0:
 
             # a list of embeds
@@ -243,6 +235,7 @@ class AniSearch:
 
                 embed = discord.Embed(title=title)
                 embed.url = link
+                embed.color = 3447003
                 embed.description = self.description_parser(description)
                 embed.set_thumbnail(url=anime_manga['coverImage']['medium'])
                 embed.add_field(name="Score", value=anime_manga.get('averageScore', 'N/A'))
@@ -291,6 +284,7 @@ class AniSearch:
                     for manga in character["media"]["nodes"] if manga["type"] == "MANGA"]
                 embed = discord.Embed(title=self.format_name(character['name']['first'], character['name']['last']))
                 embed.url = link
+                embed.color = 3447003
                 embed.description = self.description_parser(character['description'])
                 embed.set_thumbnail(url=character['image']['large'])
                 if len(character_anime) > 0:
@@ -327,6 +321,7 @@ class AniSearch:
 
                 embed = discord.Embed(title=title)
                 embed.url = link
+                embed.color = 3447003
                 embed.description = self.description_parser(user['about'])
                 embed.set_thumbnail(url=user['avatar']['large'])
                 embed.add_field(name="Watched time",
@@ -364,7 +359,7 @@ class AniSearch:
             embeds, data = await self._search_anime_manga(ctx, cmd, entered_title)
 
             if embeds is not None:
-                await anilist_menu(ctx, embeds, message=None, page=0, timeout=30)
+                await menu(ctx, pages=embeds, controls=DEFAULT_CONTROLS, message=None, page=0, timeout=30)
             else:
                 await ctx.send('No anime was found or there was an error in the process')
 
@@ -380,7 +375,7 @@ class AniSearch:
             embeds, data = await self._search_anime_manga(ctx, cmd, entered_title)
 
             if embeds is not None:
-                await anilist_menu(ctx, embeds, message=None, page=0, timeout=30)
+                await menu(ctx, pages=embeds, controls=DEFAULT_CONTROLS, message=None, page=0, timeout=30)
             else:
                 await ctx.send('No mangas were found or there was an error in the process')
 
@@ -395,7 +390,7 @@ class AniSearch:
             embeds, data = await self._search_character(ctx, entered_title)
 
             if embeds is not None:
-                await anilist_menu(ctx, embeds, message=None, page=0, timeout=30)
+                await menu(ctx, pages=embeds, controls=DEFAULT_CONTROLS, message=None, page=0, timeout=30)
             else:
                 await ctx.send('No characters were found or there was an error in the process')
 
@@ -410,74 +405,9 @@ class AniSearch:
             embeds, data = await self._search_user(ctx, entered_title)
 
             if embeds is not None:
-                await anilist_menu(ctx, embeds, message=None, page=0, timeout=30)
+                await menu(ctx, pages=embeds, controls=DEFAULT_CONTROLS, message=None, page=0, timeout=30)
             else:
                 await ctx.send('No users were found or there was an error in the process')
 
         except TypeError:
             await ctx.send('No users were found or there was an error in the process')
-
-
-async def anilist_menu(ctx, anime_list: list,
-                       message: discord.Message = None,
-                       page=0, timeout: int = 30):
-    """menu control logic for this taken from
-       https://github.com/Lunar-Dust/Dusty-Cogs/blob/master/menu/menu.py"""
-    emb = anime_list[page]
-    if not message:
-        message = await ctx.send(embed=emb)
-        await message.add_reaction("⬅")
-        await message.add_reaction("❌")
-        await message.add_reaction("➡")
-    else:
-        await message.edit(embed=emb)
-
-    def react_check(r, u):
-        return u == ctx.author and str(r.emoji) in ["➡", "⬅", "❌"]
-
-    try:
-        react, user = await ctx.bot.wait_for(
-            "reaction_add", check=react_check, timeout=timeout
-        )
-    except asyncio.TimeoutError:
-        try:
-            await message.clear_reactions()
-        except discord.Forbidden:
-            await message.remove_reaction("⬅", ctx.guild.me)
-            await message.remove_reaction("❌", ctx.guild.me)
-            await message.remove_reaction("➡", ctx.guild.me)
-        return None
-    reacts = {v: k for k, v in numbs.items()}
-    react = reacts[react.emoji]
-    if react == "next":
-        perms = message.channel.permissions_for(ctx.guild.me)
-        if perms.manage_messages:
-            try:
-                await message.remove_reaction("➡", ctx.author)
-            except discord.NotFound:
-                pass
-        if page == len(anime_list) - 1:
-            next_page = 0  # first item
-        else:
-            next_page = page + 1
-        return await anilist_menu(ctx, anime_list, message=message, page=next_page, timeout=timeout)
-    elif react == "back":
-        perms = message.channel.permissions_for(ctx.guild.me)
-        if perms.manage_messages:
-            try:
-                await message.remove_reaction("⬅", ctx.author)
-            except discord.NotFound:
-                pass
-        if page == 0:
-            next_page = len(anime_list) - 1  # last item
-        else:
-            next_page = page - 1
-        return await anilist_menu(ctx, anime_list, message=message, page=next_page, timeout=timeout)
-    else:
-        try:
-            await message.clear_reactions()
-        except discord.Forbidden:
-            await message.remove_reaction("⬅", ctx.guild.me)
-            await message.remove_reaction("❌", ctx.guild.me)
-            await message.remove_reaction("➡", ctx.guild.me)
-        return None
