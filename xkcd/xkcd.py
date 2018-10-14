@@ -32,7 +32,6 @@ class XKCD(BaseCog):
                 xkcd = await response.json()
 
         # Build Embed
-        print(xkcd)
         embed = discord.Embed()
         embed.title = xkcd['title'] + " (" + xkcd['day'] + "/" + xkcd['month'] + "/" + xkcd['year'] + ")"
         embed.url = "https://xkcd.com/" + str(i)
