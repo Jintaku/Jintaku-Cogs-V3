@@ -5,5 +5,5 @@
   "hidden": false,
   "install_msg" : "Installing xkcd cog",
   "short" : "Display random xkcd",
-  "tags" : ["xkcd", "comic", "jokes"],
+  "tags" : ["xkcd", "comic", "jokes"]
 }
