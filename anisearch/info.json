@@ -1,9 +1,9 @@
 {
-  "AUTHOR": ["Jintaku, Wyn"],
-  "BOT_VERSION": [3,0,0],
-  "DESCRIPTION": "You can search anime, manga, users and characters!",
-  "HIDDEN": false,
-  "INSTALL_MSG": "Installing anisearch cog",
-  "SHORT": "A cog to search the anilist API",
-  "TAGS" : ["anime", "manga", "anilist", "list"]
+  "author": ["Jintaku", "Wyn"],
+  "bot_version": [3,0,0],
+  "description": "You can search anime, manga, users and characters!",
+  "hidden": false,
+  "install_msg": "Installing anisearch cog",
+  "short": "A cog to search the anilist API",
+  "tags" : ["anime", "manga", "anilist", "list"]
 }

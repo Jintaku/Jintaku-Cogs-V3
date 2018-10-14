@@ -6,7 +6,7 @@ from random import randint
 
 BaseCog = getattr(commands, "Cog", object)
 
-class xkcd(BaseCog):
+class XKCD(BaseCog):
     """Display XKCD entries"""
 
     @commands.command(pass_context=True)
@@ -14,10 +14,17 @@ class xkcd(BaseCog):
         """Post a random xkcd"""
 
         # Creates random number between 0 and 2002 (number of xkcd comics at time of writing) and queries xkcd
-        if entry_number is not None and int(entry_number) > 0 and int(entry_number) < 2002:
+        headers = {'content-type': 'application/json'}
+        url = "https://xkcd.com/info.0.json"
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, headers=headers) as response:
+                xkcd_latest = await response.json()
+                xkcd_max = xkcd_latest.get('num') + 1
+                        
+        if entry_number is not None and int(entry_number) > 0 and int(entry_number) < xkcd_max:
             i = int(entry_number)
         else:
-            i = randint(0, 2002)
+            i = randint(0, xkcd_max)
         headers = {'content-type': 'application/json'}
         url = "https://xkcd.com/" + str(i) + "/info.0.json"
         async with aiohttp.ClientSession() as session:

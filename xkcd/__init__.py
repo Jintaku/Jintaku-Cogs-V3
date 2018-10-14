@@ -1,6 +1,6 @@
-from .xkcd import xkcd
+from .xkcd import XKCD
 
 
 def setup(bot):
-    n = xkcd()
+    n = XKCD()
     bot.add_cog(n)

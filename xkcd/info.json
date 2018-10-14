@@ -1,9 +1,9 @@
 {
-  "AUTHOR": ["Jintaku"],
-  "BOT_VERSION": [3,0,0],
-  "DESCRIPTION" : "Displays xkcd entries such as description, title and image/comic from xkcd",
-  "HIDDEN": false,
-  "INSTALL_MSG" : "Installing xkcd cog",
-  "SHORT" : "Display random xkcd",
-  "TAGS" : ["xkcd", "comic", "jokes"],
+  "author": ["Jintaku"],
+  "bot_version": [3,0,0],
+  "description" : "Displays xkcd entries such as description, title and image/comic from xkcd",
+  "hidden": false,
+  "install_msg" : "Installing xkcd cog",
+  "short" : "Display random xkcd",
+  "tags" : ["xkcd", "comic", "jokes"],
 }
