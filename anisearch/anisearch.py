@@ -19,8 +19,8 @@ query ($id: Int, $page: Int, $search: String, $type: MediaType) {
             }
             coverImage {
             		medium
-
             }
+            bannerImage
             averageScore
             meanScore
             status
@@ -249,6 +249,8 @@ class AniSearch(BaseCog):
                                                                                 'N/A') + ", Powered by Anilist")
                 if external_links:
                     embed.add_field(name="Streaming and/or Info sites", value=external_links)
+                if anime_manga['bannerImage']:
+                    embed.set_image(url=anime_manga['bannerImage'])
                 embed.add_field(name="You can find out more",
                                 value="[Anilist]({anilist_url}), [MAL](https://myanimelist.net/{type}/{id_mal}), Kitsu (Soon™)".format(
                                     id_mal=anime_manga['idMal'], anilist_url=link, type=cmd.lower()))
