@@ -1,6 +1,6 @@
-from .booru import booru
+from .booru import Booru
 
 
 def setup(bot):
-    n = booru()
+    n = Booru()
     bot.add_cog(n)
