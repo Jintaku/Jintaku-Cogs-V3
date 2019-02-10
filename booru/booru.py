@@ -5,7 +5,7 @@ import aiohttp
 import contextlib
 from random import randint
 import os
-import threading
+import asyncio
 import logging
 
 log = logging.getLogger("Booru") # Thanks to Sinbad for the example code for logging
@@ -41,6 +41,83 @@ class Booru(BaseCog):
     async def booru(self, ctx, *, tag=None):
         """Shows a image board entry based on user query"""
 
+        tag = await self.filter_tags(ctx, tag)
+
+        if tag is None:
+            return
+
+        log.debug(tag)
+
+        # Image board fetcher
+        yan_data, gel_data, kon_data = await asyncio.gather(self.fetch_yan(ctx, tag), self.fetch_gel(ctx, tag), self.fetch_kon(ctx, tag))
+
+        # Fuse multiple image board data
+        data = yan_data + gel_data + kon_data
+
+        # Done sending requests, time to show it
+        await self.show_booru(ctx, data)
+
+    @commands.command()
+    async def yan(self, ctx, *, tag=None):
+        """Shows a image board entry based on user query from yande.re"""
+
+        tag = await self.filter_tags(ctx, tag)
+
+        if tag is None:
+            return
+
+        log.debug(tag)
+
+        # Image board fetcher
+        yan_data = await self.fetch_yan(ctx, tag)
+
+        # Fuse multiple image board data
+        data = yan_data
+
+        # Done sending requests, time to show it
+        await self.show_booru(ctx, data)
+
+    @commands.command()
+    async def gel(self, ctx, *, tag=None):
+        """Shows a image board entry based on user query from gelbooru"""
+
+        tag = await self.filter_tags(ctx, tag)
+
+        if tag is None:
+            return
+
+        log.debug(tag)
+
+        # Image board fetcher
+        gel_data = await self.fetch_gel(ctx, tag)
+
+        # Fuse multiple image board data
+        data = gel_data
+
+        # Done sending requests, time to show it
+        await self.show_booru(ctx, data)
+
+    @commands.command()
+    async def kon(self, ctx, *, tag=None):
+        """Shows a image board entry based on user query from konachan"""
+
+        tag = await self.filter_tags(ctx, tag)
+
+        if tag is None:
+            return
+
+        log.debug(tag)
+
+        # Image board fetcher
+        kon_data = await self.fetch_kon(ctx, tag)
+
+        # Fuse multiple image board data
+        data = kon_data
+
+        # Done sending requests, time to show it
+        await self.show_booru(ctx, data)
+
+    async def filter_tags(self, ctx, tag):
         # Global filters
         global_filters = await self.config.filters()
         global_nsfw_filters = await self.config.nsfw_filters()
@@ -91,22 +168,7 @@ class Booru(BaseCog):
 
         log.debug(tag)
 
-        # Image board fetcher
-        yan = threading.Thread(target=await self.fetch_yan(ctx, tag))
-        gel = threading.Thread(target=await self.fetch_gel(ctx, tag))
-        kon = threading.Thread(target=await self.fetch_kon(ctx, tag))
-        yan.start()
-        gel.start()
-        kon.start()
-        yan.join()
-        gel.join()
-        kon.join()
-
-        # Fuse multiple image board data
-        data = self.yan_data + self.gel_data + self.kon_data
-
-        # Done sending requests, time to show it
-        await self.show_booru(ctx, data)
+        return tag
 
     async def fetch_from_booru(self, urlstr, provider): # Handles provider data and fetcher responses
        content = ""
@@ -126,17 +188,17 @@ class Booru(BaseCog):
     async def fetch_yan(self, ctx, tags): # Yande.re fetcher
         urlstr = "https://yande.re/post.json?limit=100&tags=" + "+".join(tags)
         log.debug(urlstr)
-        self.yan_data = await self.fetch_from_booru(urlstr, "Yandere")
+        return await self.fetch_from_booru(urlstr, "Yandere")
 
     async def fetch_gel(self, ctx, tags): # Gelbooru fetcher
         urlstr = "https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1&limit=100&tags=" + "+".join(tags)
         log.debug(urlstr)
-        self.gel_data = await self.fetch_from_booru(urlstr, "Gelbooru")
+        return await self.fetch_from_booru(urlstr, "Gelbooru")
 
     async def fetch_kon(self, ctx, tags): # Konachan fetcher
         urlstr = "https://konachan.com/post.json?limit=100&tags=" + "+".join(tags)
         log.debug(urlstr)
-        self.kon_data = await self.fetch_from_booru(urlstr, "Konachan")
+        return await self.fetch_from_booru(urlstr, "Konachan")
 
     async def show_booru(self, ctx, data): #Shows various info in embed
        mn = len(data)
@@ -149,7 +211,8 @@ class Booru(BaseCog):
           # Build Embed
           embeds = []
 
-          for booru in data:
+          num_pages = len(data)
+          for page_num, booru in enumerate(data, 1):
               # Set variables for owner/author of post
               booru_author = booru.get('owner') or booru.get('author') or booru.get('uploader_name') or 'N/A'
 
@@ -174,7 +237,7 @@ class Booru(BaseCog):
               color = {
                 "Gelbooru": 3395583,
                 "Konachan": 8745592,
-                "Yandere": 2236962
+                "Yandere": 2236962,
               }
 
               embed = discord.Embed()
@@ -185,7 +248,7 @@ class Booru(BaseCog):
               embed.add_field(name="Tags", value="```" + booru_tags[:300] + "```", inline=False)
               embed.add_field(name="Rating", value=booru['rating'])
               embed.add_field(name="Score", value=booru_score)
-              embed.set_footer(text="If image doesn't appear, it may be a webm or too big, Powered by {}".format(booru['provider']))
+              embed.set_footer(text="{}/{} If image doesn't appear, it may be a webm or too big, Powered by {}".format(page_num, num_pages, booru['provider']))
               embeds.append(embed)
 
           await menu(ctx, pages=embeds, controls=DEFAULT_CONTROLS, message=None, page=i, timeout=15)
