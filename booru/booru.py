@@ -32,10 +32,10 @@ class Booru(BaseCog):
         }
         default_guild = {
             "filters": [],
-            "nsfw_filters": ["-loli", "-shota"]
+            "nsfw_filters": ["loli", "shota"]
         }
-        self.config.register_global(**default_global, force_registration=True)
-        self.config.register_guild(**default_guild, force_registration=True)
+        self.config.register_global(**default_global)
+        self.config.register_guild(**default_guild)
 
     @commands.command()
     async def booru(self, ctx, *, tag=None):
@@ -49,10 +49,13 @@ class Booru(BaseCog):
         log.debug(tag)
 
         # Image board fetcher
-        yan_data, gel_data, kon_data = await asyncio.gather(self.fetch_yan(ctx, tag), self.fetch_gel(ctx, tag), self.fetch_kon(ctx, tag))
+        yan_data, gel_data, kon_data, dan_data = await asyncio.gather(self.fetch_yan(ctx, tag), self.fetch_gel(ctx, tag), self.fetch_kon(ctx, tag), self.fetch_dan(ctx, tag))
 
         # Fuse multiple image board data
-        data = yan_data + gel_data + kon_data
+        data = yan_data + gel_data + kon_data + dan_data
+
+        # Filter data without using up requests space
+        data = await self.filter_posts(ctx, data)
 
         # Done sending requests, time to show it
         await self.show_booru(ctx, data)
@@ -69,10 +72,10 @@ class Booru(BaseCog):
         log.debug(tag)
 
         # Image board fetcher
-        yan_data = await self.fetch_yan(ctx, tag)
+        data = await self.fetch_yan(ctx, tag)
 
-        # Fuse multiple image board data
-        data = yan_data
+        # Filter data without using up requests space
+        data = await self.filter_posts(ctx, data)
 
         # Done sending requests, time to show it
         await self.show_booru(ctx, data)
@@ -89,10 +92,10 @@ class Booru(BaseCog):
         log.debug(tag)
 
         # Image board fetcher
-        gel_data = await self.fetch_gel(ctx, tag)
+        data = await self.fetch_gel(ctx, tag)
 
-        # Fuse multiple image board data
-        data = gel_data
+        # Filter data without using up requests space
+        data = await self.filter_posts(ctx, data)
 
         # Done sending requests, time to show it
         await self.show_booru(ctx, data)
@@ -109,27 +112,38 @@ class Booru(BaseCog):
         log.debug(tag)
 
         # Image board fetcher
-        kon_data = await self.fetch_kon(ctx, tag)
+        data = await self.fetch_kon(ctx, tag)
 
-        # Fuse multiple image board data
-        data = kon_data
+        # Filter data without using up requests space
+        data = await self.filter_posts(ctx, data)
+
+        # Done sending requests, time to show it
+        await self.show_booru(ctx, data)
+
+    @commands.command()
+    async def dan(self, ctx, *, tag=None):
+        """Shows a image board entry based on user query from Danbooru"""
+
+        tag = await self.filter_tags(ctx, tag)
+
+        if tag is None:
+            return
+
+        log.debug(tag)
+
+        # Image board fetcher
+        data = await self.fetch_dan(ctx, tag)
+
+        # Filter data without using up requests space
+        data = await self.filter_posts(ctx, data)
 
         # Done sending requests, time to show it
         await self.show_booru(ctx, data)
 
     async def filter_tags(self, ctx, tag):
-        # Global filters
-        global_filters = await self.config.filters()
-        global_nsfw_filters = await self.config.nsfw_filters()
-
-        # Guild filters
-        guild_group = self.config.guild(ctx.guild)
-        guild_nsfw_filters = await guild_group.nsfw_filters()
-        guild_filters = await guild_group.filters()
-
         # Checks if there is a tag and defaults depending on channel
         if tag is not None:
-            tag = set(tag.split())
+            tag = set(tag.split(" "))
         if ctx.channel.is_nsfw() and tag is None:
             tag = {'rating:none', '*'}
         if ctx.channel.is_nsfw() == False and tag is None:
@@ -138,37 +152,56 @@ class Booru(BaseCog):
         log.debug(tag)
 
         # Checks common to see if any ratings are there
-        ratings = {'rating:safe', 'rating:explicit', 'rating:questionable'}
+        ratings = {'rating:safe', 'rating:explicit', 'rating:questionable', 'rating:none'}
         if not ratings & tag:
             tag.add('rating:safe')
 
-        # Checks if none and applies ratings
+        # Checks if none and removes ratings
         if 'rating:none' in tag:
             tag.remove('rating:none')
-            tag.update(ratings)
-
-        # Applies filters which always apply
-        if global_filters is not None:
-            tag.update(global_filters)
-        if guild_filters is not None:
-            tag.update(guild_filters)
-
-        # Checks if nsfw and adds nsfw filters
-        if 'rating:explicit' in tag or 'rating:questionable' in tag:
-            if global_nsfw_filters is not None:
-                tag.update(global_nsfw_filters)
-            if guild_nsfw_filters is not None:
-                tag.update(guild_nsfw_filters)
 
         # Checks if nsfw could be posted in sfw channel
         if not ctx.channel.is_nsfw():
-            if 'rating:explicit' in tag or 'rating:questionable' in tag:
+            if 'rating:explicit' in tag or 'rating:questionable' in tag or not ratings & tag:
                 await ctx.send("You cannot post nsfw content in sfw channels")
                 return
+
+        # Checks if more than 6 tag and tells user you can't do that
+        if len(tag) > 6:
+            await ctx.send("You cannot search for more than 6 tags at once")
+            return
 
         log.debug(tag)
 
         return tag
+
+    async def filter_posts(self, ctx, data):
+        # Global filters
+        global_filters = set(await self.config.filters())
+        global_nsfw_filters = set(await self.config.nsfw_filters())
+
+        # Guild filters
+        guild_group = self.config.guild(ctx.guild)
+        guild_nsfw_filters = set(await guild_group.nsfw_filters())
+        guild_filters = set(await guild_group.filters())
+
+        filters = global_filters | guild_filters
+        nsfw_filters = global_nsfw_filters | guild_nsfw_filters
+
+        filtered_data = []
+
+        for booru in data:
+            booru_tags_string = booru.get('tags') or booru.get('tag_string') or 'N/A'
+            booru_tags = set(booru_tags_string.split())
+
+            if booru['rating'] in 'sqe':
+                if filters & booru_tags or (booru['rating'] != 's' and nsfw_filters & booru_tags):
+                    continue
+            if booru.get('is_deleted'):
+                continue
+
+            filtered_data.append(booru)
+        return filtered_data
 
     async def fetch_from_booru(self, urlstr, provider): # Handles provider data and fetcher responses
        content = ""
@@ -177,9 +210,12 @@ class Booru(BaseCog):
                try:
                    content = await url.json()
                except ValueError:
-                   content = None
-       if not content or (type(content) is dict and 'success' in content.keys() and content['success'] == False):
-           return []
+                   content = []
+               except aiohttp.client_exceptions.ContentTypeError:
+                   content = []
+       if not content or content == [] or content is None or (type(content) is dict and 'success' in content.keys() and content['success'] == False):
+           content = []
+           return content
        else:
          for item in content:
              item['provider'] = provider
@@ -199,6 +235,13 @@ class Booru(BaseCog):
         urlstr = "https://konachan.com/post.json?limit=100&tags=" + "+".join(tags)
         log.debug(urlstr)
         return await self.fetch_from_booru(urlstr, "Konachan")
+
+    async def fetch_dan(self, ctx, tags): # Danbooru fetcher
+        if len(tags) > 2:
+            return []
+        urlstr = "https://danbooru.donmai.us/posts.json?limit=100&tags=" + "+".join(tags)
+        log.debug(urlstr)
+        return await self.fetch_from_booru(urlstr, "Danbooru")
 
     async def show_booru(self, ctx, data): #Shows various info in embed
        mn = len(data)
@@ -233,9 +276,12 @@ class Booru(BaseCog):
                   booru_post = "https://gelbooru.com/index.php?page=post&s=view&id=" + str(booru.get('id'))
               if booru['provider'] == "Yandere":
                   booru_post = "https://yande.re/post/show/" + str(booru.get('id'))
+              if booru['provider'] == "Danbooru":
+                  booru_post = "https://danbooru.donmai.us/posts/" + str(booru.get('id'))
 
               color = {
                 "Gelbooru": 3395583,
+                "Danbooru": 3395583,
                 "Konachan": 8745592,
                 "Yandere": 2236962,
               }
@@ -255,7 +301,10 @@ class Booru(BaseCog):
 
     @commands.group()
     async def booruset(self, ctx):
-        """Settings for booru"""
+        """Settings for booru \n\n
+        These filter whatever you add *out* of the search results, it does not add anything.
+        This is because the filters are applied locally instead of in the API to avoid reaching the
+        maximum amount of tags given by these APIs."""
         pass
 
     # Guild configs
