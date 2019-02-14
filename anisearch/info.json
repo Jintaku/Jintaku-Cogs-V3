@@ -3,7 +3,7 @@
   "bot_version": [3,0,0],
   "description": "You can search anime, manga, users and characters!",
   "hidden": false,
-  "install_msg": "Installing anisearch cog",
+  "install_msg": "Installed Anisearch! Have fun.",
   "short": "A cog to search the anilist API",
   "tags" : ["anime", "manga", "anilist", "list"]
 }

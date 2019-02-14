@@ -1,7 +1,7 @@
 {
   "author" : ["Jintaku"],
   "bot_version": [3,0,0],
-  "install_msg" : "Installing booru cog",
+  "install_msg" : "Installed Booru, please be careful in NSFW channels and use [p]help!",
   "short" : "Display image board entries",
   "description" : "Displays a random image board entry based on your query \n This may include NSFW content (although this is not the case by default)",
   "tags" : ["booru", "images", "gelbooru", "yandere", "konachan", "NSFW"],

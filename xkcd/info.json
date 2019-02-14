@@ -3,7 +3,7 @@
   "bot_version": [3,0,0],
   "description" : "Displays xkcd entries such as description, title and image/comic from xkcd",
   "hidden": false,
-  "install_msg" : "Installing xkcd cog",
+  "install_msg" : "Share them XKCDs! Show all the comics, have fun!",
   "short" : "Display random xkcd",
   "tags" : ["xkcd", "comic", "jokes"]
 }
