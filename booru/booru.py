@@ -8,7 +8,7 @@ import os
 import asyncio
 import logging
 
-log = logging.getLogger("Booru") # Thanks to Sinbad for the example code for logging
+log = logging.getLogger("Booru")  # Thanks to Sinbad for the example code for logging
 log.setLevel(logging.DEBUG)
 
 console = logging.StreamHandler()
@@ -21,19 +21,14 @@ log.addHandler(console)
 
 BaseCog = getattr(commands, "Cog", object)
 
+
 class Booru(BaseCog):
     """Show a picture using image boards (Gelbooru, yandere, konachan)"""
 
     def __init__(self):
         self.config = Config.get_conf(self, identifier=4894278742742)
-        default_global = {
-            "filters": [],
-            "nsfw_filters": []
-        }
-        default_guild = {
-            "filters": [],
-            "nsfw_filters": ["loli", "shota"]
-        }
+        default_global = {"filters": [], "nsfw_filters": []}
+        default_guild = {"filters": [], "nsfw_filters": ["loli", "shota"]}
         self.config.register_global(**default_global)
         self.config.register_guild(**default_guild)
 
@@ -145,24 +140,24 @@ class Booru(BaseCog):
         if tag is not None:
             tag = set(tag.split(" "))
         if ctx.channel.is_nsfw() and tag is None:
-            tag = {'rating:none', '*'}
+            tag = {"rating:none", "*"}
         if ctx.channel.is_nsfw() == False and tag is None:
-            tag = {'rating:safe', '*'}
+            tag = {"rating:safe", "*"}
 
         log.debug(tag)
 
         # Checks common to see if any ratings are there
-        ratings = {'rating:safe', 'rating:explicit', 'rating:questionable', 'rating:none'}
+        ratings = {"rating:safe", "rating:explicit", "rating:questionable", "rating:none"}
         if not ratings & tag:
-            tag.add('rating:safe')
+            tag.add("rating:safe")
 
         # Checks if none and removes ratings
-        if 'rating:none' in tag:
-            tag.remove('rating:none')
+        if "rating:none" in tag:
+            tag.remove("rating:none")
 
         # Checks if nsfw could be posted in sfw channel
         if not ctx.channel.is_nsfw():
-            if 'rating:explicit' in tag or 'rating:questionable' in tag or not ratings & tag:
+            if "rating:explicit" in tag or "rating:questionable" in tag or not ratings & tag:
                 await ctx.send("You cannot post nsfw content in sfw channels")
                 return
 
@@ -191,113 +186,108 @@ class Booru(BaseCog):
         filtered_data = []
 
         for booru in data:
-            booru_tags_string = booru.get('tags') or booru.get('tag_string') or 'N/A'
+            booru_tags_string = booru.get("tags") or booru.get("tag_string") or "N/A"
             booru_tags = set(booru_tags_string.split())
 
-            if booru['rating'] in 'sqe':
-                if filters & booru_tags or (booru['rating'] != 's' and nsfw_filters & booru_tags):
+            if booru["rating"] in "sqe":
+                if filters & booru_tags or (booru["rating"] != "s" and nsfw_filters & booru_tags):
                     continue
-            if booru.get('is_deleted'):
+            if booru.get("is_deleted"):
                 continue
 
             filtered_data.append(booru)
         return filtered_data
 
-    async def fetch_from_booru(self, urlstr, provider): # Handles provider data and fetcher responses
-       content = ""
-       async with aiohttp.ClientSession() as session:
-           async with session.get(urlstr) as url:
-               try:
-                   content = await url.json()
-               except ValueError:
-                   content = []
-               except aiohttp.client_exceptions.ContentTypeError:
-                   content = []
-       if not content or content == [] or content is None or (type(content) is dict and 'success' in content.keys() and content['success'] == False):
-           content = []
-           return content
-       else:
-         for item in content:
-             item['provider'] = provider
-       return content
+    async def fetch_from_booru(self, urlstr, provider):  # Handles provider data and fetcher responses
+        content = ""
+        async with aiohttp.ClientSession() as session:
+            async with session.get(urlstr) as url:
+                try:
+                    content = await url.json()
+                except ValueError:
+                    content = []
+                except aiohttp.client_exceptions.ContentTypeError:
+                    content = []
+        if not content or content == [] or content is None or (type(content) is dict and "success" in content.keys() and content["success"] == False):
+            content = []
+            return content
+        else:
+            for item in content:
+                item["provider"] = provider
+        return content
 
-    async def fetch_yan(self, ctx, tags): # Yande.re fetcher
+    async def fetch_yan(self, ctx, tags):  # Yande.re fetcher
         urlstr = "https://yande.re/post.json?limit=100&tags=" + "+".join(tags)
         log.debug(urlstr)
         return await self.fetch_from_booru(urlstr, "Yandere")
 
-    async def fetch_gel(self, ctx, tags): # Gelbooru fetcher
+    async def fetch_gel(self, ctx, tags):  # Gelbooru fetcher
         urlstr = "https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1&limit=100&tags=" + "+".join(tags)
         log.debug(urlstr)
         return await self.fetch_from_booru(urlstr, "Gelbooru")
 
-    async def fetch_kon(self, ctx, tags): # Konachan fetcher
+    async def fetch_kon(self, ctx, tags):  # Konachan fetcher
         urlstr = "https://konachan.com/post.json?limit=100&tags=" + "+".join(tags)
         log.debug(urlstr)
         return await self.fetch_from_booru(urlstr, "Konachan")
 
-    async def fetch_dan(self, ctx, tags): # Danbooru fetcher
+    async def fetch_dan(self, ctx, tags):  # Danbooru fetcher
         if len(tags) > 2:
             return []
         urlstr = "https://danbooru.donmai.us/posts.json?limit=100&tags=" + "+".join(tags)
         log.debug(urlstr)
         return await self.fetch_from_booru(urlstr, "Danbooru")
 
-    async def show_booru(self, ctx, data): #Shows various info in embed
-       mn = len(data)
-       if mn == 0:
-          await ctx.send("No results.")
-       else:
+    async def show_booru(self, ctx, data):  # Shows various info in embed
+        mn = len(data)
+        if mn == 0:
+            await ctx.send("No results.")
+        else:
 
-          i = randint(0, mn-1)
+            i = randint(0, mn - 1)
 
-          # Build Embed
-          embeds = []
+            # Build Embed
+            embeds = []
 
-          num_pages = len(data)
-          for page_num, booru in enumerate(data, 1):
-              # Set variables for owner/author of post
-              booru_author = booru.get('owner') or booru.get('author') or booru.get('uploader_name') or 'N/A'
+            num_pages = len(data)
+            for page_num, booru in enumerate(data, 1):
+                # Set variables for owner/author of post
+                booru_author = booru.get("owner") or booru.get("author") or booru.get("uploader_name") or "N/A"
 
-              # Set variables for tags
-              booru_tags = booru.get('tags') or booru.get('tag_string') or 'N/A'
+                # Set variables for tags
+                booru_tags = booru.get("tags") or booru.get("tag_string") or "N/A"
 
-              # Set variables for score
-              booru_score = booru.get('score') or 'N/A'
+                # Set variables for score
+                booru_score = booru.get("score") or "N/A"
 
-              # Set variables for file url
-              file_url = booru.get('file_url')
-              booru_url = file_url
+                # Set variables for file url
+                file_url = booru.get("file_url")
+                booru_url = file_url
 
-              # Set variable for post link
-              if booru['provider'] == "Konachan":
-                  booru_post = "https://konachan.com/post/show/" + str(booru.get('id'))
-              if booru['provider'] == "Gelbooru":
-                  booru_post = "https://gelbooru.com/index.php?page=post&s=view&id=" + str(booru.get('id'))
-              if booru['provider'] == "Yandere":
-                  booru_post = "https://yande.re/post/show/" + str(booru.get('id'))
-              if booru['provider'] == "Danbooru":
-                  booru_post = "https://danbooru.donmai.us/posts/" + str(booru.get('id'))
+                # Set variable for post link
+                if booru["provider"] == "Konachan":
+                    booru_post = "https://konachan.com/post/show/" + str(booru.get("id"))
+                if booru["provider"] == "Gelbooru":
+                    booru_post = "https://gelbooru.com/index.php?page=post&s=view&id=" + str(booru.get("id"))
+                if booru["provider"] == "Yandere":
+                    booru_post = "https://yande.re/post/show/" + str(booru.get("id"))
+                if booru["provider"] == "Danbooru":
+                    booru_post = "https://danbooru.donmai.us/posts/" + str(booru.get("id"))
 
-              color = {
-                "Gelbooru": 3395583,
-                "Danbooru": 3395583,
-                "Konachan": 8745592,
-                "Yandere": 2236962,
-              }
+                color = {"Gelbooru": 3395583, "Danbooru": 3395583, "Konachan": 8745592, "Yandere": 2236962}
 
-              embed = discord.Embed()
-              embed.color = color[booru['provider']]
-              embed.title = booru['provider'] + " entry by " + booru_author
-              embed.url = booru_post
-              embed.set_image(url=booru_url)
-              embed.add_field(name="Tags", value="```" + booru_tags[:300] + "```", inline=False)
-              embed.add_field(name="Rating", value=booru['rating'])
-              embed.add_field(name="Score", value=booru_score)
-              embed.set_footer(text=f"{page_num}/{num_pages} If image doesn't appear, it may be a webm or too big, Powered by {booru['provider']}")
-              embeds.append(embed)
+                embed = discord.Embed()
+                embed.color = color[booru["provider"]]
+                embed.title = booru["provider"] + " entry by " + booru_author
+                embed.url = booru_post
+                embed.set_image(url=booru_url)
+                embed.add_field(name="Tags", value="```" + booru_tags[:300] + "```", inline=False)
+                embed.add_field(name="Rating", value=booru["rating"])
+                embed.add_field(name="Score", value=booru_score)
+                embed.set_footer(text=f"{page_num}/{num_pages} If image doesn't appear, it may be a webm or too big, Powered by {booru['provider']}")
+                embeds.append(embed)
 
-          await menu(ctx, pages=embeds, controls=DEFAULT_CONTROLS, message=None, page=i, timeout=15)
+            await menu(ctx, pages=embeds, controls=DEFAULT_CONTROLS, message=None, page=i, timeout=15)
 
     @commands.group()
     @checks.admin_or_permissions()
@@ -336,7 +326,7 @@ class Booru(BaseCog):
         # Load config
         config_filters = await self.config.guild(ctx.guild).filters()
 
-        origin = ['all']
+        origin = ["all"]
         await self.generic_add(ctx, origin, config_filters, filter)
 
     @_guild_allfilters.command(name="remove")
@@ -347,7 +337,7 @@ class Booru(BaseCog):
         # Load config
         config_filters = await self.config.guild(ctx.guild).filters()
 
-        origin = ['all']
+        origin = ["all"]
         await self.generic_remove(ctx, origin, config_filters, filter)
 
     @_guild.group(name="nsfw")
@@ -372,7 +362,7 @@ class Booru(BaseCog):
         # Load config
         config_filters = await self.config.guild(ctx.guild).nsfw_filters()
 
-        origin = ['nsfw']
+        origin = ["nsfw"]
         await self.generic_add(ctx, origin, config_filters, filter)
 
     @_guild_nsfwfilters.command(name="remove")
@@ -383,7 +373,7 @@ class Booru(BaseCog):
         # Load config
         config_filters = await self.config.guild(ctx.guild).nsfw_filters()
 
-        origin = ['nsfw']
+        origin = ["nsfw"]
         await self.generic_remove(ctx, origin, config_filters, filter)
 
     # Global configs
@@ -414,7 +404,7 @@ class Booru(BaseCog):
         # Load config
         config_filters = await self.config.filters()
 
-        origin = ['global', 'all']
+        origin = ["global", "all"]
         await self.generic_add(ctx, origin, config_filters, filter)
 
     @_global_allfilters.command(name="remove")
@@ -425,7 +415,7 @@ class Booru(BaseCog):
         # Load config
         config_filters = await self.config.filters()
 
-        origin = ['global', 'all']
+        origin = ["global", "all"]
         await self.generic_remove(ctx, origin, config_filters, filter)
 
     @_global.group(name="nsfw")
@@ -449,7 +439,7 @@ class Booru(BaseCog):
         # Load config
         config_filters = await self.config.nsfw_filters()
 
-        origin = ['global', 'nsfw']
+        origin = ["global", "nsfw"]
         await self.generic_add(ctx, origin, config_filters, filter)
 
     @_global_nsfwfilters.command(name="remove")
@@ -460,7 +450,7 @@ class Booru(BaseCog):
         # Load config
         config_filters = await self.config.nsfw_filters()
 
-        origin = ['global', 'nsfw']
+        origin = ["global", "nsfw"]
         await self.generic_remove(ctx, origin, config_filters, filter)
 
     async def generic_show(self, ctx, filters):
@@ -476,13 +466,13 @@ class Booru(BaseCog):
         config_filters = set(config_filters)
         config_filters.update(filter)
 
-        if 'all' in origin:
+        if "all" in origin:
             await self.config.guild(ctx.guild).filters.set(list(config_filters))
-        if 'nsfw' in origin:
+        if "nsfw" in origin:
             await self.config.guild(ctx.guild).nsfw_filters.set(list(config_filters))
-        if 'all' in origin and 'global' in origin:
+        if "all" in origin and "global" in origin:
             await self.config.filters.set(list(config_filters))
-        if 'nsfw' in origin and 'global' in origin:
+        if "nsfw" in origin and "global" in origin:
             await self.config.nsfw_filters.set(list(config_filters))
         await ctx.send("The filters have been added!")
 
@@ -492,12 +482,12 @@ class Booru(BaseCog):
 
         config_filters = set(config_filters)
 
-        if 'all' in origin:
+        if "all" in origin:
             await self.config.guild(ctx.guild).filters.set(list(set(config_filters) - set(filter)))
-        if 'nsfw' in origin:
+        if "nsfw" in origin:
             await self.config.guild(ctx.guild).nsfw_filters.set(list(set(config_filters) - set(filter)))
-        if 'all' in origin and 'global' in origin:
+        if "all" in origin and "global" in origin:
             await self.config.filters.set(list(set(config_filters) - set(filter)))
-        if 'nsfw' in origin and 'global' in origin:
+        if "nsfw" in origin and "global" in origin:
             await self.config.nsfw_filters.set(list(set(config_filters) - set(filter)))
         await ctx.send("The filters have been removed!")
