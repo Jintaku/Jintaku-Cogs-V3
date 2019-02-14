@@ -17,21 +17,19 @@ V3 Cogs made by the Jintaku community
 * [p]user <username> - Displays user data using the anilist APIv2
 * [p]character <character-name> - Displays character data using the anilist APIv2
 
-Showcase 
-
-![Image of [p]anime working](https://github.com/Jintaku/Jintaku-Cogs-V3/blob/master/screenshots/anime.gif)
+<img src="https://github.com/Jintaku/Jintaku-Cogs-V3/blob/master/screenshots/anime.gif" width="60%">
 
 ## Booru
 
 * [p]booru <tags : optional> - Displays images and their tags from various image boards (defaults to random safe images except in NSFW channels)
 
-![Image of [p]booru working](https://github.com/Jintaku/Jintaku-Cogs-V3/blob/master/screenshots/booru.gif)
+<img src="https://github.com/Jintaku/Jintaku-Cogs-V3/blob/master/screenshots/booru.gif" width="60%">
 
 ## XKCD
 
 * [p]xkcd <entry_number : optional> - Displays XKCD entries (defaults to random)
 
-![Image of [p]xkcd working](https://github.com/Jintaku/Jintaku-Cogs-V3/blob/master/screenshots/xkcd.gif)
+<img src="https://github.com/Jintaku/Jintaku-Cogs-V3/blob/master/screenshots/xkcd.gif" width="60%">
 
 # Contact
 
