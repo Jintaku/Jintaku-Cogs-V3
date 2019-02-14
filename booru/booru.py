@@ -294,12 +294,13 @@ class Booru(BaseCog):
               embed.add_field(name="Tags", value="```" + booru_tags[:300] + "```", inline=False)
               embed.add_field(name="Rating", value=booru['rating'])
               embed.add_field(name="Score", value=booru_score)
-              embed.set_footer(text="{}/{} If image doesn't appear, it may be a webm or too big, Powered by {}".format(page_num, num_pages, booru['provider']))
+              embed.set_footer(text=f"{page_num}/{num_pages} If image doesn't appear, it may be a webm or too big, Powered by {booru['provider']}")
               embeds.append(embed)
 
           await menu(ctx, pages=embeds, controls=DEFAULT_CONTROLS, message=None, page=i, timeout=15)
 
     @commands.group()
+    @checks.admin_or_permissions()
     async def booruset(self, ctx):
         """Settings for booru \n\n
         These filter whatever you add *out* of the search results, it does not add anything.
@@ -309,7 +310,7 @@ class Booru(BaseCog):
 
     # Guild configs
     @booruset.group(name="guild")
-    @checks.admin_or_permissions()
+    @checks.admin_or_permissions(manage_guild=True)
     async def _guild(self, ctx):
         """Guild Settings for booru"""
         pass
@@ -466,7 +467,7 @@ class Booru(BaseCog):
         if not filters:
             await ctx.send("There are currently no filters")
         else:
-            await ctx.send("Current filters are: ```{}```".format(",".join(filters)))
+            await ctx.send(f"Current filters are: ```{','.join(filters)}```")
 
     async def generic_add(self, ctx, origin, config_filters, filter):
 
