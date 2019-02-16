@@ -31,6 +31,12 @@ V3 Cogs made by the Jintaku community
 
 <img src="https://github.com/Jintaku/Jintaku-Cogs-V3/blob/master/screenshots/xkcd.gif" width="60%">
 
+## Pokemon
+
+* [p]pokemon <name_or_ID> - Displays pokemon entries
+
+<img src="https://github.com/Jintaku/Jintaku-Cogs-V3/blob/master/screenshots/pokemon.gif" width="60%">
+
 # Contact
 
 Write an issue or find me in the [Red - Cog support](https://discord.gg/GET4DVk)

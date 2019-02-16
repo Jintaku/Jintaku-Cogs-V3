@@ -1,0 +1,9 @@
+{
+  "author" : ["Jintaku"],
+  "bot_version": [3,0,0],
+  "install_msg" : "Installing pokemon cog",
+  "short" : "Display pokemon information",
+  "description" : "Displays pokemons using pokeapi",
+  "tags" : ["pokemon", "information", "pokeapi"],
+  "hidden" : false
+}
