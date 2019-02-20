@@ -1,0 +1,9 @@
+{
+  "author" : ["Jintaku"],
+  "bot_version": [3,0,0],
+  "install_msg" : "This is a V2 port which is mostly still really bad at the moment. I'm working on it.",
+  "short" : "Displays wikia articles",
+  "description" : "Displays article summaries from wikia websites",
+  "tags" : ["wikia", "information"],
+  "hidden" : true
+}
