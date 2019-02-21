@@ -323,6 +323,7 @@ class Booru(BaseCog):
 
             await menu(ctx, pages=embeds, controls=DEFAULT_CONTROLS, message=None, page=i, timeout=15)
 
+    # TODO : Use Reaction menus now that I know how with self
     @commands.group()
     @checks.admin_or_permissions()
     async def booruset(self, ctx):

@@ -70,7 +70,7 @@ class Wikia(BaseCog):
             embed.set_footer(text="Powered by Wikia/Fandom.com")
             embeds.append(embed)
 
-        await menu(ctx, pages=embeds, controls=SELECT_CONTROLS, message=None, page=0, timeout=15)
+        await menu(ctx, pages=embeds, controls=SELECT_CONTROLS, message=None, page=0, timeout=60)
 
     async def selected_domain(self, ctx, data, page):
 
