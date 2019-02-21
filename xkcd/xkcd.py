@@ -10,7 +10,8 @@ BaseCog = getattr(commands, "Cog", object)
 class XKCD(BaseCog):
     """Display XKCD entries"""
 
-    @commands.command(pass_context=True)
+    @commands.command()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def xkcd(self, ctx, *, entry_number=None):
         """Post a random xkcd"""
 

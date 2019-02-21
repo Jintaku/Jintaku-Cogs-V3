@@ -11,6 +11,7 @@ class Wikia(BaseCog):
     """Search wikia"""
 
     @commands.command()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def wikia(self, ctx, *, subdomain):
         """Search wikia subdomain then bot will ask you which article you want to consult"""
 
@@ -58,6 +59,11 @@ class Wikia(BaseCog):
         # Set empty list to be appended to later
         embeds = []
 
+        # Checks if there is actually subdomains
+        if data["total"] == 0:
+            await ctx.send("There is no such subdomain")
+            return
+
         # Loop through subdomains to show them in menu
         for subdomains in data["items"]:
             embed = discord.Embed()
@@ -95,6 +101,12 @@ class Wikia(BaseCog):
                 data = await response.json()
 
         embeds = []
+
+        # Checks if there is actually articles
+        print(data)
+        if data["exception"]["type"] == "NotFoundApiException":
+            await ctx.send("There is no such articles")
+            return
 
         # Loops and queries api because Wikia doesn't give enough information with the List api, this is the slowest part sadly
         for articles in data["items"]:
