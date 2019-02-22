@@ -1,0 +1,9 @@
+{
+  "author" : ["Jintaku"],
+  "bot_version": [3,0,0],
+  "install_msg" : "Installed games, rock and roll!",
+  "short" : "Display game information from IGDB",
+  "description" : "Displays information about games from IGDB with reaction menus",
+  "tags" : ["games", "information"],
+  "hidden" : true
+}
