@@ -1,5 +1,5 @@
 import discord
-from redbot.core import commands
+from redbot.core import Config, checks, commands
 import aiohttp
 from redbot.core.utils.predicates import ReactionPredicate, MessagePredicate
 from redbot.core.utils.menus import menu, commands, DEFAULT_CONTROLS, start_adding_reactions
@@ -10,13 +10,29 @@ BaseCog = getattr(commands, "Cog", object)
 class Wikia(BaseCog):
     """Search wikia"""
 
+    def __init__(self):
+        self.config = Config.get_conf(self, identifier=4894278742742)
+        default_channel = {"url": ""}
+        self.config.register_channel(**default_channel)
+
     @commands.command()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
-    async def wikia(self, ctx, *, subdomain):
-        """Search wikia subdomain then bot will ask you which article you want to consult"""
+    async def wikia(self, ctx, *, query):
+        """Search wikia subdomain then bot will ask you which article you want to consult unless using a default wiki"""
 
-        # Search subdomains
-        subdomain = await self.search_subdomain(ctx, subdomain)
+        if await self.config.channel(ctx.channel).url() != "":
+            domain = await self.config.channel(ctx.channel).url()
+            await self.search_article(ctx, query, domain)
+            return
+
+        subdomain = await self.search_subdomain(ctx, query)
+
+    @commands.command()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def wikias(self, ctx, *, query):
+        """Search wikia subdomain then bot will ask you which article you want to consult ignoring default wiki"""
+
+        subdomain = await self.search_subdomain(ctx, query)
 
     async def search_subdomain(self, ctx, subdomain):
 
@@ -84,20 +100,30 @@ class Wikia(BaseCog):
         selected_domain = data["items"][page]
 
         # Initiate searching of article part
-        await self.search_article(ctx, selected_domain)
+        article = await self.enter_article(ctx, selected_domain)
+        await self.search_article(ctx, article, selected_domain)
 
-    async def search_article(self, ctx, selected_domain):
+    async def enter_article(self, ctx, selected_domain):
 
         message = await ctx.send(content = "Enter the wikia article for " + selected_domain["name"] + ":", delete_after = 10)
         response = await ctx.bot.wait_for("message", check=MessagePredicate.same_context(ctx))
 
         response = str(response.content).replace(' ', '+')
 
+        return response
+
+    async def search_article(self, ctx, article, domain):
+
+        if await self.config.channel(ctx.channel).url() != "":
+            domain = await self.config.channel(ctx.channel).url()
+        else:
+            domain = domain["url"]
+
         # Queries api to search an article
         headers = {'content-type': 'application/json'}
 
         async with aiohttp.ClientSession() as session:
-            async with session.post(selected_domain["url"] + "/api/v1/Search/List?limit=10&batch=1&query=" + response, headers=headers) as response:
+            async with session.post(str(domain) + "/api/v1/Search/List?limit=10&batch=1&query=" + article, headers=headers) as response:
                 data = await response.json()
 
         embeds = []
@@ -112,7 +138,7 @@ class Wikia(BaseCog):
 
             # Queries api for more information
             async with aiohttp.ClientSession() as session:
-                async with session.post(selected_domain["url"] + "/api/v1/Articles/Details?abstract=300&ids=" + str(articles["id"]), headers=headers) as response:
+                async with session.post(domain + "/api/v1/Articles/Details?abstract=300&ids=" + str(articles["id"]), headers=headers) as response:
                     article_data = await response.json()
 
             # Sets variable for better use in embed
@@ -130,4 +156,11 @@ class Wikia(BaseCog):
 
         await menu(ctx, pages=embeds, controls=DEFAULT_CONTROLS, message=None, page=0, timeout=15)
 
-        
+    @commands.command()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def wikiaset(self, ctx, *, url):
+        """Set default wiki domain"""
+
+        # Set new config
+        await self.config.channel(ctx.channel).url.set(url)
+        await ctx.send("The default wiki has been changed.")
