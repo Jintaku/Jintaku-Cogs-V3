@@ -103,8 +103,7 @@ class Wikia(BaseCog):
         embeds = []
 
         # Checks if there is actually articles
-        print(data)
-        if data["exception"]["type"] == "NotFoundApiException":
+        if data.get("exception"):
             await ctx.send("There is no such articles")
             return
 
@@ -131,3 +130,4 @@ class Wikia(BaseCog):
 
         await menu(ctx, pages=embeds, controls=DEFAULT_CONTROLS, message=None, page=0, timeout=15)
 
+        
