@@ -171,6 +171,8 @@ class Booru(BaseCog):
             tag = set(tag.split(" "))
         if ctx.channel.is_nsfw() and tag is None:
             tag = {"rating:none", "*"}
+        if ctx.channel.is_nsfw() and tag is not None:
+            tag.add("rating:none")
         if ctx.channel.is_nsfw() == False and tag is None:
             tag = {"rating:safe", "*"}
 
