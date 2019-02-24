@@ -157,10 +157,21 @@ class Wikia(BaseCog):
         await menu(ctx, pages=embeds, controls=DEFAULT_CONTROLS, message=None, page=0, timeout=15)
 
     @commands.command()
+    @checks.admin_or_permissions(manage_guild=True)
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def wikiaset(self, ctx, *, url):
         """Set default wiki domain"""
 
         # Set new config
         await self.config.channel(ctx.channel).url.set(url)
+        await ctx.send("The default wiki has been changed.")
+
+    @commands.command()
+    @checks.admin_or_permissions(manage_guild=True)
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def wikiaunset(self, ctx):
+        """Remove default wiki domain"""
+
+        # Set new config
+        await self.config.channel(ctx.channel).url.set("")
         await ctx.send("The default wiki has been changed.")

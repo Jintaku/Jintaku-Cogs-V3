@@ -30,6 +30,15 @@
 
 <img src="https://github.com/Jintaku/Jintaku-Cogs-V3/blob/master/screenshots/booru.gif" width="60%">
 
+## Wikia
+
+* `[p]wikia <query>` - Search wikia subdomain then bot will ask you which article you want to consult unless a default wiki is set
+* `[p]wikias <query>` - Search wikia subdomain then bot will ask you which article you want to consult ignoring default wiki
+* `[p]wikiaset <url>` - Sets a default url (per-channel)
+* `[p]wikiaunset` - Removes default url (per-channel)
+
+<img src="https://github.com/Jintaku/Jintaku-Cogs-V3/blob/master/screenshots/wikia.gif" width="60%">
+
 ## XKCD
 
 * `[p]xkcd <entry_number : optional>` - Displays XKCD entries (defaults to random)

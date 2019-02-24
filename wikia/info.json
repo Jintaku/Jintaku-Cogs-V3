@@ -5,5 +5,5 @@
   "short" : "Displays wikia articles",
   "description" : "Displays article summaries from wikia websites",
   "tags" : ["wikia", "information"],
-  "hidden" : true
+  "hidden" : false
 }
