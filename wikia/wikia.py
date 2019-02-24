@@ -7,6 +7,7 @@ import contextlib
 
 BaseCog = getattr(commands, "Cog", object)
 
+
 class Wikia(BaseCog):
     """Search wikia"""
 
@@ -36,25 +37,17 @@ class Wikia(BaseCog):
 
     async def search_subdomain(self, ctx, subdomain):
 
-        subdomain = subdomain.replace(' ', '+')
+        subdomain = subdomain.replace(" ", "+")
 
         # Queries api to search wikia subdomains
-        headers = {'content-type': 'application/json'}
+        headers = {"content-type": "application/json"}
 
         async with aiohttp.ClientSession() as session:
             async with session.post("http://www.wikia.com/api/v1/Wikis/ByString?expand=1&limit=25&batch=1&includeDomain=true&string=" + subdomain, headers=headers) as response:
                 data = await response.json()
 
         # Function which selects domain using reaction
-        async def select_domain(
-            ctx: commands.Context,
-            pages: list,
-            controls: dict,
-            message: discord.Message,
-            page: int,
-            timeout: float,
-            emoji: str,
-        ):
+        async def select_domain(ctx: commands.Context, pages: list, controls: dict, message: discord.Message, page: int, timeout: float, emoji: str):
             # Clean up
             with contextlib.suppress(discord.NotFound):
                 await message.delete()
@@ -62,10 +55,7 @@ class Wikia(BaseCog):
             await self.selected_domain(ctx, data, page)
             return None
 
-
-        SELECT_DOMAIN = {
-            "\N{WHITE HEAVY CHECK MARK}": select_domain,
-        }
+        SELECT_DOMAIN = {"\N{WHITE HEAVY CHECK MARK}": select_domain}
 
         # Create dict for controls used by menu
         SELECT_CONTROLS = {}
@@ -105,10 +95,10 @@ class Wikia(BaseCog):
 
     async def enter_article(self, ctx, selected_domain):
 
-        message = await ctx.send(content = "Enter the wikia article for " + selected_domain["name"] + ":", delete_after = 10)
+        message = await ctx.send(content="Enter the wikia article for " + selected_domain["name"] + ":", delete_after=10)
         response = await ctx.bot.wait_for("message", check=MessagePredicate.same_context(ctx))
 
-        response = str(response.content).replace(' ', '+')
+        response = str(response.content).replace(" ", "+")
 
         return response
 
@@ -120,7 +110,7 @@ class Wikia(BaseCog):
             domain = domain["url"]
 
         # Queries api to search an article
-        headers = {'content-type': 'application/json'}
+        headers = {"content-type": "application/json"}
 
         async with aiohttp.ClientSession() as session:
             async with session.post(str(domain) + "/api/v1/Search/List?limit=10&batch=1&query=" + article, headers=headers) as response:
@@ -143,7 +133,7 @@ class Wikia(BaseCog):
 
             # Sets variable for better use in embed
             article_id = str(articles["id"])
-            article = article_data['items'][article_id]
+            article = article_data["items"][article_id]
 
             embed = discord.Embed()
             embed.title = article["title"]

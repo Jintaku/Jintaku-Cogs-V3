@@ -1,4 +1,3 @@
-import discord
 from redbot.core import Config, checks, commands
 from redbot.core.utils.menus import menu, commands, DEFAULT_CONTROLS
 import aiohttp
@@ -50,7 +49,7 @@ class Booru(BaseCog):
             await ctx.send("There no image boards, please use [p]booruset guild boards to set them.")
             return
 
-        all_data = await asyncio.gather(*(getattr(self, f'fetch_{board}')(ctx, tag) for board in boards))
+        all_data = await asyncio.gather(*(getattr(self, f"fetch_{board}")(ctx, tag) for board in boards))
         data = [item for board_data in all_data for item in board_data]
 
         # Filter data without using up requests space
@@ -157,7 +156,6 @@ class Booru(BaseCog):
 
         # Image board fetcher
         data = await self.fetch_r34(ctx, tag)
-        print (data)
 
         # Filter data without using up requests space
         data = await self.filter_posts(ctx, data)
@@ -229,7 +227,7 @@ class Booru(BaseCog):
                     continue
             if booru.get("is_deleted"):
                 continue
-            if 'file_url' not in booru:
+            if "file_url" not in booru:
                 continue
 
             filtered_data.append(booru)

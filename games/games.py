@@ -5,6 +5,7 @@ from redbot.core.utils.menus import menu, commands, DEFAULT_CONTROLS
 
 BaseCog = getattr(commands, "Cog", object)
 
+
 class Games(BaseCog):
     """Search wikia"""
 
@@ -25,7 +26,7 @@ class Games(BaseCog):
             return
 
         # Queries api to search an article
-        headers = {'content-type': 'application/json', "user-key": apikey}
+        headers = {"content-type": "application/json", "user-key": apikey}
 
         async with aiohttp.ClientSession() as session:
             async with session.post(f"https://api-v3.igdb.com/games/?search={game}&fields=*&filter[version_parent][not_exists]=1", headers=headers) as response:
@@ -36,17 +37,17 @@ class Games(BaseCog):
         for games in data:
 
             # TODO : Make thumbnails work
-            #async with aiohttp.ClientSession() as session:
+            # async with aiohttp.ClientSession() as session:
             #    async with session.post("https://api-v3.igdb.com/games/" + str(games['id']) + "?fields=cover", headers=headers) as response:
             #        data = await response.text()
 
-            #print(data)
+            # print(data)
 
             embed = discord.Embed()
             embed.title = games["name"]
             if games.get("summary"):
                 embed.description = games["summary"][:1024] + "..."
-            #embed.set_thumbnail(url="https:" + data["url"])
+            # embed.set_thumbnail(url="https:" + data["url"])
             embed.url = games["url"]
             embeds.append(embed)
 
