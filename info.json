@@ -3,5 +3,6 @@
     "install_msg" : "Installing... Be prepared for awesomeness",
     "name" : "Jintaku-Cogs-V3",
     "short" : "Cogs made by the Jintaku community",
-    "description" : "Awesome cogs made by the Jintaku community (Wyn ported Anisearch)"
+    "description" : "Awesome cogs made by the Jintaku community (Wyn ported Anisearch)",
+    "requirements": ["async_lru"]
 }
