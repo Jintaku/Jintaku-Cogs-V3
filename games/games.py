@@ -25,7 +25,7 @@ class Games(BaseCog):
             await ctx.send("You need to set an api key to use the IGDB api, please use [p]igdbkey")
             return
 
-        # Queries api to search an article
+        # Queries api to search for a game
         headers = {"content-type": "application/json", "user-key": apikey}
 
         async with aiohttp.ClientSession() as session:

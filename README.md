@@ -45,6 +45,12 @@
 
 <img src="https://github.com/Jintaku/Jintaku-Cogs-V3/blob/master/screenshots/xkcd.gif" width="60%">
 
+## Osu
+
+* `[p]osu <username>` - Displays user profile on osu
+
+<img src="https://github.com/Jintaku/Jintaku-Cogs-V3/blob/master/screenshots/osu.png" width="60%">
+
 ## Pokemon
 
 * `[p]pokemon <name_or_ID>` - Displays pokemon entries
