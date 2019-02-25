@@ -31,6 +31,7 @@ class Osu(BaseCog):
             async with session.post(f"https://osu.ppy.sh/api/get_user?k={apikey}&u={username}", headers=headers) as response:
                 osu = await response.json()
 
+        # TODO : Pictures somehow would be nice
         if osu:
            # Build Embed
            embed = discord.Embed()

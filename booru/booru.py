@@ -26,6 +26,7 @@ class Booru(BaseCog):
 
     def __init__(self):
         self.config = Config.get_conf(self, identifier=4894278742742)
+        # TODO : Per-Channel boards?
         default_global = {"filters": [], "nsfw_filters": []}
         default_guild = {"filters": [], "nsfw_filters": ["loli", "shota"], "boards": ["dan", "gel", "kon", "yan"]}
         self.config.register_global(**default_global)

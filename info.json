@@ -1,8 +1,7 @@
 {
     "author" : ["Jintaku", "Wyn"],
-    "install_msg" : "Installing... Be prepared for awesomeness",
+    "install_msg" : "Installed!... Be prepared for awesomeness",
     "name" : "Jintaku-Cogs-V3",
     "short" : "Cogs made by the Jintaku community",
-    "description" : "Awesome cogs made by the Jintaku community (Wyn ported Anisearch)",
-    "requirements": ["async_lru"]
+    "description" : "Awesome cogs made by the Jintaku community",
 }
