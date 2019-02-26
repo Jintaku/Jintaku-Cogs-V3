@@ -45,11 +45,17 @@
 
 <img src="https://github.com/Jintaku/Jintaku-Cogs-V3/blob/master/screenshots/xkcd.gif" width="60%">
 
-## Osu
+## Osu (An osu API key is needed)
 
 * `[p]osu <username>` - Displays user profile on osu
 
 <img src="https://github.com/Jintaku/Jintaku-Cogs-V3/blob/master/screenshots/osu.png" width="60%">
+
+## Gamesearch (An IGDB.com API key is needed)
+
+* `[p]game <game-name>` - Displays a summary with platforms
+
+<img src="https://github.com/Jintaku/Jintaku-Cogs-V3/blob/master/screenshots/gamesearch.gif" width="60%">
 
 ## Pokemon
 

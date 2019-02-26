@@ -17,7 +17,7 @@ async def cached_json_request(url, *, headers=(), **kw):
             return await response.json()
 
 
-class Games(BaseCog):
+class Gamesearch(BaseCog):
     """Search wikia"""
 
     def __init__(self):
@@ -49,7 +49,7 @@ class Games(BaseCog):
 
     @commands.command()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
-    async def games(self, ctx, game):
+    async def game(self, ctx, game):
         """Search IGDB.com for games"""
 
         apikey = await self.config.apikey()
