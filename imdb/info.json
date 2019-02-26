@@ -1,0 +1,9 @@
+{
+  "author" : ["Jintaku"],
+  "bot_version": [3,0,0],
+  "install_msg" : "Crude V2 port of IMDB",
+  "short" : "Display movie information from IMDB",
+  "description" : "Displays information about movies from IMDB",
+  "tags" : ["movie", "information"],
+  "hidden" : true
+}
