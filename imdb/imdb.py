@@ -23,6 +23,10 @@ class Imdb(BaseCog):
         # Get API key
         apikey = await self.config.apikey()
 
+        if apikey == "":
+            ctx.send("No omdbkey set, please set one using [p]omdbkey")
+            return
+
         headers = {"accept": "application/json"}
 
         # Queries api for a game
