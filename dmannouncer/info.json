@@ -1,0 +1,9 @@
+{
+  "author" : ["Jintaku"],
+  "bot_version": [3,0,0],
+  "install_msg" : "Use with caution, this will DM every server owner your bot is connected to.",
+  "short" : "DM all the server owners",
+  "description" : "DM all the server owners that your bot is connected to, useful to notify users.",
+  "tags" : ["news", "DM", "information"],
+  "hidden" : false
+}
