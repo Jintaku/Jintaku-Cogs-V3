@@ -15,6 +15,7 @@ class Imdb(BaseCog):
         self.config.register_global(**default_global)
 
     @commands.command()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def movie(self, ctx, title):
         """Search a movie"""
 
