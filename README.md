@@ -57,6 +57,12 @@
 
 <img src="https://github.com/Jintaku/Jintaku-Cogs-V3/blob/master/screenshots/gamesearch.gif" width="60%">
 
+## Imdb (An omdb API key is needed)
+
+* `[p]movie <movie-name>` - Displays a summary with some more information such as metascore, genre, runtime.
+
+<img src="https://github.com/Jintaku/Jintaku-Cogs-V3/blob/master/screenshots/imdb.gif" width="60%">
+
 ## Pokemon
 
 * `[p]pokemon <name_or_ID>` - Displays pokemon entries
