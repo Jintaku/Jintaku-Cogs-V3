@@ -24,7 +24,7 @@ class Imdb(BaseCog):
         apikey = await self.config.apikey()
 
         if apikey == "":
-            ctx.send("No omdbkey set, please set one using [p]omdbkey")
+            await ctx.send("No omdbkey set, please set one using [p]omdbkey")
             return
 
         headers = {"accept": "application/json"}
