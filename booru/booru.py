@@ -243,7 +243,7 @@ class Booru(BaseCog):
                     continue
             if booru.get("is_deleted"):
                 continue
-            if "file_url" not in booru:
+            if booru["provider"] == "Danbooru" and "file_url" not in booru:
                 continue
 
             filtered_data.append(booru)
