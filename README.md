@@ -26,7 +26,9 @@
 * `[p]gel <tags : optional>` - Displays images and their tags from gelbooru
 * `[p]kon <tags : optional>` - Displays images and their tags from konachan
 * `[p]r34 <tags : optional>` - Displays images and their tags from rule34
-* `[p]booruset global|guild all|boards|nsfw show|add|remove` - Booru settings
+* `[p]safe <tags : optional>` - Displays images and their tags from safebooru
+* `[p]e621 <tags : optional>` - Displays images and their tags from e621
+* `[p]booruset global|guild|channel all|boards|nsfw show|add|remove` - Booru settings
 
 <img src="https://github.com/Jintaku/Jintaku-Cogs-V3/blob/master/screenshots/booru.gif" width="60%">
 
