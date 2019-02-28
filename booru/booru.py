@@ -179,6 +179,50 @@ class Booru(BaseCog):
         # Done sending requests, time to show it
         await self.show_booru(ctx, data)
 
+    @commands.command()
+    @commands.guild_only()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def safe(self, ctx, *, tag=None):
+        """Shows a image board entry based on user query from Safebooru"""
+
+        tag = await self.filter_tags(ctx, tag)
+
+        if tag is None:
+            return
+
+        log.debug(tag)
+
+        # Image board fetcher
+        data = await self.fetch_safe(ctx, tag)
+
+        # Filter data without using up requests space
+        data = await self.filter_posts(ctx, data)
+
+        # Done sending requests, time to show it
+        await self.show_booru(ctx, data)
+
+    @commands.command()
+    @commands.guild_only()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def e621(self, ctx, *, tag=None):
+        """Shows a image board entry based on user query from Safebooru"""
+
+        tag = await self.filter_tags(ctx, tag)
+
+        if tag is None:
+            return
+
+        log.debug(tag)
+
+        # Image board fetcher
+        data = await self.fetch_e621(ctx, tag)
+
+        # Filter data without using up requests space
+        data = await self.filter_posts(ctx, data)
+
+        # Done sending requests, time to show it
+        await self.show_booru(ctx, data)
+
     async def filter_tags(self, ctx, tag):
         # Checks if there is a tag and defaults depending on channel
         if tag is not None:
@@ -253,10 +297,12 @@ class Booru(BaseCog):
     async def fetch_from_booru(self, urlstr, provider):  # Handles provider data and fetcher responses
         content = ""
         async with aiohttp.ClientSession() as session:
-            async with session.get(urlstr) as url:
+            async with session.get(urlstr, headers={'User-Agent': "Booru (https://github.com/Jintaku/Jintaku-Cogs-V3)"}) as resp:
                 try:
-                    content = await url.json(content_type=None)
-                except (ValueError, aiohttp.ContentTypeError):
+                    content = await resp.json(content_type=None)
+                except (ValueError, aiohttp.ContentTypeError) as ex:
+                    log.debug("Pruned by exception, error below:")
+                    log.debug(ex)
                     content = []
         if not content or content == [] or content is None or (type(content) is dict and "success" in content.keys() and content["success"] == False):
             content = []
@@ -276,6 +322,11 @@ class Booru(BaseCog):
         log.debug(urlstr)
         return await self.fetch_from_booru(urlstr, "Gelbooru")
 
+    async def fetch_safe(self, ctx, tags):  # Safebooru fetcher
+        urlstr = "https://safebooru.org/index.php?page=dapi&s=post&q=index&json=1&limit=100&tags=" + "+".join(tags)
+        log.debug(urlstr)
+        return await self.fetch_from_booru(urlstr, "Safebooru")
+
     async def fetch_kon(self, ctx, tags):  # Konachan fetcher
         urlstr = "https://konachan.com/post.json?limit=100&tags=" + "+".join(tags)
         log.debug(urlstr)
@@ -292,6 +343,11 @@ class Booru(BaseCog):
         urlstr = "https://rule34.xxx/index.php?page=dapi&s=post&q=index&json=1&limit=100&tags=" + "+".join(tags)
         log.debug(urlstr)
         return await self.fetch_from_booru(urlstr, "Rule34")
+
+    async def fetch_e621(self, ctx, tags):  # e621 fetcher
+        urlstr = "https://e621.net/post/index.json?limit=100&tags=" + "+".join(tags)
+        log.debug(urlstr)
+        return await self.fetch_from_booru(urlstr, "e621")
 
     async def show_booru(self, ctx, data):  # Shows various info in embed
         mn = len(data)
@@ -316,7 +372,11 @@ class Booru(BaseCog):
                 booru_score = booru.get("score") or "N/A"
 
                 # Set variables for file url
-                file_url = booru.get("file_url") or "https://us.rule34.xxx//images/" + booru.get("directory") + "/" + booru.get("image")
+                file_url = booru.get("file_url")
+                if booru["provider"] == "Rule34":
+                     file_url = "https://us.rule34.xxx//images/" + booru.get("directory") + "/" + booru.get("image")
+                if booru["provider"] == "Safebooru":
+                     file_url = "https://safebooru.org//images/" + booru.get("directory") + "/" + booru.get("image")
                 booru_url = file_url
 
                 # Set variable for post link
@@ -330,9 +390,13 @@ class Booru(BaseCog):
                     booru_post = "https://yande.re/post/show/" + str(booru.get("id"))
                 if booru["provider"] == "Danbooru":
                     booru_post = "https://danbooru.donmai.us/posts/" + str(booru.get("id"))
+                if booru["provider"] == "Safebooru":
+                    booru_post = "https://safebooru.com/index.php?page=post&s=view&id=" + str(booru.get("id"))
+                if booru["provider"] == "e621":
+                    booru_post = "https://e621.net/post/show/" + str(booru.get("id"))
 
                 # Set colour for each board
-                color = {"Gelbooru": 3395583, "Danbooru": 3395583, "Konachan": 8745592, "Yandere": 2236962, "Rule34": 339933}
+                color = {"Gelbooru": 3395583, "Danbooru": 3395583, "Konachan": 8745592, "Yandere": 2236962, "Rule34": 339933, "Safebooru": 000000, "e621": 000000}
 
                 embed = discord.Embed()
                 embed.color = color[booru["provider"]]
