@@ -27,11 +27,12 @@ class Booru(BaseCog):
 
     def __init__(self):
         self.config = Config.get_conf(self, identifier=4894278742742)
-        # TODO : Per-Channel boards?
         default_global = {"filters": [], "nsfw_filters": []}
         default_guild = {"filters": [], "nsfw_filters": ["loli", "shota"], "boards": ["dan", "gel", "kon", "yan"]}
+        default_channel = {"boards": ["dan", "gel", "kon", "yan"]}
         self.config.register_global(**default_global)
         self.config.register_guild(**default_guild)
+        self.config.register_channel(**default_channel)
 
     @commands.command()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
@@ -46,7 +47,14 @@ class Booru(BaseCog):
         log.debug(tag)
 
         # Image board fetcher
-        boards = await self.config.guild(ctx.guild).boards()
+        guild_boards = await self.config.guild(ctx.guild).boards()
+        channel_boards = await self.config.channel(ctx.channel).boards()
+
+        if set(channel_boards) == {"dan", "gel", "kon", "yan"}:
+            boards = guild_boards
+        else:
+            boards = channel_boards
+
         if boards == []:
             await ctx.send("There no image boards, please use [p]booruset guild boards to set them.")
             return
@@ -556,8 +564,8 @@ class Booru(BaseCog):
             await ctx.send(f"Current boards shown in booru are: ```{','.join(boards)}```")
 
     @_guild_boards.command(name="add")
-    @checks.is_owner()
-    async def _global_boards_add(self, ctx, *, boards):
+    @checks.admin_or_permissions(manage_guild=True)
+    async def _guild_boards_add(self, ctx, *, boards):
         """Add image boards to booru"""
 
         # Load config
@@ -566,7 +574,7 @@ class Booru(BaseCog):
         # Filter input
         boards = await self.boards_filter(boards)
         if boards is None:
-            await ctx.send("Reminder that the board names that can be used are dan, gel, kon, yan and r34. Please try again")
+            await ctx.send("Reminder that the board names that can be used are dan, gel, kon, yan, r34, safe, e621. Please try again")
             return
 
         # Fuse input and config
@@ -578,8 +586,8 @@ class Booru(BaseCog):
         await ctx.send("The boards have been added.")
 
     @_guild_boards.command(name="remove")
-    @checks.is_owner()
-    async def _global_boards_remove(self, ctx, *, boards):
+    @checks.admin_or_permissions(manage_guild=True)
+    async def _guild_boards_remove(self, ctx, *, boards):
         """Remove image boards to booru"""
 
         # Load config
@@ -588,7 +596,7 @@ class Booru(BaseCog):
         # Filter input
         boards = await self.boards_filter(boards)
         if boards is None:
-            await ctx.send("Reminder that the board names that can be used are dan, gel, kon, yan. Please try again")
+            await ctx.send("Reminder that the board names that can be used are dan, gel, kon, yan, safe, e621. Please try again")
             return
 
         # Set new config
@@ -601,10 +609,74 @@ class Booru(BaseCog):
         boards = set(boards.split(" "))
 
         # Set variable to see which are good
-        correct_board_names = ["dan", "gel", "kon", "yan", "r34"]
+        correct_board_names = ["dan", "gel", "kon", "yan", "r34", "safe", "e621"]
 
         # Check if good
         if boards & set(correct_board_names):
             return boards
         else:
             return
+
+    # Channel configs
+    @booruset.group(name="channel")
+    @checks.admin_or_permissions(manage_guild=True)
+    async def _channel(self, ctx):
+        """Channel Settings for booru"""
+        pass
+
+    @_channel.group(name="boards")
+    @checks.admin_or_permissions(manage_guild=True)
+    async def _channel_boards(self, ctx):
+        """Commands pertaining to which boards are shown in booru"""
+        pass
+
+    @_channel_boards.command(name="show")
+    @checks.admin_or_permissions(manage_guild=True)
+    async def _channel_boards_show(self, ctx):
+        """Show booru boards"""
+        boards = await self.config.channel(ctx.channel).boards()
+        if not boards:
+            await ctx.send("There are currently no boards shown in booru")
+        else:
+            await ctx.send(f"Current boards shown in booru are: ```{','.join(boards)}```")
+
+    @_channel_boards.command(name="add")
+    @checks.admin_or_permissions(manage_guild=True)
+    async def _channel_boards_add(self, ctx, *, boards):
+        """Add image boards to booru"""
+
+        # Load config
+        config_boards = await self.config.channel(ctx.channel).boards()
+
+        # Filter input
+        boards = await self.boards_filter(boards)
+        if boards is None:
+            await ctx.send("Reminder that the board names that can be used are dan, gel, kon, yan, r34, safe, e621. Please try again")
+            return
+
+        # Fuse input and config
+        config_boards = set(config_boards)
+        config_boards.update(boards)
+
+        # Set new config
+        await self.config.channel(ctx.channel).boards.set(list(config_boards))
+        await ctx.send("The boards have been added.")
+
+    @_channel_boards.command(name="remove")
+    @checks.admin_or_permissions(manage_guild=True)
+    async def _channel_boards_remove(self, ctx, *, boards):
+        """Remove image boards to booru"""
+
+        # Load config
+        config_boards = await self.config.channel(ctx.channel).boards()
+
+        # Filter input
+        boards = await self.boards_filter(boards)
+        if boards is None:
+            await ctx.send("Reminder that the board names that can be used are dan, gel, kon, yan, r34, safe, e621. Please try again")
+            return
+
+        # Set new config
+        config_boards = set(config_boards)
+        await self.config.channel(ctx.channel).boards.set(list(set(config_boards) - set(boards)))
+        await ctx.send("The boards have been removed.")     
