@@ -35,6 +35,7 @@ class Booru(BaseCog):
         self.config.register_channel(**default_channel)
 
     @commands.command()
+    @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def booru(self, ctx, *, tag=None):
         """Shows a image board entry based on user query"""
@@ -69,6 +70,7 @@ class Booru(BaseCog):
         await self.show_booru(ctx, data)
 
     @commands.command()
+    @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def yan(self, ctx, *, tag=None):
         """Shows a image board entry based on user query from yande.re"""
@@ -90,6 +92,7 @@ class Booru(BaseCog):
         await self.show_booru(ctx, data)
 
     @commands.command()
+    @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def gel(self, ctx, *, tag=None):
         """Shows a image board entry based on user query from gelbooru"""
@@ -111,6 +114,7 @@ class Booru(BaseCog):
         await self.show_booru(ctx, data)
 
     @commands.command()
+    @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def kon(self, ctx, *, tag=None):
         """Shows a image board entry based on user query from konachan"""
@@ -132,6 +136,7 @@ class Booru(BaseCog):
         await self.show_booru(ctx, data)
 
     @commands.command()
+    @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def dan(self, ctx, *, tag=None):
         """Shows a image board entry based on user query from Danbooru"""
@@ -153,6 +158,7 @@ class Booru(BaseCog):
         await self.show_booru(ctx, data)
 
     @commands.command()
+    @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def r34(self, ctx, *, tag=None):
         """Shows a image board entry based on user query from Rule34"""
