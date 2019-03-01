@@ -1,9 +1,9 @@
 {
   "author": ["Jintaku", "Wyn"],
   "bot_version": [3,0,0],
-  "description": "You can search anime, manga, users and characters!",
+  "description": "You can search anime, manga, users and characters from Anilist!",
   "hidden": false,
   "install_msg": "Installed Anisearch! Have fun.",
-  "short": "A cog to search the anilist API",
+  "short": "Search Anilist for anime, manga, users, characters",
   "tags" : ["anime", "manga", "anilist", "list"]
 }
