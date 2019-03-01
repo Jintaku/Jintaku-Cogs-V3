@@ -28,12 +28,14 @@ class Gamesearch(BaseCog):
     async def get_game_embed(self, headers, game_data):
 
         # Set data query and send it to get game data
-        cover_query = f"fields url; where id = {game_data['cover']};".encode()
+        if game_data.get('cover'):
+            cover_query = f"fields url; where id = {game_data['cover']};".encode()
 
-        async with aiohttp.ClientSession() as session:
-            async with session.post("https://api-v3.igdb.com/covers", data=cover_query, headers=headers) as response:
-                cover_data = await response.json()
-
+            async with aiohttp.ClientSession() as session:
+                async with session.post("https://api-v3.igdb.com/covers", data=cover_query, headers=headers) as response:
+                    cover_data = await response.json()
+        else:
+            cover_data = []
         platforms_data = await asyncio.gather(
             *(cached_json_request("https://api-v3.igdb.com/platforms", data=f"fields name; where id = {platform};".encode(), headers=tuple(headers.items())) for platform in game_data["platforms"])
         )
@@ -43,7 +45,7 @@ class Gamesearch(BaseCog):
         embed.add_field(name="Platforms", value=", ".join(platform_data[0]["name"] for platform_data in platforms_data))
         if "summary" in game_data:
             embed.description = game_data["summary"][:1024] + "..."
-        if cover_data:
+        if cover_data != []:
             embed.set_thumbnail(url="https:" + cover_data[0]["url"])
         return embed
 
