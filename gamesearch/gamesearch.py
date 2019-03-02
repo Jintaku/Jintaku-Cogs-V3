@@ -18,7 +18,7 @@ async def cached_json_request(url, *, headers=(), **kw):
 
 
 class Gamesearch(BaseCog):
-    """Search wikia"""
+    """Search IGDB for games"""
 
     def __init__(self):
         self.config = Config.get_conf(self, identifier=7535876897)
@@ -36,13 +36,19 @@ class Gamesearch(BaseCog):
                     cover_data = await response.json()
         else:
             cover_data = []
-        platforms_data = await asyncio.gather(
-            *(cached_json_request("https://api-v3.igdb.com/platforms", data=f"fields name; where id = {platform};".encode(), headers=tuple(headers.items())) for platform in game_data["platforms"])
-        )
+
+        # Try to query platforms with cache
+        if game_data.get('platforms'):
+            platforms_data = await asyncio.gather(
+                *(cached_json_request("https://api-v3.igdb.com/platforms", data=f"fields name; where id = {platform};".encode(), headers=tuple(headers.items())) for platform in game_data["platforms"])
+            )
+        else:
+            platforms_data = []
 
         # Build and return embed
         embed = discord.Embed(title=game_data["name"], url=game_data["url"])
-        embed.add_field(name="Platforms", value=", ".join(platform_data[0]["name"] for platform_data in platforms_data))
+        if platforms_data != []:
+            embed.add_field(name="Platforms", value=", ".join(platform_data[0]["name"] for platform_data in platforms_data))
         if "summary" in game_data:
             embed.description = game_data["summary"][:1024] + "..."
         if cover_data != []:
