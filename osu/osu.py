@@ -38,12 +38,14 @@ class Osu(BaseCog):
             embed.title = osu[0]["username"]
             embed.url = "https://osu.ppy.sh/u/{}".format(osu[0]["user_id"])
             embed.set_footer(text="Powered by osu!")
+            embed.add_field(name="Join date", value=osu[0]["join_date"][:10])
             embed.add_field(name="Accuracy", value=osu[0]["accuracy"][:4])
             embed.add_field(name="Level", value=osu[0]["level"][:5])
             embed.add_field(name="Ranked score", value=osu[0]["ranked_score"])
             embed.add_field(name="Rank", value=osu[0]["pp_rank"])
             embed.add_field(name="Country rank ({})".format(osu[0]["country"]), value=osu[0]["pp_country_rank"])
             embed.add_field(name="Playcount", value=osu[0]["playcount"])
+            embed.add_field(name="Total score", value=osu[0]["total_score"])
             await ctx.send(embed=embed)
         else:
             await ctx.send("No results.")
