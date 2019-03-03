@@ -39,7 +39,7 @@ class Osu(BaseCog):
             embed.url = "https://osu.ppy.sh/u/{}".format(osu[0]["user_id"])
             embed.set_footer(text="Powered by osu!")
             embed.add_field(name="Join date", value=osu[0]["join_date"][:10])
-            embed.add_field(name="Accuracy", value=osu[0]["accuracy"][:4])
+            embed.add_field(name="Accuracy", value=osu[0]["accuracy"][:6])
             embed.add_field(name="Level", value=osu[0]["level"][:5])
             embed.add_field(name="Ranked score", value=osu[0]["ranked_score"])
             embed.add_field(name="Rank", value=osu[0]["pp_rank"])
