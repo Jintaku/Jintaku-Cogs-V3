@@ -46,6 +46,7 @@ class Osu(BaseCog):
             embed.add_field(name="Country rank ({})".format(osu[0]["country"]), value=osu[0]["pp_country_rank"])
             embed.add_field(name="Playcount", value=osu[0]["playcount"])
             embed.add_field(name="Total score", value=osu[0]["total_score"])
+            embed.add_field(name="Total seconds played", value=osu[0]["total_seconds_played"])
             await ctx.send(embed=embed)
         else:
             await ctx.send("No results.")
