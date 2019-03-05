@@ -77,6 +77,7 @@ class Roleplay(BaseCog):
         self.config.register_global(**default_global)
 
     @commands.command()
+    @commands.bot_has_permissions(embed_links=True)
     async def hugs(self, ctx, *, user: discord.Member):
         """Hugs a user!"""
 
@@ -92,6 +93,7 @@ class Roleplay(BaseCog):
         await ctx.send(embed=embed)
 
     @commands.command()
+    @commands.bot_has_permissions(embed_links=True)
     async def kiss(self, ctx, *, user: discord.Member):
         """Kiss a user!"""
 
@@ -107,6 +109,7 @@ class Roleplay(BaseCog):
         await ctx.send(embed=embed)
 
     @commands.command()
+    @commands.bot_has_permissions(embed_links=True)
     async def slap(self, ctx, *, user: discord.Member):
         """Slaps a user!"""
 
@@ -122,6 +125,7 @@ class Roleplay(BaseCog):
         await ctx.send(embed=embed)
 
     @commands.command()
+    @commands.bot_has_permissions(embed_links=True)
     async def pat(self, ctx, *, user: discord.Member):
         """Pats a user!"""
 
@@ -137,6 +141,7 @@ class Roleplay(BaseCog):
         await ctx.send(embed=embed)
 
     @commands.command()
+    @commands.bot_has_permissions(embed_links=True)
     async def lick(self, ctx, *, user: discord.Member):
         """Licks a user!"""
 
@@ -152,6 +157,7 @@ class Roleplay(BaseCog):
         await ctx.send(embed=embed)
 
     @commands.command()
+    @commands.bot_has_permissions(embed_links=True)
     async def highfive(self, ctx, *, user: discord.Member):
         """Highfives a user!"""
 
@@ -167,6 +173,7 @@ class Roleplay(BaseCog):
         await ctx.send(embed=embed)
 
     @commands.command()
+    @commands.bot_has_permissions(embed_links=True)
     async def feed(self, ctx, *, user: discord.Member):
         """Feeds a user!"""
 

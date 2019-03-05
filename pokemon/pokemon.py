@@ -9,7 +9,7 @@ class Pokemon(BaseCog):
     """Show Pokemon info"""
 
     @commands.command()
-    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    @commands.bot_has_permissions(embed_links=True)
     async def pokemon(self, ctx, name_or_id):
         """Show pokemon info"""
 
