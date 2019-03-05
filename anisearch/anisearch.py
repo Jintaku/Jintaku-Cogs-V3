@@ -365,7 +365,7 @@ class AniSearch(BaseCog):
 
     @commands.command()
     async def character(self, ctx, *, entered_title):
-        """Searches for anime using Anilist"""
+        """Searches for characters using Anilist"""
 
         try:
             embeds, data = await self._search_character(ctx, entered_title)
