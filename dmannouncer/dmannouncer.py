@@ -38,7 +38,7 @@ class Dmannouncer(BaseCog):
             embed = discord.Embed()
             embed.title = f"Announcement sent by {ctx.author}"
             embed.description = message
-            embed.set_footer(text="Use [p]DMannouncements toggle to turn off announcements")
+            embed.set_footer(text="Use [p]dmannouncements toggle to turn off announcements")
             await owner.send(embed=embed)
 
         await ctx.send("DM'ed successfully!")
