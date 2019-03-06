@@ -41,6 +41,16 @@
 
 <img src="https://github.com/Jintaku/Jintaku-Cogs-V3/blob/master/screenshots/wikia.gif" width="60%">
 
+### Roleplay
+
+* `-feed` Feeds a user!
+* `-highfive` Highfives a user!
+* `-hugs` Hugs a user!
+* `-kiss` Kiss a user!
+* `-lick` Licks a user!
+* `-pat` Pats a user!
+* `-slap` Slaps a user!
+
 ## XKCD
 
 * `[p]xkcd <entry_number : optional>` - Displays XKCD entries (defaults to random)
