@@ -9,7 +9,7 @@ class Dmannouncer(BaseCog):
 
     def __init__(self):
         self.config = Config.get_conf(self, identifier=233137652)
-        default_user = {"toggle": "0"}
+        default_user = {"toggle": "1"}
         self.config.register_user(**default_user)
 
     @commands.command()
@@ -55,3 +55,12 @@ class Dmannouncer(BaseCog):
         if toggle_status == "1":
             await self.config.user(ctx.author).toggle.set("0")
             await ctx.send("Announcements back on!")
+
+    async def on_guild_join(self, guild):
+
+        server_owner = guild.owner
+
+        embed = discord.Embed()
+        embed.title = "News announcements"
+        embed.description = "If you wish to receive new features, maintenance and such announcements, please use [p]dmannouncements to turn this on!"
+        await server_owner.send(embed=embed)
