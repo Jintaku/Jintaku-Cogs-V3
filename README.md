@@ -51,6 +51,11 @@
 * `-pat` Pats a user!
 * `-slap` Slaps a user!
 
+## Truthordare
+
+* `-dare` Dare someone!
+* `-truth` Ask a truth question to users!
+
 ## XKCD
 
 * `[p]xkcd <entry_number : optional>` - Displays XKCD entries (defaults to random)
