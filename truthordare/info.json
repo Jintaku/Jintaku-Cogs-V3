@@ -1,0 +1,9 @@
+{
+  "author" : ["Jintaku"],
+  "bot_version": [3,0,0],
+  "install_msg" : "Go daring and truth away!",
+  "short" : "Truth or dare users",
+  "description" : "Truth or dare users with random truth or dares",
+  "tags" : ["truth", "dare", "random"],
+  "hidden" : false
+}
