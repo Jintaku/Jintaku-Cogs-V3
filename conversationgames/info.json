@@ -1,0 +1,9 @@
+{
+  "author" : ["Jintaku"],
+  "bot_version": [3,0,0],
+  "install_msg" : "Get yo people grooving.",
+  "short" : "Truth or dare, Would you rather, Never have I ever..",
+  "description" : "Play with your friends with some Truth or dare, would you rather or Never have I ever.",
+  "tags" : ["interaction", "truth", "dare", "would", "you", "rather", "never", "have"],
+  "hidden" : false
+}
