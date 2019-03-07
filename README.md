@@ -43,18 +43,20 @@
 
 ### Roleplay
 
-* `-feed` Feeds a user!
-* `-highfive` Highfives a user!
-* `-hugs` Hugs a user!
-* `-kiss` Kiss a user!
-* `-lick` Licks a user!
-* `-pat` Pats a user!
-* `-slap` Slaps a user!
+* `-feed` - Feeds a user!
+* `-highfive` - Highfives a user!
+* `-hugs` - Hugs a user!
+* `-kiss` - Kiss a user!
+* `-lick` - Licks a user!
+* `-pat` - Pats a user!
+* `-slap` - Slaps a user!
 
-## Truthordare
+## ConversationGames
 
-* `-dare` Dare someone!
-* `-truth` Ask a truth question to users!
+* `-dare` - Dare someone!
+* `-truth` - Ask a truth question to users!
+* `-wouldyourather|wyr` - Would you rather?
+* `-neverhaveIever|nhie` - Never have I ever..
 
 ## XKCD
 
