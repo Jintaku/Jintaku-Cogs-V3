@@ -15,6 +15,7 @@ class Confession(BaseCog):
     @commands.command()
     @checks.admin_or_permissions(manage_guild=True)
     async def confessionset(self, ctx, *, channel: discord.TextChannel):
+        """Set a confession room"""
 
         rooms = await self.config.guild(ctx.guild).confession_rooms()
 
@@ -27,6 +28,7 @@ class Confession(BaseCog):
     @commands.command()
     @checks.admin_or_permissions(manage_guild=True)
     async def confessionunset(self, ctx):
+        """Unset a confession room"""
 
         rooms = await self.config.guild(ctx.guild).confession_rooms()
 
@@ -35,6 +37,7 @@ class Confession(BaseCog):
 
     @commands.command()
     async def confess(self, ctx, *, confession):
+        """Confess your dirty sins"""
 
         rooms = await self.config.guild(ctx.guild).confession_rooms()
 
