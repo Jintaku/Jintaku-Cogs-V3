@@ -1,0 +1,9 @@
+{
+  "author" : ["Jintaku"],
+  "bot_version": [3,0,0],
+  "install_msg" : "Let your users confess their terrible terrible crimes in secrecy!",
+  "short" : "Confess secretly.",
+  "description" : "Confess in a confession room to repent your crimes.",
+  "tags" : ["confession", "crime", "secret"],
+  "hidden" : false
+}
