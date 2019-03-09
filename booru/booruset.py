@@ -36,6 +36,20 @@ class Booruset:
         filters = await self.config.guild(ctx.guild).filters()
         await self.generic_show(ctx, filters)
 
+    @_guild.group(name="simple")
+    @checks.admin_or_permissions(manage_guild=True)
+    async def _guild_simple(self, ctx):
+        """Give out only a picture with no reactions or other information, as simple as can be!"""
+
+        toggle_status = await self.config.guild(ctx.guild).simple()
+
+        if toggle_status == "on":
+            await self.config.guild(ctx.guild).simple.set("off")
+            await ctx.send("Simple booru now off! Get all the fancy menus!")
+        if toggle_status == "off":
+            await self.config.guild(ctx.guild).simple.set("on")
+            await ctx.send("Simple booru now on, plain and simple!")
+
     @_guild_allfilters.command(name="add")
     @checks.admin_or_permissions(manage_guild=True)
     async def _guild_allfilters_add(self, ctx, *, filter):

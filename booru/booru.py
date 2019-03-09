@@ -29,7 +29,7 @@ class Booru(BaseCog, Booruset):
     def __init__(self):
         self.config = Config.get_conf(self, identifier=4894278742742)
         default_global = {"filters": [], "nsfw_filters": []}
-        default_guild = {"filters": [], "nsfw_filters": ["loli", "shota"], "boards": ["dan", "gel", "kon", "yan"]}
+        default_guild = {"filters": [], "nsfw_filters": ["loli", "shota"], "boards": ["dan", "gel", "kon", "yan"], "simple": "off"}
         default_channel = {"boards": ["dan", "gel", "kon", "yan"]}
         self.config.register_global(**default_global)
         self.config.register_guild(**default_guild)
@@ -361,6 +361,11 @@ class Booru(BaseCog, Booruset):
             # Build Embed
             embeds = []
 
+            # Respect simple setting
+            simple_booru = await self.config.guild(ctx.guild).simple()
+            if simple_booru == "on":
+                return await self.show_simple_booru(ctx, i, data)
+
             num_pages = len(data)
             for page_num, booru in enumerate(data, 1):
                 # Set variables for owner/author of post
@@ -412,3 +417,22 @@ class Booru(BaseCog, Booruset):
 
             await menu(ctx, pages=embeds, controls=DEFAULT_CONTROLS, message=None, page=i, timeout=15)
 
+    async def show_simple_booru(self, ctx, i, data):  # Shows simple embed
+
+            booru = data[i]
+
+            # Set variables for file url
+            file_url = booru.get("file_url")
+            if booru["provider"] == "Rule34":
+                 file_url = "https://us.rule34.xxx//images/" + booru.get("directory") + "/" + booru.get("image")
+            if booru["provider"] == "Safebooru":
+                 file_url = "https://safebooru.org//images/" + booru.get("directory") + "/" + booru.get("image")
+            booru_url = file_url
+
+            # Set colour for each board
+            color = {"Gelbooru": 3395583, "Danbooru": 3395583, "Konachan": 8745592, "Yandere": 2236962, "Rule34": 339933, "Safebooru": 000000, "e621": 000000}
+
+            embed = discord.Embed()
+            embed.color = color[booru["provider"]]
+            embed.set_image(url=booru_url)
+            await ctx.send(embed=embed)
