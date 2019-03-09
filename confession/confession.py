@@ -65,7 +65,6 @@ class Confession(BaseCog):
         for guild in all_guilds:
             if guild.get_member(ctx.message.author.id):
                 room = await self.config.guild(guild).confession_rooms()
-                print(room)
                 if room is not None:
                     user_guilds.append(guild)
 
