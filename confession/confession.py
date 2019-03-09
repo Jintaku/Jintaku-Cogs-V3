@@ -106,4 +106,6 @@ class Confession(BaseCog):
         try:
             await confession_room.send(confession)
         except:
-            await ctx.author.send("I don't have permission to this room or something went wrong")
+            return await ctx.author.send("I don't have permission to this room or something went wrong")
+
+        await ctx.author.send("Your confession has been sent, you are forgiven now.")
