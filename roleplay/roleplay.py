@@ -1,6 +1,19 @@
 import discord
 from redbot.core import commands, Config
 from random import randint
+import aiohttp
+import logging
+
+log = logging.getLogger("Roleplay")  # Thanks to Sinbad for the example code for logging
+log.setLevel(logging.DEBUG)
+
+console = logging.StreamHandler()
+
+if logging.getLogger("red").isEnabledFor(logging.DEBUG):
+    console.setLevel(logging.DEBUG)
+else:
+    console.setLevel(logging.INFO)
+log.addHandler(console)
 
 BaseCog = getattr(commands, "Cog", object)
 
@@ -221,6 +234,22 @@ class Roleplay(BaseCog):
                 "https://media1.tenor.com/images/4b48975ec500f8326c5db6b178a91a3a/tenor.gif?itemid=12593977",
                 "https://media1.tenor.com/images/187ff5bc3a5628b6906935232898c200/tenor.gif?itemid=9340097",
             ],
+            "tickle": [
+                "https://img2.gelbooru.com/images/c4/41/c441cf1fce1fe51420796f6bd0e420e1.gif",
+                "https://img2.gelbooru.com/images/00/a8/00a8b5ad3ceb7b063ed8a4a59f7c8bdf.gif",
+                "https://img2.gelbooru.com/images/51/63/516318277e9438626c12d0543eb5808b.gif",
+                "https://img2.gelbooru.com/images/0c/e4/0ce45bee2e1aaed9f1e650438f1e2867.gif",
+                "https://img2.gelbooru.com/images/11/74/1174ccbee672bd3f1129f5dc36964926.gif",
+            ],
+            "poke": [
+                "https://img2.gelbooru.com/images/07/86/078690a58e0b816e8e00cc58e090b499.gif",
+                "https://img2.gelbooru.com/images/b7/89/b789369db69022afde47a1ed62598ec6.gif",
+                "https://img2.gelbooru.com/images/49/ec/49ecc543b7b0b680ad0c27c29e942a21.gif",
+                "https://img2.gelbooru.com/images/91/ef/91ef340231f6d537836e23c8ab90a255.gif",
+                "https://img2.gelbooru.com/images/62/d9/62d9a16a640bfcd25dd6159e53fc50d2.gif",
+                "https://img2.gelbooru.com/images/1d/8b/1d8b77bf65858101a82d195deaa39252.gif",
+                "https://img2.gelbooru.com/images/c0/22/c022dc318c7f014d7bac6c2300b9f7a2.gif",
+            ],
         }
         self.config.register_global(**default_global)
 
@@ -231,12 +260,17 @@ class Roleplay(BaseCog):
 
         author = ctx.message.author
         images = await self.config.hugs()
+
+        nekos = await self.fetch_nekos_life(ctx, "hug")
+        images.extend(nekos)
+
         mn = len(images)
         i = randint(0, mn - 1)
 
         # Build Embed
         embed = discord.Embed()
         embed.description = f"**{author.mention} hugs {user.mention}**"
+        embed.set_footer(text="Made with the help of nekos.life")
         embed.set_image(url=images[i])
         await ctx.send(embed=embed)
 
@@ -247,12 +281,17 @@ class Roleplay(BaseCog):
 
         author = ctx.message.author
         images = await self.config.cuddle()
+
+        nekos = await self.fetch_nekos_life(ctx, "cuddle")
+        images.extend(nekos)
+
         mn = len(images)
         i = randint(0, mn - 1)
 
         # Build Embed
         embed = discord.Embed()
         embed.description = f"**{author.mention} cuddles {user.mention}**"
+        embed.set_footer(text="Made with the help of nekos.life")
         embed.set_image(url=images[i])
         await ctx.send(embed=embed)
 
@@ -263,12 +302,17 @@ class Roleplay(BaseCog):
 
         author = ctx.message.author
         images = await self.config.kiss()
+
+        nekos = await self.fetch_nekos_life(ctx, "kiss")
+        images.extend(nekos)
+
         mn = len(images)
         i = randint(0, mn - 1)
 
         # Build Embed
         embed = discord.Embed()
         embed.description = f"**{author.mention} kisses {user.mention}**"
+        embed.set_footer(text="Made with the help of nekos.life")
         embed.set_image(url=images[i])
         await ctx.send(embed=embed)
 
@@ -279,12 +323,17 @@ class Roleplay(BaseCog):
 
         author = ctx.message.author
         images = await self.config.slap()
+
+        nekos = await self.fetch_nekos_life(ctx, "slap")
+        images.extend(nekos)
+
         mn = len(images)
         i = randint(0, mn - 1)
 
         # Build Embed
         embed = discord.Embed()
         embed.description = f"**{author.mention} slaps {user.mention}**"
+        embed.set_footer(text="Made with the help of nekos.life")
         embed.set_image(url=images[i])
         await ctx.send(embed=embed)
 
@@ -295,12 +344,17 @@ class Roleplay(BaseCog):
 
         author = ctx.message.author
         images = await self.config.pat()
+
+        nekos = await self.fetch_nekos_life(ctx, "pat")
+        images.extend(nekos)
+
         mn = len(images)
         i = randint(0, mn - 1)
 
         # Build Embed
         embed = discord.Embed()
         embed.description = f"**{author.mention} pats {user.mention}**"
+        embed.set_footer(text="Made with the help of nekos.life")
         embed.set_image(url=images[i])
         await ctx.send(embed=embed)
 
@@ -317,6 +371,7 @@ class Roleplay(BaseCog):
         # Build Embed
         embed = discord.Embed()
         embed.description = f"**{author.mention} licks {user.mention}**"
+        embed.set_footer(text="Made with the help of nekos.life")
         embed.set_image(url=images[i])
         await ctx.send(embed=embed)
 
@@ -333,6 +388,7 @@ class Roleplay(BaseCog):
         # Build Embed
         embed = discord.Embed()
         embed.description = f"**{author.mention} highfives {user.mention}**"
+        embed.set_footer(text="Made with the help of nekos.life")
         embed.set_image(url=images[i])
         await ctx.send(embed=embed)
 
@@ -343,11 +399,73 @@ class Roleplay(BaseCog):
 
         author = ctx.message.author
         images = await self.config.feed()
+
+        nekos = await self.fetch_nekos_life(ctx, "feed")
+        images.extend(nekos)
+
         mn = len(images)
         i = randint(0, mn - 1)
 
         # Build Embed
         embed = discord.Embed()
         embed.description = f"**{author.mention} feeds {user.mention}**"
+        embed.set_footer(text="Made with the help of nekos.life")
         embed.set_image(url=images[i])
         await ctx.send(embed=embed)
+
+    @commands.command()
+    @commands.bot_has_permissions(embed_links=True)
+    async def tickle(self, ctx, *, user: discord.Member):
+        """Tickles a user!"""
+
+        author = ctx.message.author
+        images = await self.config.tickle()
+
+        nekos = await self.fetch_nekos_life(ctx, "tickle")
+        images.extend(nekos)
+
+        mn = len(images)
+        i = randint(0, mn - 1)
+
+        # Build Embed
+        embed = discord.Embed()
+        embed.description = f"**{author.mention} feeds {user.mention}**"
+        embed.set_footer(text="Made with the help of nekos.life")
+        embed.set_image(url=images[i])
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    @commands.bot_has_permissions(embed_links=True)
+    async def poke(self, ctx, *, user: discord.Member):
+        """Pokes a user!"""
+
+        author = ctx.message.author
+        images = await self.config.poke()
+
+        nekos = await self.fetch_nekos_life(ctx, "poke")
+        images.extend(nekos)
+
+        mn = len(images)
+        i = randint(0, mn - 1)
+
+        # Build Embed
+        embed = discord.Embed()
+        embed.description = f"**{author.mention} feeds {user.mention}**"
+        embed.set_footer(text="Made with the help of nekos.life")
+        embed.set_image(url=images[i])
+        await ctx.send(embed=embed)
+
+    async def fetch_nekos_life(self, ctx, rp_action):
+
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f"https://api.nekos.dev/api/v3/images/sfw/gif/{rp_action}/?count=20") as resp:
+                try:
+                    content = await resp.json(content_type=None)
+                except (ValueError, aiohttp.ContentTypeError) as ex:
+                    log.debug("Pruned by exception, error below:")
+                    log.debug(ex)
+                    return []
+
+        if content["data"]["status"]["code"] == 200:
+            return content["data"]["response"]["urls"]
+
