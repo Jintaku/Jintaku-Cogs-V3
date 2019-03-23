@@ -50,6 +50,20 @@ class Booruset:
             await self.config.guild(ctx.guild).simple.set("on")
             await ctx.send("Simple booru now on, plain and simple!")
 
+    @_guild.group(name="onlynsfw")
+    @checks.admin_or_permissions(manage_guild=True)
+    async def _guild_onlynsfw(self, ctx):
+        """Only post in nsfw channels"""
+
+        toggle_status = await self.config.guild(ctx.guild).onlynsfw()
+
+        if toggle_status == "on":
+            await self.config.guild(ctx.guild).onlynsfw.set("off")
+            await ctx.send("You can use booru as normal!")
+        if toggle_status == "off":
+            await self.config.guild(ctx.guild).onlynsfw.set("on")
+            await ctx.send("You can only use it in nsfw channels!")
+
     @_guild_allfilters.command(name="add")
     @checks.admin_or_permissions(manage_guild=True)
     async def _guild_allfilters_add(self, ctx, *, filter):

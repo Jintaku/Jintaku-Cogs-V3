@@ -29,7 +29,7 @@ class Booru(BaseCog, Booruset):
     def __init__(self):
         self.config = Config.get_conf(self, identifier=4894278742742)
         default_global = {"filters": [], "nsfw_filters": []}
-        default_guild = {"filters": [], "nsfw_filters": ["loli", "shota"], "boards": ["dan", "gel", "kon", "yan"], "simple": "off"}
+        default_guild = {"filters": [], "nsfw_filters": ["loli", "shota"], "boards": ["dan", "gel", "kon", "yan"], "simple": "off", "onlynsfw": "off"}
         default_channel = {"boards": ["dan", "gel", "kon", "yan"]}
         self.config.register_global(**default_global)
         self.config.register_guild(**default_guild)
@@ -248,6 +248,13 @@ class Booru(BaseCog, Booruset):
 
         # Checks if nsfw could be posted in sfw channel
         if not ctx.channel.is_nsfw():
+
+            # Respect onlynsfw setting
+            nsfw_booru = await self.config.guild(ctx.guild).onlynsfw()
+            if nsfw_booru == "on":
+                await ctx.send("You cannot use booru in sfw channels")
+                return
+
             if "rating:explicit" in tag or "rating:questionable" in tag or not ratings & tag:
                 await ctx.send("You cannot post nsfw content in sfw channels")
                 return
