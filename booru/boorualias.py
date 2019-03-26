@@ -19,7 +19,7 @@ class Boorualias:
         tag += tag_default
         boards = ["dan", "gel", "kon", "yan", "safe"]
 
-        await self.generic_alias_booru(ctx, tag)
+        await self.generic_alias_booru(ctx, boards, tag)
 
     @commands.command(name="4k")
     @commands.guild_only()
