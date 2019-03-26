@@ -172,14 +172,13 @@ class BooruCore:
     async def fetch_from_reddit(self, urlstr, rating, provider):  # Handles provider data and fetcher responses
         content = ""
 
-        async with aiohttp.ClientSession() as session:
-            async with session.get(urlstr, headers={'User-Agent': "Booru (https://github.com/Jintaku/Jintaku-Cogs-V3)"}) as resp:
-                try:
-                    content = await resp.json(content_type=None)
-                except (ValueError, aiohttp.ContentTypeError) as ex:
-                    log.debug("Pruned by exception, error below:")
-                    log.debug(ex)
-                    content = []
+        async with self.session.get(urlstr, headers={'User-Agent': "Booru (https://github.com/Jintaku/Jintaku-Cogs-V3)"}) as resp:
+            try:
+                content = await resp.json(content_type=None)
+            except (ValueError, aiohttp.ContentTypeError) as ex:
+                log.debug("Pruned by exception, error below:")
+                log.debug(ex)
+                content = []
         if not content or content == [] or content is None or (type(content) is dict and "success" in content.keys() and content["success"] == False):
             content = []
             return content
@@ -447,14 +446,13 @@ class BooruCore:
         content = ""
 
         # TODO : Use aiohttp clientsession in init to be reused
-        async with aiohttp.ClientSession() as session:
-            async with session.get(urlstr, headers={'User-Agent': "Booru (https://github.com/Jintaku/Jintaku-Cogs-V3)"}) as resp:
-                try:
-                    content = await resp.json(content_type=None)
-                except (ValueError, aiohttp.ContentTypeError) as ex:
-                    log.debug("Pruned by exception, error below:")
-                    log.debug(ex)
-                    content = []
+        async with self.session.get(urlstr, headers={'User-Agent': "Booru (https://github.com/Jintaku/Jintaku-Cogs-V3)"}) as resp:
+            try:
+                content = await resp.json(content_type=None)
+            except (ValueError, aiohttp.ContentTypeError) as ex:
+                log.debug("Pruned by exception, error below:")
+                log.debug(ex)
+                content = []
         if not content or content == [] or content is None or (type(content) is dict and "success" in content.keys() and content["success"] == False):
             content = []
             return content

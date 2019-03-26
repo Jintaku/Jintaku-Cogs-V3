@@ -29,7 +29,11 @@ class Booru(BaseCog, BooruCore, Booruset, Boorualias):
     """Show a picture using image boards (Gelbooru, yandere, konachan)"""
 
     def __init__(self):
+        # Reusable stuff
         self.board_names = ["dan", "gel", "kon", "yan", "r34", "safe", "e621", "4k", "ahegao", "ass", "anal", "bdsm", "blowjob", "boobs", "cunnilingus", "bottomless", "cumshots", "deepthroat", "dick", "double_penetration", "gay", "group", "hentai", "lesbian", "milf", "public", "rule34", "thigh", "trap", "wild"]
+        self.session = aiohttp.ClientSession()
+
+        # Config stuff
         self.config = Config.get_conf(self, identifier=4894278742742)
         default_global = {"filters": [], "nsfw_filters": []}
         default_guild = {"filters": [], "nsfw_filters": ["loli", "shota"], "boards": ["dan", "gel", "kon", "yan"], "simple": "off", "onlynsfw": "off"}
