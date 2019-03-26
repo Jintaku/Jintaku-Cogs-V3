@@ -272,6 +272,12 @@ class Booruset:
                 board_names_string += f" {board},"
             await ctx.send(f"Reminder that the board names that can be used are {board_names_string}. Please try again")
             return
+        else:
+            for board in boards:
+                if board not in self.board_names:
+                    for board in self.board_names:
+                        board_names_string += f" {board},"
+                    await ctx.send(f"Reminder that the board names that can be used are {board_names_string}. Please try again")
 
         # Fuse input and config
         config_boards = set(config_boards)
@@ -297,6 +303,12 @@ class Booruset:
                 board_names_string += f" {board},"
             await ctx.send(f"Reminder that the board names that can be used are {board_names_string}. Please try again")
             return
+        else:
+            for board in boards:
+                if board not in self.board_names:
+                    for board in self.board_names:
+                        board_names_string += f" {board},"
+                    await ctx.send(f"Reminder that the board names that can be used are {board_names_string}. Please try again")
 
         # Set new config
         config_boards = set(config_boards)
@@ -347,8 +359,17 @@ class Booruset:
         # Filter input
         boards = await self.boards_filter(boards)
         if boards is None:
-            await ctx.send("Reminder that the board names that can be used are dan, gel, kon, yan, r34, safe, e621. Please try again")
+            board_names_string = ""
+            for board in self.board_names:
+                board_names_string += f" {board},"
+            await ctx.send(f"Reminder that the board names that can be used are {board_names_string}. Please try again")
             return
+        else:
+            for board in boards:
+                if board not in self.board_names:
+                    for board in self.board_names:
+                        board_names_string += f" {board},"
+                    await ctx.send(f"Reminder that the board names that can be used are {board_names_string}. Please try again")
 
         # Fuse input and config
         config_boards = set(config_boards)
@@ -369,8 +390,17 @@ class Booruset:
         # Filter input
         boards = await self.boards_filter(boards)
         if boards is None:
-            await ctx.send("Reminder that the board names that can be used are dan, gel, kon, yan, r34, safe, e621. Please try again")
+            board_names_string = ""
+            for board in self.board_names:
+                board_names_string += f" {board},"
+            await ctx.send(f"Reminder that the board names that can be used are {board_names_string}. Please try again")
             return
+        else:
+            for board in boards:
+                if board not in self.board_names:
+                    for board in self.board_names:
+                        board_names_string += f" {board},"
+                    await ctx.send(f"Reminder that the board names that can be used are {board_names_string}. Please try again")
 
         # Set new config
         config_boards = set(config_boards)
