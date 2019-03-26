@@ -17,162 +17,176 @@ class Boorualias:
 
         tag_default = " neko"
         tag += tag_default
+        boards = ["dan", "gel", "kon", "yan", "safe"]
 
-        await self.generic_booru(ctx, tag)
+        await self.generic_alias_booru(ctx, tag)
 
     @commands.command(name="4k")
     @commands.guild_only()
+    @commands.is_nsfw()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def _4_k(self, ctx, *, tag=""):
         """Shows a 4k image board entry based on user query"""
 
         tag_default = " 4k"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "4k"]
+        boards = ["dan", "gel", "kon", "yan", "safe", "4k"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
     @commands.command()
     @commands.guild_only()
+    @commands.is_nsfw()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def ahegao(self, ctx, *, tag=""):
         """Shows a ahegao image board entry based on user query"""
 
         tag_default = " ahegao"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "ahegao"]
+        boards = ["dan", "gel", "kon", "yan", "safe", "ahegao"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
     @commands.command()
     @commands.guild_only()
+    @commands.is_nsfw()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def anal(self, ctx, *, tag=""):
         """Shows a anal image board entry based on user query"""
 
         tag_default = " anal"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "anal"]
+        boards = ["dan", "gel", "kon", "yan", "safe", "anal"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
     @commands.command()
     @commands.guild_only()
+    @commands.is_nsfw()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def ass(self, ctx, *, tag=""):
         """Shows a ass image board entry based on user query"""
 
         tag_default = " ass"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "ass"]
+        boards = ["dan", "gel", "kon", "yan", "safe", "ass"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
     @commands.command()
     @commands.guild_only()
+    @commands.is_nsfw()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def bdsm(self, ctx, *, tag=""):
         """Shows a bdsm image board entry based on user query"""
 
         tag_default = " bdsm"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "bdsm"]
+        boards = ["dan", "gel", "kon", "yan", "safe", "bdsm"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
     @commands.command()
     @commands.guild_only()
+    @commands.is_nsfw()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def boobs(self, ctx, *, tag=""):
         """Shows a boobs image board entry based on user query"""
 
         tag_default = " boobs"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "boobs"]
+        boards = ["dan", "gel", "kon", "yan", "safe", "boobs"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
     @commands.command()
     @commands.guild_only()
+    @commands.is_nsfw()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def bottomless(self, ctx, *, tag=""):
         """Shows a boobs image board entry based on user query"""
 
         tag_default = " bottomless"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "bottomless"]
+        boards = ["dan", "gel", "kon", "yan", "safe", "bottomless"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
     @commands.command()
     @commands.guild_only()
+    @commands.is_nsfw()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def blowjob(self, ctx, *, tag=""):
         """Shows a boobs image board entry based on user query"""
 
         tag_default = " blowjob"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "blowjob"]
+        boards = ["dan", "gel", "kon", "yan", "safe", "blowjob"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
     @commands.command()
     @commands.guild_only()
+    @commands.is_nsfw()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def cumon(self, ctx, *, tag=""):
         """Shows a boobs image board entry based on user query"""
 
         tag_default = " cum_on_*"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "cumshots"]
+        boards = ["dan", "gel", "kon", "yan", "safe", "cumshots"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
     @commands.command()
     @commands.guild_only()
+    @commands.is_nsfw()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def cunni(self, ctx, *, tag=""):
         """Shows a cunnilingus image board entry based on user query"""
 
         tag_default = " cunnilingus"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "cunnilingus"]
+        boards = ["dan", "gel", "kon", "yan", "safe", "cunnilingus"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
     @commands.command()
     @commands.guild_only()
+    @commands.is_nsfw()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def deepthroat(self, ctx, *, tag=""):
         """Shows a deepthroat image board entry based on user query"""
 
         tag_default = " deepthroat"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "deepthroat"]
+        boards = ["dan", "gel", "kon", "yan", "safe", "deepthroat"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
     @commands.command()
     @commands.guild_only()
+    @commands.is_nsfw()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def dick(self, ctx, *, tag=""):
         """Shows a dick image board entry based on user query"""
 
         tag_default = " dick"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "dick"]
+        boards = ["dan", "gel", "kon", "yan", "safe", "dick"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
     @commands.command()
     @commands.guild_only()
+    @commands.is_nsfw()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def doublepenetration(self, ctx, *, tag=""):
         """Shows a doublepenetration image board entry based on user query"""
 
         tag_default = " double_penetration"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "double_penetration"]
+        boards = ["dan", "gel", "kon", "yan", "safe", "double_penetration"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
@@ -184,7 +198,10 @@ class Boorualias:
 
         tag_default = " yaoi"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "gay"]
+        if ctx.message.channel.is_nsfw():
+            boards = ["dan", "gel", "kon", "yan", "safe", "gay"]
+        if ctx.message.channel.is_nsfw() is False:
+            boards = ["dan", "gel", "kon", "yan", "safe"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
@@ -196,7 +213,10 @@ class Boorualias:
 
         tag_default = " lesbian yuri"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "lesbian"]
+        if ctx.message.channel.is_nsfw():
+            boards = ["dan", "gel", "kon", "yan", "safe", "lesbian"]
+        if ctx.message.channel.is_nsfw() is False:
+            boards = ["dan", "gel", "kon", "yan", "safe"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
@@ -208,12 +228,16 @@ class Boorualias:
 
         tag_default = " milf"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "milf"]
+        if ctx.message.channel.is_nsfw():
+            boards = ["dan", "gel", "kon", "yan", "safe", "milf"]
+        if ctx.message.channel.is_nsfw() is False:
+            boards = ["dan", "gel", "kon", "yan", "safe"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
     @commands.command()
     @commands.guild_only()
+    @commands.is_nsfw()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def oral(self, ctx, *, tag=""):
         """Shows a oral image board entry based on user query"""
@@ -226,25 +250,27 @@ class Boorualias:
 
     @commands.command()
     @commands.guild_only()
+    @commands.is_nsfw()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def public(self, ctx, *, tag=""):
         """Shows a public sex image board entry based on user query"""
 
         tag_default = " public"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "public"]
+        boards = ["dan", "gel", "kon", "yan", "safe", "public"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
     @commands.command()
     @commands.guild_only()
+    @commands.is_nsfw()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def pussy(self, ctx, *, tag=""):
         """Shows a pussy image board entry based on user query"""
 
         tag_default = " pussy"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "pussy", "cunnilingus"]
+        boards = ["dan", "gel", "kon", "yan", "safe", "pussy", "cunnilingus"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
@@ -256,19 +282,23 @@ class Boorualias:
 
         tag_default = " thigh"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "thigh"]
+        if ctx.message.channel.is_nsfw():
+            boards = ["dan", "gel", "kon", "yan", "safe", "thigh"]
+        if ctx.message.channel.is_nsfw() is False:
+            boards = ["dan", "gel", "kon", "yan", "safe"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
     @commands.command()
     @commands.guild_only()
+    @commands.is_nsfw()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def trap(self, ctx, *, tag=""):
         """Shows a trap image board entry based on user query"""
 
         tag_default = " trap"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "trap"]
+        boards = ["dan", "gel", "kon", "yan", "safe", "trap"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
@@ -280,7 +310,7 @@ class Boorualias:
 
         tag_default = " red_hair redhead"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan"]
+        boards = ["dan", "gel", "kon", "yan", "safe"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
@@ -292,30 +322,32 @@ class Boorualias:
 
         tag_default = " collar"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan"]
+        boards = ["dan", "gel", "kon", "yan", "safe"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
     @commands.command()
     @commands.guild_only()
+    @commands.is_nsfw()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def group(self, ctx, *, tag=""):
         """Shows a group sex image board entry based on user query"""
 
         tag_default = " group_sex gangbang"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "group"]
+        boards = ["dan", "gel", "kon", "yan", "safe", "group"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
     @commands.command()
     @commands.guild_only()
+    @commands.is_nsfw()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def wild(self, ctx, *, tag=""):
         """Shows a futanari image board entry based on user query"""
 
         tag_default = " wild"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "wild"]
+        boards = ["dan", "gel", "kon", "yan", "safe", "wild"]
 
         await self.generic_alias_booru(ctx, boards, tag)

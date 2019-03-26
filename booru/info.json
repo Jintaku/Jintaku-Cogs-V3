@@ -5,6 +5,6 @@
   "short" : "Display image board entries",
   "description" : "Displays a random image board entry based on your query \n This may include NSFW content (although this is not the case by default)",
   "tags" : ["booru", "images", "gelbooru", "yandere", "konachan", "NSFW"],
-  "requirements" : ["aiocache"],
+  "requirements" : ["aiocache==0.10.1"],
   "hidden" : false
 }
