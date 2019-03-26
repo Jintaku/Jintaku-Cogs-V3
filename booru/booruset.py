@@ -267,7 +267,10 @@ class Booruset:
         # Filter input
         boards = await self.boards_filter(boards)
         if boards is None:
-            await ctx.send("Reminder that the board names that can be used are dan, gel, kon, yan, r34, safe, e621. Please try again")
+            board_names_string = ""
+            for board in self.board_names:
+                board_names_string += f" {board},"
+            await ctx.send(f"Reminder that the board names that can be used are {board_names_string}. Please try again")
             return
 
         # Fuse input and config
@@ -289,7 +292,10 @@ class Booruset:
         # Filter input
         boards = await self.boards_filter(boards)
         if boards is None:
-            await ctx.send("Reminder that the board names that can be used are dan, gel, kon, yan, safe, e621. Please try again")
+            board_names_string = ""
+            for board in self.board_names:
+                board_names_string += f" {board},"
+            await ctx.send(f"Reminder that the board names that can be used are {board_names_string}. Please try again")
             return
 
         # Set new config
@@ -301,11 +307,8 @@ class Booruset:
 
         boards = set(boards.split(" "))
 
-        # Set variable to see which are good
-        correct_board_names = ["dan", "gel", "kon", "yan", "r34", "safe", "e621"]
-
         # Check if good
-        if boards & set(correct_board_names):
+        if boards & set(self.board_names):
             return boards
         else:
             return

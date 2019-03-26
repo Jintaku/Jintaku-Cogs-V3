@@ -7,7 +7,9 @@ from random import randint
 import asyncio
 import logging
 
+from .boorucore import BooruCore
 from .booruset import Booruset
+from .boorualias import Boorualias
 
 log = logging.getLogger("Booru")  # Thanks to Sinbad for the example code for logging
 log.setLevel(logging.DEBUG)
@@ -23,10 +25,11 @@ log.addHandler(console)
 BaseCog = getattr(commands, "Cog", object)
 
 
-class Booru(BaseCog, Booruset):
+class Booru(BaseCog, BooruCore, Booruset, Boorualias):
     """Show a picture using image boards (Gelbooru, yandere, konachan)"""
 
     def __init__(self):
+        self.board_names = ["dan", "gel", "kon", "yan", "r34", "safe", "e621", "4k", "ahegao", "ass", "anal", "bdsm", "blowjob", "boobs", "cunnilingus", "bottomless", "cumshots", "deepthroat", "dick", "double_penetration", "gay", "group", "hentai", "lesbian", "milf", "public", "rule34", "thigh", "trap", "wild"]
         self.config = Config.get_conf(self, identifier=4894278742742)
         default_global = {"filters": [], "nsfw_filters": []}
         default_guild = {"filters": [], "nsfw_filters": ["loli", "shota"], "boards": ["dan", "gel", "kon", "yan"], "simple": "off", "onlynsfw": "off"}
@@ -41,34 +44,7 @@ class Booru(BaseCog, Booruset):
     async def booru(self, ctx, *, tag=None):
         """Shows a image board entry based on user query"""
 
-        tag = await self.filter_tags(ctx, tag)
-
-        if tag is None:
-            return
-
-        log.debug(tag)
-
-        # Image board fetcher
-        guild_boards = await self.config.guild(ctx.guild).boards()
-        channel_boards = await self.config.channel(ctx.channel).boards()
-
-        if set(channel_boards) == {"dan", "gel", "kon", "yan"}:
-            boards = guild_boards
-        else:
-            boards = channel_boards
-
-        if boards == []:
-            await ctx.send("There no image boards, please use [p]booruset guild boards to set them.")
-            return
-
-        all_data = await asyncio.gather(*(getattr(self, f"fetch_{board}")(ctx, tag) for board in boards))
-        data = [item for board_data in all_data for item in board_data]
-
-        # Filter data without using up requests space
-        data = await self.filter_posts(ctx, data)
-
-        # Done sending requests, time to show it
-        await self.show_booru(ctx, data)
+        await self.generic_booru(ctx, tag)
 
     @commands.command()
     @commands.guild_only()
@@ -76,21 +52,8 @@ class Booru(BaseCog, Booruset):
     async def yan(self, ctx, *, tag=None):
         """Shows a image board entry based on user query from yande.re"""
 
-        tag = await self.filter_tags(ctx, tag)
-
-        if tag is None:
-            return
-
-        log.debug(tag)
-
-        # Image board fetcher
-        data = await self.fetch_yan(ctx, tag)
-
-        # Filter data without using up requests space
-        data = await self.filter_posts(ctx, data)
-
-        # Done sending requests, time to show it
-        await self.show_booru(ctx, data)
+        board = "yan"
+        await self.generic_specific_source(ctx, board, tag)
 
     @commands.command()
     @commands.guild_only()
@@ -98,21 +61,8 @@ class Booru(BaseCog, Booruset):
     async def gel(self, ctx, *, tag=None):
         """Shows a image board entry based on user query from gelbooru"""
 
-        tag = await self.filter_tags(ctx, tag)
-
-        if tag is None:
-            return
-
-        log.debug(tag)
-
-        # Image board fetcher
-        data = await self.fetch_gel(ctx, tag)
-
-        # Filter data without using up requests space
-        data = await self.filter_posts(ctx, data)
-
-        # Done sending requests, time to show it
-        await self.show_booru(ctx, data)
+        board = "gel"
+        await self.generic_specific_source(ctx, board, tag)
 
     @commands.command()
     @commands.guild_only()
@@ -120,21 +70,8 @@ class Booru(BaseCog, Booruset):
     async def kon(self, ctx, *, tag=None):
         """Shows a image board entry based on user query from konachan"""
 
-        tag = await self.filter_tags(ctx, tag)
-
-        if tag is None:
-            return
-
-        log.debug(tag)
-
-        # Image board fetcher
-        data = await self.fetch_kon(ctx, tag)
-
-        # Filter data without using up requests space
-        data = await self.filter_posts(ctx, data)
-
-        # Done sending requests, time to show it
-        await self.show_booru(ctx, data)
+        board = "kon"
+        await self.generic_specific_source(ctx, board, tag)
 
     @commands.command()
     @commands.guild_only()
@@ -142,21 +79,8 @@ class Booru(BaseCog, Booruset):
     async def dan(self, ctx, *, tag=None):
         """Shows a image board entry based on user query from Danbooru"""
 
-        tag = await self.filter_tags(ctx, tag)
-
-        if tag is None:
-            return
-
-        log.debug(tag)
-
-        # Image board fetcher
-        data = await self.fetch_dan(ctx, tag)
-
-        # Filter data without using up requests space
-        data = await self.filter_posts(ctx, data)
-
-        # Done sending requests, time to show it
-        await self.show_booru(ctx, data)
+        board = "dan"
+        await self.generic_specific_source(ctx, board, tag)
 
     @commands.command()
     @commands.guild_only()
@@ -164,21 +88,8 @@ class Booru(BaseCog, Booruset):
     async def r34(self, ctx, *, tag=None):
         """Shows a image board entry based on user query from Rule34"""
 
-        tag = await self.filter_tags(ctx, tag)
-
-        if tag is None:
-            return
-
-        log.debug(tag)
-
-        # Image board fetcher
-        data = await self.fetch_r34(ctx, tag)
-
-        # Filter data without using up requests space
-        data = await self.filter_posts(ctx, data)
-
-        # Done sending requests, time to show it
-        await self.show_booru(ctx, data)
+        board = "r34"
+        await self.generic_specific_source(ctx, board, tag)
 
     @commands.command()
     @commands.guild_only()
@@ -186,21 +97,8 @@ class Booru(BaseCog, Booruset):
     async def safe(self, ctx, *, tag=None):
         """Shows a image board entry based on user query from Safebooru"""
 
-        tag = await self.filter_tags(ctx, tag)
-
-        if tag is None:
-            return
-
-        log.debug(tag)
-
-        # Image board fetcher
-        data = await self.fetch_safe(ctx, tag)
-
-        # Filter data without using up requests space
-        data = await self.filter_posts(ctx, data)
-
-        # Done sending requests, time to show it
-        await self.show_booru(ctx, data)
+        board = "safe"
+        await self.generic_specific_source(ctx, board, tag)
 
     @commands.command()
     @commands.guild_only()
@@ -208,238 +106,253 @@ class Booru(BaseCog, Booruset):
     async def e621(self, ctx, *, tag=None):
         """Shows a image board entry based on user query from Safebooru"""
 
-        tag = await self.filter_tags(ctx, tag)
+        board = "e621"
+        await self.generic_specific_source(ctx, board, tag)
 
-        if tag is None:
-            return
+    @commands.group()
+    @checks.admin_or_permissions()
+    async def reddits(self, ctx):
+        """Query sources for all the subreddits!"""
+        pass
 
-        log.debug(tag)
+    @reddits.group(name="4k", autohelp=False)
+    @commands.guild_only()
+    @commands.is_nsfw()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def _4k(self, ctx):
+        """Shows a image board entry based on user query from 4k subreddits"""
 
-        # Image board fetcher
-        data = await self.fetch_e621(ctx, tag)
+        board = "4k"
+        tag = None
+        await self.generic_specific_source(ctx, board, tag)
 
-        # Filter data without using up requests space
-        data = await self.filter_posts(ctx, data)
+    @reddits.group(name="ahegao", autohelp=False)
+    @commands.guild_only()
+    @commands.is_nsfw()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def _ahegao(self, ctx):
+        """Shows a image board entry based on user query from ahegao subreddits"""
 
-        # Done sending requests, time to show it
-        await self.show_booru(ctx, data)
+        board = "ahegao"
+        tag = None
+        await self.generic_specific_source(ctx, board, tag)
 
-    async def filter_tags(self, ctx, tag):
-        # Checks if there is a tag and defaults depending on channel
-        if tag is not None:
-            tag = set(tag.split(" "))
-        if ctx.channel.is_nsfw() and tag is None:
-            tag = {"rating:none", "*"}
-        if ctx.channel.is_nsfw() and tag is not None:
-            tag.add("rating:none")
-        if ctx.channel.is_nsfw() == False and tag is None:
-            tag = {"rating:safe", "*"}
+    @reddits.group(name="ass", autohelp=False)
+    @commands.guild_only()
+    @commands.is_nsfw()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def _ass(self, ctx):
+        """Shows a image board entry based on user query from ass subreddits"""
 
-        log.debug(tag)
+        board = "ass"
+        tag = None
+        await self.generic_specific_source(ctx, board, tag)
 
-        # Checks common to see if any ratings are there
-        ratings = {"rating:safe", "rating:explicit", "rating:questionable", "rating:none"}
-        if not ratings & tag:
-            tag.add("rating:safe")
+    @reddits.group(name="anal", autohelp=False)
+    @commands.guild_only()
+    @commands.is_nsfw()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def _anal(self, ctx):
+        """Shows a image board entry based on user query from anal subreddits"""
 
-        # Checks if none and removes ratings
-        if "rating:none" in tag:
-            tag.remove("rating:none")
+        board = "anal"
+        tag = None
+        await self.generic_specific_source(ctx, board, tag)
 
-        # Checks if nsfw could be posted in sfw channel
-        if not ctx.channel.is_nsfw():
+    @reddits.group(name="bdsm", autohelp=False)
+    @commands.guild_only()
+    @commands.is_nsfw()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def _bdsm(self, ctx):
+        """Shows a image board entry based on user query from bdsm subreddits"""
 
-            # Respect onlynsfw setting
-            nsfw_booru = await self.config.guild(ctx.guild).onlynsfw()
-            if nsfw_booru == "on":
-                await ctx.send("You cannot use booru in sfw channels")
-                return
+        board = "bdsm"
+        tag = None
+        await self.generic_specific_source(ctx, board, tag)
 
-            if "rating:explicit" in tag or "rating:questionable" in tag or not ratings & tag:
-                await ctx.send("You cannot post nsfw content in sfw channels")
-                return
+    @reddits.group(name="blowjob", autohelp=False)
+    @commands.guild_only()
+    @commands.is_nsfw()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def _blowjob(self, ctx):
+        """Shows a image board entry based on user query from blowjob subreddits"""
 
-        # Checks if more than 6 tag and tells user you can't do that
-        if len(tag) > 6:
-            await ctx.send("You cannot search for more than 6 tags at once")
-            return
+        board = "blowjob"
+        tag = None
+        await self.generic_specific_source(ctx, board, tag)
 
-        log.debug(tag)
+    @reddits.group(name="cunnilingus", autohelp=False)
+    @commands.guild_only()
+    @commands.is_nsfw()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def _cunnilingus(self, ctx):
+        """Shows a image board entry based on user query from cunnilingus subreddits"""
 
-        return tag
+        board = "cunnilingus"
+        tag = None
+        await self.generic_specific_source(ctx, board, tag)
 
-    async def filter_posts(self, ctx, data):
-        # Global filters
-        global_filters = set(await self.config.filters())
-        global_nsfw_filters = set(await self.config.nsfw_filters())
+    @reddits.group(name="bottomless", autohelp=False)
+    @commands.guild_only()
+    @commands.is_nsfw()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def _bottomless(self, ctx):
+        """Shows a image board entry based on user query from bottomless subreddits"""
 
-        # Guild filters
-        guild_group = self.config.guild(ctx.guild)
-        guild_nsfw_filters = set(await guild_group.nsfw_filters())
-        guild_filters = set(await guild_group.filters())
+        board = "bottomless"
+        tag = None
+        await self.generic_specific_source(ctx, board, tag)
 
-        # Fuse both global and guild for cleaner use
-        filters = global_filters | guild_filters
-        nsfw_filters = global_nsfw_filters | guild_nsfw_filters
+    @reddits.group(name="cumshots", autohelp=False)
+    @commands.guild_only()
+    @commands.is_nsfw()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def _cumshots(self, ctx):
+        """Shows a image board entry based on user query from cumshots subreddits"""
 
-        # Set variable because
-        filtered_data = []
+        board = "cumshots"
+        tag = None
+        await self.generic_specific_source(ctx, board, tag)
 
-        # Filter the content
-        for booru in data:
-            booru_tags_string = booru.get("tags") or booru.get("tag_string") or "N/A"
-            booru_tags = set(booru_tags_string.split())
+    @reddits.group(name="deepthroat", autohelp=False)
+    @commands.guild_only()
+    @commands.is_nsfw()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def _deepthroat(self, ctx):
+        """Shows a image board entry based on user query from deepthroat subreddits"""
 
-            if booru["rating"] in "sqe":
-                if filters & booru_tags or (booru["rating"] != "s" and nsfw_filters & booru_tags):
-                    continue
-            if booru.get("is_deleted"):
-                continue
-            if booru["provider"] == "Danbooru" and "file_url" not in booru:
-                continue
+        board = "deepthroat"
+        tag = None
+        await self.generic_specific_source(ctx, board, tag)
 
-            filtered_data.append(booru)
+    @reddits.group(name="dick", autohelp=False)
+    @commands.guild_only()
+    @commands.is_nsfw()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def _dick(self, ctx):
+        """Shows a image board entry based on user query from dick subreddits"""
 
-        return filtered_data
+        board = "dick"
+        tag = None
+        await self.generic_specific_source(ctx, board, tag)
 
-    async def fetch_from_booru(self, urlstr, provider):  # Handles provider data and fetcher responses
-        content = ""
-        async with aiohttp.ClientSession() as session:
-            async with session.get(urlstr, headers={'User-Agent': "Booru (https://github.com/Jintaku/Jintaku-Cogs-V3)"}) as resp:
-                try:
-                    content = await resp.json(content_type=None)
-                except (ValueError, aiohttp.ContentTypeError) as ex:
-                    log.debug("Pruned by exception, error below:")
-                    log.debug(ex)
-                    content = []
-        if not content or content == [] or content is None or (type(content) is dict and "success" in content.keys() and content["success"] == False):
-            content = []
-            return content
-        else:
-            for item in content:
-                item["provider"] = provider
-        return content
+    @reddits.group(name="doublepenetration", autohelp=False)
+    @commands.guild_only()
+    @commands.is_nsfw()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def _doublepenetration(self, ctx):
+        """Shows a image board entry based on user query from double penetration subreddits"""
 
-    async def fetch_yan(self, ctx, tags):  # Yande.re fetcher
-        urlstr = "https://yande.re/post.json?limit=100&tags=" + "+".join(tags)
-        log.debug(urlstr)
-        return await self.fetch_from_booru(urlstr, "Yandere")
+        board = "double_penetration"
+        tag = None
+        await self.generic_specific_source(ctx, board, tag)
 
-    async def fetch_gel(self, ctx, tags):  # Gelbooru fetcher
-        urlstr = "https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1&limit=100&tags=" + "+".join(tags)
-        log.debug(urlstr)
-        return await self.fetch_from_booru(urlstr, "Gelbooru")
+    @reddits.group(name="gay", autohelp=False)
+    @commands.guild_only()
+    @commands.is_nsfw()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def _gay(self, ctx):
+        """Shows a image board entry based on user query from gay subreddits"""
 
-    async def fetch_safe(self, ctx, tags):  # Safebooru fetcher
-        urlstr = "https://safebooru.org/index.php?page=dapi&s=post&q=index&json=1&limit=100&tags=" + "+".join(tags)
-        log.debug(urlstr)
-        return await self.fetch_from_booru(urlstr, "Safebooru")
+        board = "gay"
+        tag = None
+        await self.generic_specific_source(ctx, board, tag)
 
-    async def fetch_kon(self, ctx, tags):  # Konachan fetcher
-        urlstr = "https://konachan.com/post.json?limit=100&tags=" + "+".join(tags)
-        log.debug(urlstr)
-        return await self.fetch_from_booru(urlstr, "Konachan")
+    @reddits.group(name="group", autohelp=False)
+    @commands.guild_only()
+    @commands.is_nsfw()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def _group(self, ctx):
+        """Shows a image board entry based on user query from group subreddits"""
 
-    async def fetch_dan(self, ctx, tags):  # Danbooru fetcher
-        if len(tags) > 2:
-            return []
-        urlstr = "https://danbooru.donmai.us/posts.json?limit=100&tags=" + "+".join(tags)
-        log.debug(urlstr)
-        return await self.fetch_from_booru(urlstr, "Danbooru")
+        board = "group"
+        tag = None
+        await self.generic_specific_source(ctx, board, tag)
 
-    async def fetch_r34(self, ctx, tags):  # Rule34 fetcher
-        urlstr = "https://rule34.xxx/index.php?page=dapi&s=post&q=index&json=1&limit=100&tags=" + "+".join(tags)
-        log.debug(urlstr)
-        return await self.fetch_from_booru(urlstr, "Rule34")
+    @reddits.group(name="hentai", autohelp=False)
+    @commands.guild_only()
+    @commands.is_nsfw()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def _hentai(self, ctx):
+        """Shows a image board entry based on user query from hentai subreddits"""
 
-    async def fetch_e621(self, ctx, tags):  # e621 fetcher
-        urlstr = "https://e621.net/post/index.json?limit=100&tags=" + "+".join(tags)
-        log.debug(urlstr)
-        return await self.fetch_from_booru(urlstr, "e621")
+        board = "hentai"
+        tag = None
+        await self.generic_specific_source(ctx, board, tag)
 
-    async def show_booru(self, ctx, data):  # Shows various info in embed
-        mn = len(data)
-        if mn == 0:
-            await ctx.send("No results.")
-        else:
+    @reddits.group(name="lesbian", autohelp=False)
+    @commands.guild_only()
+    @commands.is_nsfw()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def _lesbian(self, ctx):
+        """Shows a image board entry based on user query from lesbian subreddits"""
 
-            i = randint(0, mn - 1)
+        board = "lesbian"
+        tag = None
+        await self.generic_specific_source(ctx, board, tag)
 
-            # Build Embed
-            embeds = []
+    @reddits.group(name="milf", autohelp=False)
+    @commands.guild_only()
+    @commands.is_nsfw()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def _milf(self, ctx):
+        """Shows a image board entry based on user query from milf subreddits"""
 
-            # Respect simple setting
-            simple_booru = await self.config.guild(ctx.guild).simple()
-            if simple_booru == "on":
-                return await self.show_simple_booru(ctx, i, data)
+        board = "milf"
+        tag = None
+        await self.generic_specific_source(ctx, board, tag)
 
-            num_pages = len(data)
-            for page_num, booru in enumerate(data, 1):
-                # Set variables for owner/author of post
-                booru_author = booru.get("owner") or booru.get("author") or booru.get("uploader_name") or "N/A"
+    @reddits.group(name="public", autohelp=False)
+    @commands.guild_only()
+    @commands.is_nsfw()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def _public(self, ctx):
+        """Shows a image board entry based on user query from public subreddits"""
 
-                # Set variables for tags
-                booru_tags = booru.get("tags") or booru.get("tag_string") or "N/A"
+        board = "public"
+        tag = None
+        await self.generic_specific_source(ctx, board, tag)
 
-                # Set variables for score
-                booru_score = booru.get("score") or "N/A"
+    @reddits.group(name="rule34", autohelp=False)
+    @commands.guild_only()
+    @commands.is_nsfw()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def _rule34(self, ctx):
+        """Shows a image board entry based on user query from rule34 subreddits"""
 
-                # Set variables for file url
-                file_url = booru.get("file_url")
-                if booru["provider"] == "Rule34":
-                     file_url = "https://us.rule34.xxx//images/" + booru.get("directory") + "/" + booru.get("image")
-                if booru["provider"] == "Safebooru":
-                     file_url = "https://safebooru.org//images/" + booru.get("directory") + "/" + booru.get("image")
-                booru_url = file_url
+        board = "rule34"
+        tag = None
+        await self.generic_specific_source(ctx, board, tag)
 
-                # Set variable for post link
-                if booru["provider"] == "Konachan":
-                    booru_post = "https://konachan.com/post/show/" + str(booru.get("id"))
-                if booru["provider"] == "Gelbooru":
-                    booru_post = "https://gelbooru.com/index.php?page=post&s=view&id=" + str(booru.get("id"))
-                if booru["provider"] == "Rule34":
-                    booru_post = "https://rule34.xxx/index.php?page=post&s=view&id=" + str(booru.get("id"))
-                if booru["provider"] == "Yandere":
-                    booru_post = "https://yande.re/post/show/" + str(booru.get("id"))
-                if booru["provider"] == "Danbooru":
-                    booru_post = "https://danbooru.donmai.us/posts/" + str(booru.get("id"))
-                if booru["provider"] == "Safebooru":
-                    booru_post = "https://safebooru.com/index.php?page=post&s=view&id=" + str(booru.get("id"))
-                if booru["provider"] == "e621":
-                    booru_post = "https://e621.net/post/show/" + str(booru.get("id"))
+    @reddits.group(name="thigh", autohelp=False)
+    @commands.guild_only()
+    @commands.is_nsfw()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def _thigh(self, ctx):
+        """Shows a image board entry based on user query from thigh subreddits"""
 
-                # Set colour for each board
-                color = {"Gelbooru": 3395583, "Danbooru": 3395583, "Konachan": 8745592, "Yandere": 2236962, "Rule34": 339933, "Safebooru": 000000, "e621": 000000}
+        board = "thigh"
+        tag = None
+        await self.generic_specific_source(ctx, board, tag)
 
-                embed = discord.Embed()
-                embed.color = color[booru["provider"]]
-                embed.title = booru["provider"] + " entry by " + booru_author
-                embed.url = booru_post
-                embed.set_image(url=booru_url)
-                embed.add_field(name="Tags", value="```" + booru_tags[:300] + "```", inline=False)
-                embed.add_field(name="Rating", value=booru["rating"])
-                embed.add_field(name="Score", value=booru_score)
-                embed.set_footer(text=f"{page_num}/{num_pages} If image doesn't appear, it may be a webm or too big, Powered by {booru['provider']}")
-                embeds.append(embed)
+    @reddits.group(name="trap", autohelp=False)
+    @commands.guild_only()
+    @commands.is_nsfw()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def _trap(self, ctx):
+        """Shows a image board entry based on user query from trap subreddits"""
 
-            await menu(ctx, pages=embeds, controls=DEFAULT_CONTROLS, message=None, page=i, timeout=15)
+        board = "trap"
+        tag = None
+        await self.generic_specific_source(ctx, board, tag)
 
-    async def show_simple_booru(self, ctx, i, data):  # Shows simple embed
+    @reddits.group(name="wild", autohelp=False)
+    @commands.guild_only()
+    @commands.is_nsfw()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def _wild(self, ctx):
+        """Shows a image board entry based on user query from wild subreddits"""
 
-            booru = data[i]
-
-            # Set variables for file url
-            file_url = booru.get("file_url")
-            if booru["provider"] == "Rule34":
-                 file_url = "https://us.rule34.xxx//images/" + booru.get("directory") + "/" + booru.get("image")
-            if booru["provider"] == "Safebooru":
-                 file_url = "https://safebooru.org//images/" + booru.get("directory") + "/" + booru.get("image")
-            booru_url = file_url
-
-            # Set colour for each board
-            color = {"Gelbooru": 3395583, "Danbooru": 3395583, "Konachan": 8745592, "Yandere": 2236962, "Rule34": 339933, "Safebooru": 000000, "e621": 000000}
-
-            embed = discord.Embed()
-            embed.color = color[booru["provider"]]
-            embed.set_image(url=booru_url)
-            await ctx.send(embed=embed)
+        board = "wild"
+        tag = None
+        await self.generic_specific_source(ctx, board, tag)
