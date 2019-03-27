@@ -369,6 +369,17 @@ class Booru(BaseCog, BooruCore, Booruset, Boorualias):
         tag = None
         await self.generic_specific_source(ctx, board, tag)
 
+    @reddits.group(name="boobs", autohelp=False)
+    @commands.guild_only()
+    @commands.is_nsfw()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def _boobs(self, ctx):
+        """Shows a image board entry based on user query from boobs subreddits"""
+
+        board = "boobs"
+        tag = None
+        await self.generic_specific_source(ctx, board, tag)
+
     @reddits.group(name="redhead", autohelp=False)
     @commands.guild_only()
     @commands.is_nsfw()
