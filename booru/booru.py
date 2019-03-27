@@ -53,7 +53,6 @@ class Booru(BaseCog, BooruCore, Booruset, Boorualias):
         await self.generic_booru(ctx, tag)
 
     @commands.group()
-    @checks.admin_or_permissions()
     async def boorus(self, ctx):
         """Query sources for all the boorus!"""
         pass
@@ -122,7 +121,6 @@ class Booru(BaseCog, BooruCore, Booruset, Boorualias):
         await self.generic_specific_source(ctx, board, tag)
 
     @commands.group()
-    @checks.admin_or_permissions()
     async def reddits(self, ctx):
         """Query sources for all the subreddits!"""
         pass
