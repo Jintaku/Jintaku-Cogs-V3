@@ -36,7 +36,7 @@ class Booruset:
         filters = await self.config.guild(ctx.guild).filters()
         await self.generic_show(ctx, filters)
 
-    @_guild.group(name="simple")
+    @_guild.group(name="simple", autohelp=False)
     @checks.admin_or_permissions(manage_guild=True)
     async def _guild_simple(self, ctx):
         """Give out only a picture with no reactions or other information, as simple as can be!"""
@@ -49,6 +49,20 @@ class Booruset:
         if toggle_status == "off":
             await self.config.guild(ctx.guild).simple.set("on")
             await ctx.send("Simple booru now on, plain and simple!")
+
+    @_guild.group(name="weebmode", autohelp=False)
+    @checks.admin_or_permissions(manage_guild=True)
+    async def _guild_weebmode(self, ctx):
+        """Give out only weeb-related sources!"""
+
+        toggle_status = await self.config.guild(ctx.guild).weebmode()
+
+        if toggle_status == "on":
+            await self.config.guild(ctx.guild).weebmode.set("off")
+            await ctx.send("Weebmode now off! Get that IRL!")
+        if toggle_status == "off":
+            await self.config.guild(ctx.guild).weebmode.set("on")
+            await ctx.send("Weebmode now on, all the anime!")
 
     @_guild.group(name="onlynsfw")
     @checks.admin_or_permissions(manage_guild=True)
@@ -337,6 +351,34 @@ class Booruset:
     async def _channel_boards(self, ctx):
         """Commands pertaining to which boards are shown in booru"""
         pass
+
+    @_channel.group(name="simple", autohelp=False)
+    @checks.admin_or_permissions(manage_guild=True)
+    async def _channel_simple(self, ctx):
+        """Give out only a picture with no reactions or other information, as simple as can be!"""
+
+        toggle_status = await self.config.guild(ctx.channel).simple()
+
+        if toggle_status == "on":
+            await self.config.guild(ctx.channel).simple.set("off")
+            await ctx.send("Simple booru now off! Get all the fancy menus!")
+        if toggle_status == "off":
+            await self.config.guild(ctx.channel).simple.set("on")
+            await ctx.send("Simple booru now on, plain and simple!")
+
+    @_channel.group(name="weebmode", autohelp=False)
+    @checks.admin_or_permissions(manage_guild=True)
+    async def _channel_weebmode(self, ctx):
+        """Give out only weeb-related sources!"""
+
+        toggle_status = await self.config.guild(ctx.channel).weebmode()
+
+        if toggle_status == "on":
+            await self.config.guild(ctx.channel).weebmode.set("off")
+            await ctx.send("Weebmode now off! Get that IRL!")
+        if toggle_status == "off":
+            await self.config.guild(ctx.channel).weebmode.set("on")
+            await ctx.send("Weebmode now on, all the anime!")
 
     @_channel_boards.command(name="show")
     @checks.admin_or_permissions(manage_guild=True)

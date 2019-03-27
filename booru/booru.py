@@ -30,15 +30,16 @@ class Booru(BaseCog, BooruCore, Booruset, Boorualias):
 
     def __init__(self):
         # Reusable stuff
-        self.board_names = ["dan", "gel", "kon", "yan", "r34", "safe", "e621", "4k", "ahegao", "ass", "anal", "bdsm", "blowjob", "boobs", "cunnilingus", "bottomless", "cumshots", "deepthroat", "dick", "double_penetration", "gay", "group", "hentai", "lesbian", "milf", "public", "rule34", "thigh", "trap", "wild"]
-        self.nsfw_board_names = ["4k", "ahegao", "ass", "anal", "bdsm", "blowjob", "boobs", "cunnilingus", "bottomless", "cumshots", "deepthroat", "dick", "double_penetration", "gay", "group", "hentai", "lesbian", "milf", "public", "rule34", "thigh", "trap", "wild"]
+        self.board_names = ["dan", "gel", "kon", "yan", "r34", "safe", "e621", "4k", "ahegao", "ass", "anal", "bdsm", "blowjob", "boobs", "cunnilingus", "bottomless", "cumshots", "deepthroat", "dick", "double_penetration", "gay", "group", "hentai", "lesbian", "milf", "public", "rule34", "thigh", "trap", "wild", "redhead"]
+        self.nsfw_board_names = ["4k", "ahegao", "ass", "anal", "bdsm", "blowjob", "boobs", "cunnilingus", "bottomless", "cumshots", "deepthroat", "dick", "double_penetration", "gay", "group", "hentai", "lesbian", "milf", "public", "rule34", "thigh", "trap", "wild", "redhead"]
+        self.weeb_board_names = ["dan", "gel", "kon", "yan", "r34", "safe", "e621", "hentai"]
         self.session = aiohttp.ClientSession()
 
         # Config stuff
         self.config = Config.get_conf(self, identifier=4894278742742)
         default_global = {"filters": [], "nsfw_filters": []}
-        default_guild = {"filters": [], "nsfw_filters": ["loli", "shota"], "boards": ["dan", "gel", "kon", "yan"], "simple": "off", "onlynsfw": "off"}
-        default_channel = {"boards": ["dan", "gel", "kon", "yan"]}
+        default_guild = {"filters": [], "nsfw_filters": ["loli", "shota"], "boards": ["dan", "gel", "kon", "yan"], "simple": "off", "weebmode": "off", "onlynsfw": "off"}
+        default_channel = {"boards": ["dan", "gel", "kon", "yan"], "simple": "off", "weebmode": "off"}
         self.config.register_global(**default_global)
         self.config.register_guild(**default_guild)
         self.config.register_channel(**default_channel)
@@ -51,7 +52,13 @@ class Booru(BaseCog, BooruCore, Booruset, Boorualias):
 
         await self.generic_booru(ctx, tag)
 
-    @commands.command()
+    @commands.group()
+    @checks.admin_or_permissions()
+    async def boorus(self, ctx):
+        """Query sources for all the boorus!"""
+        pass
+
+    @boorus.group()
     @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def yan(self, ctx, *, tag=None):
@@ -60,7 +67,7 @@ class Booru(BaseCog, BooruCore, Booruset, Boorualias):
         board = "yan"
         await self.generic_specific_source(ctx, board, tag)
 
-    @commands.command()
+    @boorus.group()
     @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def gel(self, ctx, *, tag=None):
@@ -69,7 +76,7 @@ class Booru(BaseCog, BooruCore, Booruset, Boorualias):
         board = "gel"
         await self.generic_specific_source(ctx, board, tag)
 
-    @commands.command()
+    @boorus.group()
     @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def kon(self, ctx, *, tag=None):
@@ -78,7 +85,7 @@ class Booru(BaseCog, BooruCore, Booruset, Boorualias):
         board = "kon"
         await self.generic_specific_source(ctx, board, tag)
 
-    @commands.command()
+    @boorus.group()
     @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def dan(self, ctx, *, tag=None):
@@ -87,7 +94,7 @@ class Booru(BaseCog, BooruCore, Booruset, Boorualias):
         board = "dan"
         await self.generic_specific_source(ctx, board, tag)
 
-    @commands.command()
+    @boorus.group()
     @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def r34(self, ctx, *, tag=None):
@@ -96,7 +103,7 @@ class Booru(BaseCog, BooruCore, Booruset, Boorualias):
         board = "r34"
         await self.generic_specific_source(ctx, board, tag)
 
-    @commands.command()
+    @boorus.group()
     @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def safe(self, ctx, *, tag=None):
@@ -105,7 +112,7 @@ class Booru(BaseCog, BooruCore, Booruset, Boorualias):
         board = "safe"
         await self.generic_specific_source(ctx, board, tag)
 
-    @commands.command()
+    @boorus.group()
     @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def e621(self, ctx, *, tag=None):
@@ -362,8 +369,18 @@ class Booru(BaseCog, BooruCore, Booruset, Boorualias):
         tag = None
         await self.generic_specific_source(ctx, board, tag)
 
+    @reddits.group(name="redhead", autohelp=False)
+    @commands.guild_only()
+    @commands.is_nsfw()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def _redhead(self, ctx):
+        """Shows a image board entry based on user query from redhead subreddits"""
+
+        board = "redhead"
+        tag = None
+        await self.generic_specific_source(ctx, board, tag)
+
     def __unload(self):
         fut = asyncio.ensure_future(self.session.close())
         yield from fut.__await__
         self.session.close()
-

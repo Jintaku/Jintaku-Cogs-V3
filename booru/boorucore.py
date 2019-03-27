@@ -54,13 +54,26 @@ class BooruCore:
             boards = filtered_boards
         log.debug(boards)
 
+        # Remove non-weeb sources
+        log.debug(boards)
+        filtered_boards = []
+        guild_weebmode = await self.config.guild(ctx.guild).weebmode()
+        channel_weebmode = await self.config.guild(ctx.channel).weebmode()
+        if guild_weebmode == "on" or channel_weebmode == "on":
+            for board in boards:
+                if board in self.weeb_board_names:
+                    filtered_boards.append(board)
+            boards = filtered_boards
+        log.debug(boards)
+
         # If no image boards chosen, tell them
         if boards == []:
             await ctx.send("There no image boards, please use [p]booruset guild boards to set them.")
             return
 
         # Fetch all the stuff!
-        all_data = await asyncio.gather(*(getattr(self, f"fetch_{board}")(ctx, tag) for board in boards))
+        async with ctx.typing():
+            all_data = await asyncio.gather(*(getattr(self, f"fetch_{board}")(ctx, tag) for board in boards))
         data = [item for board_data in all_data for item in board_data]
 
         # Filter data without using up requests space
@@ -90,7 +103,21 @@ class BooruCore:
             boards = filtered_boards
         log.debug(boards)
 
-        all_data = await asyncio.gather(*(getattr(self, f"fetch_{board}")(ctx, tag) for board in boards))
+        # Remove non-weeb sources
+        log.debug(boards)
+        filtered_boards = []
+        guild_weebmode = await self.config.guild(ctx.guild).weebmode()
+        channel_weebmode = await self.config.guild(ctx.channel).weebmode()
+        if guild_weebmode == "on" or channel_weebmode == "on":
+            for board in boards:
+                if board in self.weeb_board_names:
+                    filtered_boards.append(board)
+            boards = filtered_boards
+        log.debug(boards)
+
+        # Fetch all the stuff!
+        async with ctx.typing():
+            all_data = await asyncio.gather(*(getattr(self, f"fetch_{board}")(ctx, tag) for board in boards))
         data = [item for board_data in all_data for item in board_data]
 
         # Filter data without using up requests space
@@ -110,7 +137,8 @@ class BooruCore:
         log.debug(tag)
 
         # Image board fetcher
-        data = await getattr(self, f"fetch_{board}")(ctx, tag)
+        async with ctx.typing():
+            data = await getattr(self, f"fetch_{board}")(ctx, tag)
 
         # Filter data without using up requests space
         data = await self.filter_posts(ctx, data)
@@ -229,7 +257,7 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="ahegao")
     async def fetch_ahegao(self, ctx, tag):  # ahegao fetcher
-        subreddits = ["AhegaoGirls", "RealAhegao", "EyeRollOrgasm", "MouthWideOpen"]
+        subreddits = ["AhegaoGirls", "RealAhegao", "EyeRollOrgasm", "MouthWideOpen", "O_Faces"]
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -240,7 +268,7 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="ass")
     async def fetch_ass(self, ctx, tag):  # ass fetcher
-        subreddits = ["ass", "pawg", "AssholeBehindThong", "girlsinyogapants", "girlsinleggings", "bigasses", "asshole", "AssOnTheGlass", "TheUnderbun", "asstastic", "booty", "AssReveal", "beautifulbutt", "Mooning", "BestBooties", "brunetteass", "assinthong", "paag", "asstastic", "GodBooty", "Underbun", "datass", "ILikeLittleButts"]
+        subreddits = ["ass", "pawg", "AssholeBehindThong", "girlsinyogapants", "girlsinleggings", "bigasses", "asshole", "AssOnTheGlass", "TheUnderbun", "asstastic", "booty", "AssReveal", "beautifulbutt", "Mooning", "BestBooties", "brunetteass", "assinthong", "paag", "asstastic", "GodBooty", "Underbun", "datass", "ILikeLittleButts", "datgap"]
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -284,7 +312,7 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="boobs")
     async def fetch_boobs(self, ctx, tag):  # boobs fetcher
-        subreddits = ["boobs", "TheHangingBoobs", "bigboobs", "BigBoobsGW", "hugeboobs", "pokies", "ghostnipples", "PiercedNSFW", "piercedtits", "PerfectTits", "BestTits", "Boobies", "JustOneBoob", "tits", "naturaltitties", "smallboobs", "Nipples", "homegrowntits", "TheUnderboob", "BiggerThanYouThought", "fortyfivefiftyfive", "Stacked", "BigBoobsGonewild", "AreolasGW", "TittyDrop", "Titties", "Boobies", "boobbounce", "TinyTits", "cleavage", "BoobsBetweenArms","BustyNaturals"]
+        subreddits = ["boobs", "TheHangingBoobs", "bigboobs", "BigBoobsGW", "hugeboobs", "pokies", "ghostnipples", "PiercedNSFW", "piercedtits", "PerfectTits", "BestTits", "Boobies", "JustOneBoob", "tits", "naturaltitties", "smallboobs", "Nipples", "homegrowntits", "TheUnderboob", "BiggerThanYouThought", "fortyfivefiftyfive", "Stacked", "BigBoobsGonewild", "AreolasGW", "TittyDrop", "Titties", "Boobies", "boobbounce", "TinyTits", "cleavage", "BoobsBetweenArms","BustyNaturals", "burstingout"]
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -460,7 +488,18 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="wild")
     async def fetch_wild(self, ctx, tag):  # wild fetcher
-        subreddits = ["gonewild", "GWNerdy", "dirtysmall", "MyCalvins", "AsiansGoneWild", "GoneWildSmiles", "gonewildcurvy", "BigBoobsGonewild", "gonewildcouples", "gonewildcolor", "PetiteGoneWild", "GWCouples", "BigBoobsGW", "altgonewild", "LabiaGW", "UnderwearGW", "JustTheTop", "TallGoneWild", "LingerieGW", "Swingersgw"]
+        subreddits = ["gonewild", "GWNerdy", "dirtysmall", "MyCalvins", "AsiansGoneWild", "GoneWildSmiles", "gonewildcurvy", "BigBoobsGonewild", "gonewildcouples", "gonewildcolor", "PetiteGoneWild", "GWCouples", "BigBoobsGW", "altgonewild", "LabiaGW", "UnderwearGW", "JustTheTop", "TallGoneWild", "LingerieGW", "Swingersgw", "workgonewild"]
+        all_content = []
+        for subreddit in subreddits:
+            urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
+            log.debug(urlstr)
+            content = await self.fetch_from_reddit(urlstr, "explicit", "Reddit")
+            all_content.extend(content)
+        return all_content
+
+    @cached(ttl=3600, cache=SimpleMemoryCache, key="redhead")
+    async def fetch_redhead(self, ctx, tag):  # redhead fetcher
+        subreddits = ["redheadxxx", "redheads", "ginger", "FireBush", "FreckledRedheads", "redhead", "thesluttyginger", "RedheadGifs"]
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -472,7 +511,6 @@ class BooruCore:
     async def fetch_from_booru(self, urlstr, provider):  # Handles provider data and fetcher responses
         content = ""
 
-        # TODO : Use aiohttp clientsession in init to be reused
         async with self.session.get(urlstr, headers={'User-Agent': "Booru (https://github.com/Jintaku/Jintaku-Cogs-V3)"}) as resp:
             try:
                 content = await resp.json(content_type=None)
@@ -543,9 +581,13 @@ class BooruCore:
             # Build Embed
             embeds = []
 
-            # Respect simple setting
-            simple_booru = await self.config.guild(ctx.guild).simple()
-            if simple_booru == "on":
+            # Respect simple setting by guild and channel
+            simple_booru_guild = await self.config.guild(ctx.guild).simple()
+            if simple_booru_guild == "on":
+                return await self.show_simple_booru(ctx, i, data)
+
+            simple_booru_channel = await self.config.guild(ctx.channel).simple()
+            if simple_booru_channel == "on":
                 return await self.show_simple_booru(ctx, i, data)
 
             num_pages = len(data)

@@ -293,12 +293,12 @@ class Boorualias:
     @commands.command()
     @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
-    async def red(self, ctx, *, tag=""):
+    async def redhead(self, ctx, *, tag=""):
         """Shows a redhead image board entry based on user query"""
 
         tag_default = " red_hair"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "safe"]
+        boards = ["dan", "gel", "kon", "yan", "safe", "redhead"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
