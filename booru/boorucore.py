@@ -243,13 +243,13 @@ class BooruCore:
                 item["rating"] = rating
         return content
 
-    @cached(ttl=3600, cache=SimpleMemoryCache, key="oboobs")
+    @cached(ttl=600, cache=SimpleMemoryCache, key="oboobs")
     async def fetch_oboobs(self, ctx, tag):  # oboobs fetcher
         urlstr = "http://api.oboobs.ru/boobs//1000"
         log.debug(urlstr)
         return await self.fetch_from_o(urlstr, "explicit", "Oboobs")
 
-    @cached(ttl=3600, cache=SimpleMemoryCache, key="obutts")
+    @cached(ttl=600, cache=SimpleMemoryCache, key="obutts")
     async def fetch_obutts(self, ctx, tag):  # obutts fetcher
         urlstr = "http://api.obutts.ru/butts//1000"
         log.debug(urlstr)
