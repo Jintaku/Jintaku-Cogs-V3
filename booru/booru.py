@@ -31,6 +31,7 @@ class Booru(BaseCog, BooruCore, Booruset, Boorualias):
     def __init__(self):
         # Reusable stuff
         self.board_names = ["dan", "gel", "kon", "yan", "r34", "safe", "e621", "4k", "ahegao", "ass", "anal", "bdsm", "blowjob", "boobs", "cunnilingus", "bottomless", "cumshots", "deepthroat", "dick", "double_penetration", "gay", "group", "hentai", "lesbian", "milf", "public", "rule34", "thigh", "trap", "wild"]
+        self.nsfw_board_names = ["4k", "ahegao", "ass", "anal", "bdsm", "blowjob", "boobs", "cunnilingus", "bottomless", "cumshots", "deepthroat", "dick", "double_penetration", "gay", "group", "hentai", "lesbian", "milf", "public", "rule34", "thigh", "trap", "wild"]
         self.session = aiohttp.ClientSession()
 
         # Config stuff
@@ -360,3 +361,9 @@ class Booru(BaseCog, BooruCore, Booruset, Boorualias):
         board = "wild"
         tag = None
         await self.generic_specific_source(ctx, board, tag)
+
+    def __unload(self):
+        fut = asyncio.ensure_future(self.session.close())
+        yield from fut.__await__
+        self.session.close()
+

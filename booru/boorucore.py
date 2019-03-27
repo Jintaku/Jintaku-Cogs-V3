@@ -27,24 +27,39 @@ class BooruCore:
 
         tag = await self.filter_tags(ctx, tag)
 
+        # If it returns nothing, something is wrong
         if tag is None:
             return
 
+        # Log tag for debugging purposes
         log.debug(tag)
 
-        # Image board fetcher
+        # Image boards chosen
         guild_boards = await self.config.guild(ctx.guild).boards()
         channel_boards = await self.config.channel(ctx.channel).boards()
 
+        # If channel setting is default, use guild setting
         if set(channel_boards) == {"dan", "gel", "kon", "yan"}:
             boards = guild_boards
         else:
             boards = channel_boards
 
+        # Clean boards if sfw
+        log.debug(boards)
+        filtered_boards = []
+        if ctx.message.channel.is_nsfw() is False:
+            for board in boards:
+                if board not in self.nsfw_board_names:
+                    filtered_boards.append(board)
+            boards = filtered_boards
+        log.debug(boards)
+
+        # If no image boards chosen, tell them
         if boards == []:
             await ctx.send("There no image boards, please use [p]booruset guild boards to set them.")
             return
 
+        # Fetch all the stuff!
         all_data = await asyncio.gather(*(getattr(self, f"fetch_{board}")(ctx, tag) for board in boards))
         data = [item for board_data in all_data for item in board_data]
 
@@ -58,10 +73,22 @@ class BooruCore:
 
         tag = await self.filter_tags(ctx, tag)
 
+        # If it returns nothing, something is wrong
         if tag is None:
             return
 
+        # Log tag for debugging purposes
         log.debug(tag)
+
+        # Clean boards if sfw
+        log.debug(boards)
+        filtered_boards = []
+        if ctx.message.channel.is_nsfw() is False:
+            for board in boards:
+                if board not in self.nsfw_board_names:
+                    filtered_boards.append(board)
+            boards = filtered_boards
+        log.debug(boards)
 
         all_data = await asyncio.gather(*(getattr(self, f"fetch_{board}")(ctx, tag) for board in boards))
         data = [item for board_data in all_data for item in board_data]
@@ -461,26 +488,31 @@ class BooruCore:
                 item["provider"] = provider
         return content
 
+    @cached(ttl=3600, cache=SimpleMemoryCache)
     async def fetch_yan(self, ctx, tags):  # Yande.re fetcher
         urlstr = "https://yande.re/post.json?limit=100&tags=" + "+".join(tags)
         log.debug(urlstr)
         return await self.fetch_from_booru(urlstr, "Yandere")
 
+    @cached(ttl=3600, cache=SimpleMemoryCache)
     async def fetch_gel(self, ctx, tags):  # Gelbooru fetcher
         urlstr = "https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1&limit=100&tags=" + "+".join(tags)
         log.debug(urlstr)
         return await self.fetch_from_booru(urlstr, "Gelbooru")
 
+    @cached(ttl=3600, cache=SimpleMemoryCache)
     async def fetch_safe(self, ctx, tags):  # Safebooru fetcher
         urlstr = "https://safebooru.org/index.php?page=dapi&s=post&q=index&json=1&limit=100&tags=" + "+".join(tags)
         log.debug(urlstr)
         return await self.fetch_from_booru(urlstr, "Safebooru")
 
+    @cached(ttl=3600, cache=SimpleMemoryCache)
     async def fetch_kon(self, ctx, tags):  # Konachan fetcher
         urlstr = "https://konachan.com/post.json?limit=100&tags=" + "+".join(tags)
         log.debug(urlstr)
         return await self.fetch_from_booru(urlstr, "Konachan")
 
+    @cached(ttl=3600, cache=SimpleMemoryCache)
     async def fetch_dan(self, ctx, tags):  # Danbooru fetcher
         if len(tags) > 2:
             return []
@@ -488,11 +520,13 @@ class BooruCore:
         log.debug(urlstr)
         return await self.fetch_from_booru(urlstr, "Danbooru")
 
+    @cached(ttl=3600, cache=SimpleMemoryCache)
     async def fetch_r34(self, ctx, tags):  # Rule34 fetcher
         urlstr = "https://rule34.xxx/index.php?page=dapi&s=post&q=index&json=1&limit=100&tags=" + "+".join(tags)
         log.debug(urlstr)
         return await self.fetch_from_booru(urlstr, "Rule34")
 
+    @cached(ttl=3600, cache=SimpleMemoryCache)
     async def fetch_e621(self, ctx, tags):  # e621 fetcher
         urlstr = "https://e621.net/post/index.json?limit=100&tags=" + "+".join(tags)
         log.debug(urlstr)

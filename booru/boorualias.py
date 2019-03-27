@@ -198,10 +198,7 @@ class Boorualias:
 
         tag_default = " yaoi"
         tag += tag_default
-        if ctx.message.channel.is_nsfw():
-            boards = ["dan", "gel", "kon", "yan", "safe", "gay"]
-        if ctx.message.channel.is_nsfw() is False:
-            boards = ["dan", "gel", "kon", "yan", "safe"]
+        boards = ["dan", "gel", "kon", "yan", "safe", "gay"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
@@ -213,10 +210,7 @@ class Boorualias:
 
         tag_default = " lesbian yuri"
         tag += tag_default
-        if ctx.message.channel.is_nsfw():
-            boards = ["dan", "gel", "kon", "yan", "safe", "lesbian"]
-        if ctx.message.channel.is_nsfw() is False:
-            boards = ["dan", "gel", "kon", "yan", "safe"]
+        boards = ["dan", "gel", "kon", "yan", "safe", "lesbian"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
@@ -228,10 +222,7 @@ class Boorualias:
 
         tag_default = " milf"
         tag += tag_default
-        if ctx.message.channel.is_nsfw():
-            boards = ["dan", "gel", "kon", "yan", "safe", "milf"]
-        if ctx.message.channel.is_nsfw() is False:
-            boards = ["dan", "gel", "kon", "yan", "safe"]
+        boards = ["dan", "gel", "kon", "yan", "safe", "milf"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
@@ -282,10 +273,7 @@ class Boorualias:
 
         tag_default = " thigh"
         tag += tag_default
-        if ctx.message.channel.is_nsfw():
-            boards = ["dan", "gel", "kon", "yan", "safe", "thigh"]
-        if ctx.message.channel.is_nsfw() is False:
-            boards = ["dan", "gel", "kon", "yan", "safe"]
+        boards = ["dan", "gel", "kon", "yan", "safe", "thigh"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
@@ -308,7 +296,7 @@ class Boorualias:
     async def red(self, ctx, *, tag=""):
         """Shows a redhead image board entry based on user query"""
 
-        tag_default = " red_hair redhead"
+        tag_default = " red_hair"
         tag += tag_default
         boards = ["dan", "gel", "kon", "yan", "safe"]
 
