@@ -69,7 +69,7 @@ class Boorualias:
 
         tag_default = " ass"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "safe", "ass"]
+        boards = ["dan", "gel", "kon", "yan", "safe", "ass", "obutts"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
@@ -95,7 +95,7 @@ class Boorualias:
 
         tag_default = " boobs"
         tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "safe", "boobs"]
+        boards = ["dan", "gel", "kon", "yan", "safe", "boobs", "oboobs"]
 
         await self.generic_alias_booru(ctx, boards, tag)
 
@@ -104,7 +104,7 @@ class Boorualias:
     @commands.is_nsfw()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def bottomless(self, ctx, *, tag=""):
-        """Shows a boobs image board entry based on user query"""
+        """Shows a bottomless image board entry based on user query"""
 
         tag_default = " bottomless"
         tag += tag_default
@@ -117,7 +117,7 @@ class Boorualias:
     @commands.is_nsfw()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def blowjob(self, ctx, *, tag=""):
-        """Shows a boobs image board entry based on user query"""
+        """Shows a blowjob image board entry based on user query"""
 
         tag_default = " blowjob"
         tag += tag_default
@@ -130,7 +130,7 @@ class Boorualias:
     @commands.is_nsfw()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def cumon(self, ctx, *, tag=""):
-        """Shows a boobs image board entry based on user query"""
+        """Shows a cumon image board entry based on user query"""
 
         tag_default = " cum_on_*"
         tag += tag_default

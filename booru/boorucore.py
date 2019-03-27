@@ -224,6 +224,37 @@ class BooruCore:
 
         return filtered_data
 
+    async def fetch_from_o(self, urlstr, rating, provider):  # Handles provider data and fetcher responses
+        content = ""
+
+        async with self.session.get(urlstr, headers={'User-Agent': "Booru (https://github.com/Jintaku/Jintaku-Cogs-V3)"}) as resp:
+            try:
+                content = await resp.json(content_type=None)
+            except (ValueError, aiohttp.ContentTypeError) as ex:
+                log.debug("Pruned by exception, error below:")
+                log.debug(ex)
+                content = []
+        if not content or content == [] or content is None or (type(content) is dict and "success" in content.keys() and content["success"] == False):
+            content = []
+            return content
+        else:
+            for item in content:
+                item["provider"] = provider
+                item["rating"] = rating
+        return content
+
+    @cached(ttl=3600, cache=SimpleMemoryCache, key="oboobs")
+    async def fetch_oboobs(self, ctx, tag):  # oboobs fetcher
+        urlstr = "http://api.oboobs.ru/boobs//1000"
+        log.debug(urlstr)
+        return await self.fetch_from_o(urlstr, "explicit", "Oboobs")
+
+    @cached(ttl=3600, cache=SimpleMemoryCache, key="obutts")
+    async def fetch_obutts(self, ctx, tag):  # obutts fetcher
+        urlstr = "http://api.obutts.ru/butts//1000"
+        log.debug(urlstr)
+        return await self.fetch_from_o(urlstr, "explicit", "Obutts")
+
     async def fetch_from_reddit(self, urlstr, rating, provider):  # Handles provider data and fetcher responses
         content = ""
 
@@ -242,7 +273,6 @@ class BooruCore:
                 item["provider"] = provider
                 item["rating"] = rating
         return content["data"]["children"]
-
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="4k")
     async def fetch_4k(self, ctx, tag):  # 4k fetcher
@@ -615,6 +645,10 @@ class BooruCore:
                      file_url = "https://safebooru.org//images/" + booru.get("directory") + "/" + booru.get("image")
                 if booru["provider"] == "Reddit":
                      file_url = booru["data"]["url"]
+                if booru["provider"] == "Oboobs":
+                     file_url = "http://media.oboobs.ru/" + booru["preview"]
+                if booru["provider"] == "Obutts":
+                     file_url = "http://media.obutts.ru/" + booru["preview"]
                 booru_url = file_url
 
                 # Set variable for post link
@@ -634,9 +668,13 @@ class BooruCore:
                     booru_post = "https://e621.net/post/show/" + str(booru.get("id"))
                 if booru["provider"] == "Reddit":
                     booru_post = "https://reddit.com" + booru["data"]["permalink"]
+                if booru["provider"] == "Oboobs":
+                     booru_post = "http://media.oboobs.ru/" + booru["preview"]
+                if booru["provider"] == "Obutts":
+                     booru_post = "http://media.obutts.ru/" + booru["preview"]
 
                 # Set colour for each board
-                color = {"Gelbooru": 3395583, "Danbooru": 3395583, "Konachan": 8745592, "Yandere": 2236962, "Rule34": 339933, "Safebooru": 000000, "e621": 000000, "Reddit": 000000}
+                color = {"Gelbooru": 3395583, "Danbooru": 3395583, "Konachan": 8745592, "Yandere": 2236962, "Rule34": 339933, "Safebooru": 000000, "e621": 000000, "Reddit": 000000, "Oboobs": 000000, "Obutts": 000000}
 
                 embed = discord.Embed()
                 embed.color = color[booru["provider"]]
@@ -666,10 +704,14 @@ class BooruCore:
                  file_url = "https://safebooru.org//images/" + booru.get("directory") + "/" + booru.get("image")
             if booru["provider"] == "Reddit":
                  file_url = booru["data"]["url"]
+            if booru["provider"] == "Oboobs":
+                 file_url = "http://media.oboobs.ru/" + booru["preview"]
+            if booru["provider"] == "Obutts":
+                 file_url = "http://media.obutts.ru/" + booru["preview"]
             booru_url = file_url
 
             # Set colour for each board
-            color = {"Gelbooru": 3395583, "Danbooru": 3395583, "Konachan": 8745592, "Yandere": 2236962, "Rule34": 339933, "Safebooru": 000000, "e621": 000000, "Reddit": 000000}
+            color = {"Gelbooru": 3395583, "Danbooru": 3395583, "Konachan": 8745592, "Yandere": 2236962, "Rule34": 339933, "Safebooru": 000000, "e621": 000000, "Reddit": 000000, "Oboobs": 000000, "Obutts": 000000}
 
             embed = discord.Embed()
             embed.color = color[booru["provider"]]

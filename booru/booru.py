@@ -389,6 +389,33 @@ class Booru(BaseCog, BooruCore, Booruset, Boorualias):
         tag = None
         await self.generic_specific_source(ctx, board, tag)
 
+    @commands.group()
+    async def others(self, ctx):
+        """Query sources for all the other sources!"""
+        pass
+
+    @others.group(name="oboobs", autohelp=False)
+    @commands.guild_only()
+    @commands.is_nsfw()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def _oboobs(self, ctx):
+        """Shows a image board entry based on user query from oboobs"""
+
+        board = "oboobs"
+        tag = None
+        await self.generic_specific_source(ctx, board, tag)
+
+    @others.group(name="obutts", autohelp=False)
+    @commands.guild_only()
+    @commands.is_nsfw()
+    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
+    async def _obutts(self, ctx):
+        """Shows a image board entry based on user query from obutts"""
+
+        board = "obutts"
+        tag = None
+        await self.generic_specific_source(ctx, board, tag)
+
     def __unload(self):
         fut = asyncio.ensure_future(self.session.close())
         yield from fut.__await__
