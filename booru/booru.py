@@ -57,7 +57,7 @@ class Booru(BaseCog, BooruCore, Booruset, Boorualias):
         """Query sources for all the boorus!"""
         pass
 
-    @boorus.group()
+    @boorus.group(autohelp=False)
     @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def yan(self, ctx, *, tag=None):
@@ -66,7 +66,7 @@ class Booru(BaseCog, BooruCore, Booruset, Boorualias):
         board = "yan"
         await self.generic_specific_source(ctx, board, tag)
 
-    @boorus.group()
+    @boorus.group(autohelp=False)
     @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def gel(self, ctx, *, tag=None):
@@ -75,7 +75,7 @@ class Booru(BaseCog, BooruCore, Booruset, Boorualias):
         board = "gel"
         await self.generic_specific_source(ctx, board, tag)
 
-    @boorus.group()
+    @boorus.group(autohelp=False)
     @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def kon(self, ctx, *, tag=None):
@@ -84,7 +84,7 @@ class Booru(BaseCog, BooruCore, Booruset, Boorualias):
         board = "kon"
         await self.generic_specific_source(ctx, board, tag)
 
-    @boorus.group()
+    @boorus.group(autohelp=False)
     @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def dan(self, ctx, *, tag=None):
@@ -93,7 +93,7 @@ class Booru(BaseCog, BooruCore, Booruset, Boorualias):
         board = "dan"
         await self.generic_specific_source(ctx, board, tag)
 
-    @boorus.group()
+    @boorus.group(autohelp=False)
     @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def r34(self, ctx, *, tag=None):
@@ -102,7 +102,7 @@ class Booru(BaseCog, BooruCore, Booruset, Boorualias):
         board = "r34"
         await self.generic_specific_source(ctx, board, tag)
 
-    @boorus.group()
+    @boorus.group(autohelp=False)
     @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def safe(self, ctx, *, tag=None):
@@ -111,7 +111,7 @@ class Booru(BaseCog, BooruCore, Booruset, Boorualias):
         board = "safe"
         await self.generic_specific_source(ctx, board, tag)
 
-    @boorus.group()
+    @boorus.group(autohelp=False)
     @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def e621(self, ctx, *, tag=None):
