@@ -286,10 +286,8 @@ class BooruCore:
                 elif url.startswith("https://gfycat.com/"):
                     url_cut = url[19:]
                     if url_cut.islower():
-                        print(url)
                         continue
                     item["file_url"] = "https://thumbs.gfycat.com/" + url_cut + "-size_restricted.gif"
-                    print(item["file_url"])
                 elif url.endswith(GOOD_EXTENSIONS):
                     item["file_url"] = url
                 else:
