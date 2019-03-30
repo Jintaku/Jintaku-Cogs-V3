@@ -6,6 +6,7 @@ import contextlib
 from random import randint
 import asyncio
 import logging
+from . import boorusources
 from aiocache import cached, SimpleMemoryCache
 
 cache = SimpleMemoryCache()
@@ -209,8 +210,7 @@ class BooruCore:
 
         # Filter the content
         for booru in data:
-            booru_tags_string = booru.get("tags") or booru.get("tag_string") or "N/A"
-            booru_tags = set(booru_tags_string.split())
+            booru_tags = set(booru["tags"].split())
 
             if booru["rating"] in "sqe":
                 if filters & booru_tags or (booru["rating"] != "s" and nsfw_filters & booru_tags):
@@ -223,6 +223,299 @@ class BooruCore:
             filtered_data.append(booru)
 
         return filtered_data
+
+    async def fetch_from_nekos(self, urlstr, rating, provider):  # Handles provider data and fetcher responses
+        content = ""
+
+        async with self.session.get(urlstr, headers={'User-Agent': "Booru (https://github.com/Jintaku/Jintaku-Cogs-V3)"}) as resp:
+            try:
+                content = await resp.json(content_type=None)
+            except (ValueError, aiohttp.ContentTypeError) as ex:
+                log.debug("Pruned by exception, error below:")
+                log.debug(ex)
+                content = []
+        if not content or content == [] or content is None or (type(content) is dict and "success" in content.keys() and content["success"] == False):
+            content = []
+            return content
+        else:
+            # Assign stuff to be used by booru_show
+            nekos_content = []
+            item = {}
+            for url in content["data"]["response"]["urls"]:
+                item["post_link"] = url
+                item["file_url"] = url
+                item["provider"] = provider
+                item["author"] = "N/A"
+                item["rating"] = rating
+                item["score"] = "N/A"
+                item["tags"] = "N/A"
+                nekos_content.append(item)
+                item = {}
+        return nekos_content
+
+    @cached(ttl=600, cache=SimpleMemoryCache, key="nekos_nsfw_classic")
+    async def fetch_nekos_nsfw_classic(self, ctx, tag):  # Nekos nsfw classic fetcher
+        life = boorusources.nekos_nsfw_classic
+        all_content = []
+        for nekos in life:
+            urlstr = "https://api.nekos.dev/api/v3/" + nekos + "/?count=20"
+            log.debug(urlstr)
+            content = await self.fetch_from_nekos(urlstr, "explicit", "Nekos.life")
+            all_content.extend(content)
+        return all_content
+
+    @cached(ttl=600, cache=SimpleMemoryCache, key="nekos_nsfw_blowjob")
+    async def fetch_nekos_nsfw_blowjob(self, ctx, tag):  # Nekos nsfw blowjob fetcher
+        life = boorusources.nekos_nsfw_blowjob
+        all_content = []
+        for nekos in life:
+            urlstr = "https://api.nekos.dev/api/v3/" + nekos + "/?count=20"
+            log.debug(urlstr)
+            content = await self.fetch_from_nekos(urlstr, "explicit", "Nekos.life")
+            all_content.extend(content)
+        return all_content
+
+    @cached(ttl=600, cache=SimpleMemoryCache, key="nekos_nsfw_boobs")
+    async def fetch_nekos_nsfw_boobs(self, ctx, tag):  # Nekos nsfw boobs fetcher
+        life = boorusources.nekos_nsfw_boobs
+        all_content = []
+        for nekos in life:
+            urlstr = "https://api.nekos.dev/api/v3/" + nekos + "/?count=20"
+            log.debug(urlstr)
+            content = await self.fetch_from_nekos(urlstr, "explicit", "Nekos.life")
+            all_content.extend(content)
+        return all_content
+
+    @cached(ttl=600, cache=SimpleMemoryCache, key="nekos_nsfw_neko")
+    async def fetch_nekos_nsfw_neko(self, ctx, tag):  # Nekos nsfw neko fetcher
+        life = boorusources.nekos_nsfw_neko
+        all_content = []
+        for nekos in life:
+            urlstr = "https://api.nekos.dev/api/v3/" + nekos + "/?count=20"
+            log.debug(urlstr)
+            content = await self.fetch_from_nekos(urlstr, "explicit", "Nekos.life")
+            all_content.extend(content)
+        return all_content
+
+    @cached(ttl=600, cache=SimpleMemoryCache, key="nekos_nsfw_furry")
+    async def fetch_nekos_nsfw_furry(self, ctx, tag):  # Nekos nsfw furry fetcher
+        life = boorusources.nekos_nsfw_furry
+        all_content = []
+        for nekos in life:
+            urlstr = "https://api.nekos.dev/api/v3/" + nekos + "/?count=20"
+            log.debug(urlstr)
+            content = await self.fetch_from_nekos(urlstr, "explicit", "Nekos.life")
+            all_content.extend(content)
+        return all_content
+
+    @cached(ttl=600, cache=SimpleMemoryCache, key="nekos_nsfw_pussy")
+    async def fetch_nekos_nsfw_pussy(self, ctx, tag):  # Nekos nsfw pussy fetcher
+        life = boorusources.nekos_nsfw_pussy
+        all_content = []
+        for nekos in life:
+            urlstr = "https://api.nekos.dev/api/v3/" + nekos + "/?count=20"
+            log.debug(urlstr)
+            content = await self.fetch_from_nekos(urlstr, "explicit", "Nekos.life")
+            all_content.extend(content)
+        return all_content
+
+    @cached(ttl=600, cache=SimpleMemoryCache, key="nekos_nsfw_feet")
+    async def fetch_nekos_nsfw_feet(self, ctx, tag):  # Nekos nsfw feet fetcher
+        life = boorusources.nekos_nsfw_feet
+        all_content = []
+        for nekos in life:
+            urlstr = "https://api.nekos.dev/api/v3/" + nekos + "/?count=20"
+            log.debug(urlstr)
+            content = await self.fetch_from_nekos(urlstr, "explicit", "Nekos.life")
+            all_content.extend(content)
+        return all_content
+
+    @cached(ttl=600, cache=SimpleMemoryCache, key="nekos_nsfw_yuri")
+    async def fetch_nekos_nsfw_yuri(self, ctx, tag):  # Nekos nsfw yuri fetcher
+        life = boorusources.nekos_nsfw_yuri
+        all_content = []
+        for nekos in life:
+            urlstr = "https://api.nekos.dev/api/v3/" + nekos + "/?count=20"
+            log.debug(urlstr)
+            content = await self.fetch_from_nekos(urlstr, "explicit", "Nekos.life")
+            all_content.extend(content)
+        return all_content
+
+    @cached(ttl=600, cache=SimpleMemoryCache, key="nekos_nsfw_anal")
+    async def fetch_nekos_nsfw_anal(self, ctx, tag):  # Nekos nsfw anal fetcher
+        life = boorusources.nekos_nsfw_anal
+        all_content = []
+        for nekos in life:
+            urlstr = "https://api.nekos.dev/api/v3/" + nekos + "/?count=20"
+            log.debug(urlstr)
+            content = await self.fetch_from_nekos(urlstr, "explicit", "Nekos.life")
+            all_content.extend(content)
+        return all_content
+
+    @cached(ttl=600, cache=SimpleMemoryCache, key="nekos_nsfw_solo")
+    async def fetch_nekos_nsfw_solo(self, ctx, tag):  # Nekos nsfw solo fetcher
+        life = boorusources.nekos_nsfw_solo
+        all_content = []
+        for nekos in life:
+            urlstr = "https://api.nekos.dev/api/v3/" + nekos + "/?count=20"
+            log.debug(urlstr)
+            content = await self.fetch_from_nekos(urlstr, "explicit", "Nekos.life")
+            all_content.extend(content)
+        return all_content
+
+    @cached(ttl=600, cache=SimpleMemoryCache, key="nekos_nsfw_cum")
+    async def fetch_nekos_nsfw_cum(self, ctx, tag):  # Nekos nsfw cum fetcher
+        life = boorusources.nekos_nsfw_cum
+        all_content = []
+        for nekos in life:
+            urlstr = "https://api.nekos.dev/api/v3/" + nekos + "/?count=20"
+            log.debug(urlstr)
+            content = await self.fetch_from_nekos(urlstr, "explicit", "Nekos.life")
+            all_content.extend(content)
+        return all_content
+
+    @cached(ttl=600, cache=SimpleMemoryCache, key="nekos_nsfw_spank")
+    async def fetch_nekos_nsfw_spank(self, ctx, tag):  # Nekos nsfw spank fetcher
+        life = boorusources.nekos_nsfw_spank
+        all_content = []
+        for nekos in life:
+            urlstr = "https://api.nekos.dev/api/v3/" + nekos + "/?count=20"
+            log.debug(urlstr)
+            content = await self.fetch_from_nekos(urlstr, "explicit", "Nekos.life")
+            all_content.extend(content)
+        return all_content
+
+    @cached(ttl=600, cache=SimpleMemoryCache, key="nekos_nsfw_cunnilingus")
+    async def fetch_nekos_nsfw_cunnilingus(self, ctx, tag):  # Nekos nsfw cunnilingus fetcher
+        life = boorusources.nekos_nsfw_cunnilingus
+        all_content = []
+        for nekos in life:
+            urlstr = "https://api.nekos.dev/api/v3/" + nekos + "/?count=20"
+            log.debug(urlstr)
+            content = await self.fetch_from_nekos(urlstr, "explicit", "Nekos.life")
+            all_content.extend(content)
+        return all_content
+
+    @cached(ttl=600, cache=SimpleMemoryCache, key="nekos_nsfw_bdsm")
+    async def fetch_nekos_nsfw_bdsm(self, ctx, tag):  # Nekos nsfw bdsm fetcher
+        life = boorusources.nekos_nsfw_bdsm
+        all_content = []
+        for nekos in life:
+            urlstr = "https://api.nekos.dev/api/v3/" + nekos + "/?count=20"
+            log.debug(urlstr)
+            content = await self.fetch_from_nekos(urlstr, "explicit", "Nekos.life")
+            all_content.extend(content)
+        return all_content
+
+    @cached(ttl=600, cache=SimpleMemoryCache, key="nekos_nsfw_piercings")
+    async def fetch_nekos_nsfw_piercings(self, ctx, tag):  # Nekos nsfw piercings fetcher
+        life = boorusources.nekos_nsfw_piercings
+        all_content = []
+        for nekos in life:
+            urlstr = "https://api.nekos.dev/api/v3/" + nekos + "/?count=20"
+            log.debug(urlstr)
+            content = await self.fetch_from_nekos(urlstr, "explicit", "Nekos.life")
+            all_content.extend(content)
+        return all_content
+
+    @cached(ttl=600, cache=SimpleMemoryCache, key="nekos_nsfw_trap")
+    async def fetch_nekos_nsfw_trap(self, ctx, tag):  # Nekos nsfw trap fetcher
+        life = boorusources.nekos_nsfw_trap
+        all_content = []
+        for nekos in life:
+            urlstr = "https://api.nekos.dev/api/v3/" + nekos + "/?count=20"
+            log.debug(urlstr)
+            content = await self.fetch_from_nekos(urlstr, "explicit", "Nekos.life")
+            all_content.extend(content)
+        return all_content
+
+    @cached(ttl=600, cache=SimpleMemoryCache, key="nekos_nsfw_kitsune")
+    async def fetch_nekos_nsfw_kitsune(self, ctx, tag):  # Nekos nsfw kitsune fetcher
+        life = boorusources.nekos_nsfw_kitsune
+        all_content = []
+        for nekos in life:
+            urlstr = "https://api.nekos.dev/api/v3/" + nekos + "/?count=20"
+            log.debug(urlstr)
+            content = await self.fetch_from_nekos(urlstr, "explicit", "Nekos.life")
+            all_content.extend(content)
+        return all_content
+
+    @cached(ttl=600, cache=SimpleMemoryCache, key="nekos_nsfw_holo")
+    async def fetch_nekos_nsfw_holo(self, ctx, tag):  # Nekos nsfw holo fetcher
+        life = boorusources.nekos_nsfw_holo
+        all_content = []
+        for nekos in life:
+            urlstr = "https://api.nekos.dev/api/v3/" + nekos + "/?count=20"
+            log.debug(urlstr)
+            content = await self.fetch_from_nekos(urlstr, "explicit", "Nekos.life")
+            all_content.extend(content)
+        return all_content
+
+    @cached(ttl=600, cache=SimpleMemoryCache, key="nekos_nsfw_femdom")
+    async def fetch_nekos_nsfw_femdom(self, ctx, tag):  # Nekos nsfw femdom fetcher
+        life = boorusources.nekos_nsfw_femdom
+        all_content = []
+        for nekos in life:
+            urlstr = "https://api.nekos.dev/api/v3/" + nekos + "/?count=20"
+            log.debug(urlstr)
+            content = await self.fetch_from_nekos(urlstr, "explicit", "Nekos.life")
+            all_content.extend(content)
+        return all_content
+
+    @cached(ttl=600, cache=SimpleMemoryCache, key="nekos_sfw_neko")
+    async def fetch_nekos_sfw_neko(self, ctx, tag):  # Nekos sfw neko fetcher
+        life = boorusources.nekos_sfw_neko
+        all_content = []
+        for nekos in life:
+            urlstr = "https://api.nekos.dev/api/v3/" + nekos + "/?count=20"
+            log.debug(urlstr)
+            content = await self.fetch_from_nekos(urlstr, "safe", "Nekos.life")
+            all_content.extend(content)
+        return all_content
+
+    @cached(ttl=600, cache=SimpleMemoryCache, key="nekos_sfw_waifu")
+    async def fetch_nekos_sfw_waifu(self, ctx, tag):  # Nekos sfw waifu fetcher
+        life = boorusources.nekos_sfw_waifu
+        all_content = []
+        for nekos in life:
+            urlstr = "https://api.nekos.dev/api/v3/" + nekos + "/?count=20"
+            log.debug(urlstr)
+            content = await self.fetch_from_nekos(urlstr, "safe", "Nekos.life")
+            all_content.extend(content)
+        return all_content
+
+    @cached(ttl=600, cache=SimpleMemoryCache, key="nekos_sfw_kitsune")
+    async def fetch_nekos_sfw_kitsune(self, ctx, tag):  # Nekos sfw kitsune fetcher
+        life = boorusources.nekos_sfw_kitsune
+        all_content = []
+        for nekos in life:
+            urlstr = "https://api.nekos.dev/api/v3/" + nekos + "/?count=20"
+            log.debug(urlstr)
+            content = await self.fetch_from_nekos(urlstr, "safe", "Nekos.life")
+            all_content.extend(content)
+        return all_content
+
+    @cached(ttl=600, cache=SimpleMemoryCache, key="nekos_sfw_smug")
+    async def fetch_nekos_sfw_smug(self, ctx, tag):  # Nekos sfw smug fetcher
+        life = boorusources.nekos_sfw_smug
+        all_content = []
+        for nekos in life:
+            urlstr = "https://api.nekos.dev/api/v3/" + nekos + "/?count=20"
+            log.debug(urlstr)
+            content = await self.fetch_from_nekos(urlstr, "safe", "Nekos.life")
+            all_content.extend(content)
+        return all_content
+
+    @cached(ttl=600, cache=SimpleMemoryCache, key="nekos_sfw_holo")
+    async def fetch_nekos_sfw_holo(self, ctx, tag):  # Nekos sfw holo fetcher
+        life = boorusources.nekos_sfw_holo
+        all_content = []
+        for nekos in life:
+            urlstr = "https://api.nekos.dev/api/v3/" + nekos + "/?count=20"
+            log.debug(urlstr)
+            content = await self.fetch_from_nekos(urlstr, "safe", "Nekos.life")
+            all_content.extend(content)
+        return all_content
 
     async def fetch_from_o(self, urlstr, rating, provider):  # Handles provider data and fetcher responses
         content = ""
@@ -238,20 +531,30 @@ class BooruCore:
             content = []
             return content
         else:
+            # Assign stuff to be used by booru_show
             for item in content:
+                if provider == "Oboobs":
+                    item["post_link"] = "http://media.oboobs.ru/" + item["preview"]
+                    item["file_url"] = "http://media.oboobs.ru/" + item["preview"]
+                elif provider == "Obutts":
+                    item["post_link"] = "http://media.obutts.ru/" + item["preview"]
+                    item["file_url"] = "http://media.obutts.ru/" + item["preview"]
                 item["provider"] = provider
+                item["author"] = "N/A"
                 item["rating"] = rating
+                item["score"] = "N/A"
+                item["tags"] = "N/A"
         return content
 
     @cached(ttl=600, cache=SimpleMemoryCache, key="oboobs")
     async def fetch_oboobs(self, ctx, tag):  # oboobs fetcher
-        urlstr = "http://api.oboobs.ru/boobs//1000"
+        urlstr = boorusources.oboobs
         log.debug(urlstr)
         return await self.fetch_from_o(urlstr, "explicit", "Oboobs")
 
     @cached(ttl=600, cache=SimpleMemoryCache, key="obutts")
     async def fetch_obutts(self, ctx, tag):  # obutts fetcher
-        urlstr = "http://api.obutts.ru/butts//1000"
+        urlstr = boorusources.obutts
         log.debug(urlstr)
         return await self.fetch_from_o(urlstr, "explicit", "Obutts")
 
@@ -269,6 +572,7 @@ class BooruCore:
             content = []
             return content
         else:
+            # Clean up to kill bad pictures and crap
             good_content = []
             for item in content["data"]["children"]:
                 IMGUR_LINKS = "https://imgur.com/", "https://i.imgur.com/", "http://i.imgur.com/", "http://imgur.com", "https://m.imgur.com"
@@ -293,14 +597,21 @@ class BooruCore:
                 else:
                     continue
                 good_content.append(item)
+            content = good_content
+
+            # Assign stuff to be used by booru_show
+            for item in content:
                 item["provider"] = provider
                 item["rating"] = rating
-            content = good_content
+                item["post_link"] = "https://reddit.com" + item["data"]["permalink"]
+                item["score"] = item["data"]["score"]
+                item["tags"] = item["data"]["title"]
+                item["author"] = item["data"]["author"]
         return content
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="4k")
     async def fetch_4k(self, ctx, tag):  # 4k fetcher
-        subreddits = ["HighResNSFW", "UHDnsfw", "nsfw4k", "nsfw_hd", "NSFW_Wallpapers", "HDnsfw", "closeup"]
+        subreddits = boorusources.fourk
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -311,7 +622,7 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="ahegao")
     async def fetch_ahegao(self, ctx, tag):  # ahegao fetcher
-        subreddits = ["AhegaoGirls", "RealAhegao", "EyeRollOrgasm", "MouthWideOpen", "O_Faces"]
+        subreddits = boorusources.ahegao
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -322,7 +633,7 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="ass")
     async def fetch_ass(self, ctx, tag):  # ass fetcher
-        subreddits = ["ass", "pawg", "AssholeBehindThong", "girlsinyogapants", "girlsinleggings", "bigasses", "asshole", "AssOnTheGlass", "TheUnderbun", "asstastic", "booty", "AssReveal", "beautifulbutt", "Mooning", "BestBooties", "brunetteass", "assinthong", "paag", "asstastic", "GodBooty", "Underbun", "datass", "ILikeLittleButts", "datgap"]
+        subreddits = boorusources.ass
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -333,7 +644,7 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="anal")
     async def fetch_anal(self, ctx, tag):  # anal fetcher
-        subreddits = ["MasterOfAnal", "analgonewild", "anal", "buttsex", "buttsthatgrip", "AnalGW", "analinsertions", "AnalGW", "assholegonewild"]
+        subreddits = boorusources.anal
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -344,7 +655,7 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="bdsm")
     async def fetch_bdsm(self, ctx, tag):  # bdsm fetcher
-        subreddits = ["BDSMGW", "bdsm", "ropeart", "shibari"]
+        subreddits = boorusources.bdsm
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -355,7 +666,7 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="blowjob")
     async def fetch_blowjob(self, ctx, tag):  # blowjob fetcher
-        subreddits = ["blowjobsandwich", "Blowjobs", "BlowjobGifs", "BlowjobEyeContact", "blowbang", "AsianBlowjobs", "SuckingItDry", "OralCreampie", "SwordSwallowers"]
+        subreddits = boorusources.blowjob
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -366,7 +677,7 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="boobs")
     async def fetch_boobs(self, ctx, tag):  # boobs fetcher
-        subreddits = ["boobs", "TheHangingBoobs", "bigboobs", "BigBoobsGW", "hugeboobs", "pokies", "ghostnipples", "PiercedNSFW", "piercedtits", "PerfectTits", "BestTits", "Boobies", "JustOneBoob", "tits", "naturaltitties", "smallboobs", "Nipples", "homegrowntits", "TheUnderboob", "BiggerThanYouThought", "fortyfivefiftyfive", "Stacked", "BigBoobsGonewild", "AreolasGW", "TittyDrop", "Titties", "Boobies", "boobbounce", "TinyTits", "cleavage", "BoobsBetweenArms","BustyNaturals", "burstingout"]
+        subreddits = boorusources.boobs
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -377,7 +688,7 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="cunnilingus")
     async def fetch_cunnilingus(self, ctx, tag):  # cunnilingus fetcher
-        subreddits = ["cunnilingus", "CunnilingusSelfie", "Hegoesdown"]
+        subreddits = boorusources.cunnilingus
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -388,7 +699,7 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="bottomless")
     async def fetch_bottomless(self, ctx, tag):  # bottomless fetcher
-        subreddits = ["upskirt", "Bottomless", "Bottomless_Vixens", "nopanties", "Pantiesdown"]
+        subreddits = boorusources.bottomless
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -399,7 +710,7 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="cumshots")
     async def fetch_cumshots(self, ctx, tag):  # cumshots fetcher
-        subreddits = ["OralCreampie", "cumfetish", "cumontongue", "cumshots", "CumshotSelfies", "facialcumshots", "pulsatingcumshots", "gwcumsluts", "ImpresssedByCum", "GirlsFinishingTheJob", "cumshot", "amateurcumsluts", "unexpectedcum", "bodyshots", "ContainTheLoad", "bodyshots"]
+        subreddits = boorusources.cumshots
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -410,7 +721,7 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="deepthroat")
     async def fetch_deepthroat(self, ctx, tag):  # deepthroat fetcher
-        subreddits = ["DeepThroatTears", "deepthroat", "SwordSwallowers"]
+        subreddits = boorusources.deepthroat
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -421,7 +732,7 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="dick")
     async def fetch_dick(self, ctx, tag):  # dick fetcher
-        subreddits = ["DickPics4Freedom", "mangonewild", "MassiveCock", "penis", "cock", "ThickDick"]
+        subreddits = boorusources.dick
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -432,7 +743,7 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="doublepenetration")
     async def fetch_double_penetration(self, ctx, tag):  # double penetration fetcher
-        subreddits = ["doublepenetration", "dp_porn", "Technical_DP"]
+        subreddits = boorusources.doublepenetration
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -443,7 +754,7 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="gay")
     async def fetch_gay(self, ctx, tag):  # gay fetcher
-        subreddits = ["gayporn", "GayPornForStrtGuys", "ladybonersgw", "mangonewild"]
+        subreddits = boorusources.gay
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -454,7 +765,7 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="group")
     async def fetch_group(self, ctx, tag):  # group fetcher
-        subreddits = ["GroupOfNudeGirls", "GroupOfNudeMILFs", "groupsex"]
+        subreddits = boorusources.group
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -465,7 +776,7 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="hentai")
     async def fetch_hentai(self, ctx, tag):  # hentai fetcher
-        subreddits = ["hentai", "thick_hentai", "HQHentai", "AnimeBooty", "thighdeology", "ecchigifs", "nsfwanimegifs", "oppai_gif"]
+        subreddits = boorusources.hentai
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -476,7 +787,7 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="lesbian")
     async def fetch_lesbian(self, ctx, tag):  # lesbian fetcher
-        subreddits = ["lesbians", "HDLesbianGifs", "amateurlesbians", "Lesbian_gifs"]
+        subreddits = boorusources.lesbian
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -487,7 +798,7 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="milf")
     async def fetch_milf(self, ctx, tag):  # milf fetcher
-        subreddits = ["amateur_milfs", "GroupOfNudeMILFs", "ChocolateMilf", "milf", "Milfie", "hairymilfs", "HotAsianMilfs", "HotMILFs", "MILFs", "maturemilf", "puremilf", "amateur_milfs"]
+        subreddits = boorusources.milf
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -498,7 +809,7 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="public")
     async def fetch_public(self, ctx, tag):  # public fetcher
-        subreddits = ["RealPublicNudity", "FlashingAndFlaunting", "FlashingGirls", "PublicFlashing", "Unashamed", "OutsideNude", "NudeInPublic", "publicplug", "casualnudity"]
+        subreddits = boorusources.public
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -509,7 +820,7 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="rule34")
     async def fetch_rule34(self, ctx, tag):  # rule34 fetcher
-        subreddits = ["rule34", "rule34cartoons", "Rule_34", "Rule34LoL", "AvatarPorn", "Overwatch_Porn", "Rule34Overwatch", "WesternHentai"]
+        subreddits = boorusources.rule34
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -520,7 +831,7 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="thigh")
     async def fetch_thigh(self, ctx, tag):  # thigh fetcher
-        subreddits = ["Thighs", "ThickThighs", "thighhighs", "Thigh", "leggingsgonewild"]
+        subreddits = boorusources.thigh
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -531,7 +842,7 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="trap")
     async def fetch_trap(self, ctx, tag):  # trap fetcher
-        subreddits = ["Transex", "DeliciousTraps", "traps", "trapgifs", "GoneWildTrans", "SexyShemales", "Shemales", "shemale_gifs", "Shemales", "ShemalesParadise", "Shemale_Big_Cock", "ShemaleGalleries"]
+        subreddits = boorusources.trap
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -542,7 +853,7 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="wild")
     async def fetch_wild(self, ctx, tag):  # wild fetcher
-        subreddits = ["gonewild", "GWNerdy", "dirtysmall", "MyCalvins", "AsiansGoneWild", "GoneWildSmiles", "gonewildcurvy", "BigBoobsGonewild", "gonewildcouples", "gonewildcolor", "PetiteGoneWild", "GWCouples", "BigBoobsGW", "altgonewild", "LabiaGW", "UnderwearGW", "JustTheTop", "TallGoneWild", "LingerieGW", "Swingersgw", "workgonewild"]
+        subreddits = boorusources.wild
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -553,7 +864,7 @@ class BooruCore:
 
     @cached(ttl=3600, cache=SimpleMemoryCache, key="redhead")
     async def fetch_redhead(self, ctx, tag):  # redhead fetcher
-        subreddits = ["redheadxxx", "redheads", "ginger", "FireBush", "FreckledRedheads", "redhead", "thesluttyginger", "RedheadGifs"]
+        subreddits = boorusources.redhead
         all_content = []
         for subreddit in subreddits:
             urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
@@ -577,30 +888,51 @@ class BooruCore:
             return content
         else:
             for item in content:
+                if provider == "Konachan":
+                    item["post_link"] = "https://konachan.com/post/show/" + str(item["id"])
+                elif provider == "Gelbooru":
+                    item["post_link"] = "https://gelbooru.com/index.php?page=post&s=view&id=" + str(item["id"])
+                    item["author"] = item["owner"]
+                elif provider == "Rule34":
+                    item["post_link"] = "https://rule34.xxx/index.php?page=post&s=view&id=" + str(item["id"])
+                    item["file_url"] = "https://us.rule34.xxx//images/" + item["directory"] + "/" + item["image"]
+                    item["author"] = item["owner"]
+                elif provider == "Yandere":
+                    item["post_link"] = "https://yande.re/post/show/" + str(item["id"])
+                elif provider == "Danbooru":
+                    item["post_link"] = "https://danbooru.donmai.us/posts/" + str(item["id"])
+                    item["tags"] = item["tag_string"]
+                    item["author"] = item["uploader_name"]
+                elif provider == "Safebooru":
+                    item["post_link"] = "https://safebooru.com/index.php?page=post&s=view&id=" + str(item["id"])
+                    item["file_url"] = "https://safebooru.org//images/" + item["directory"] + "/" + item["image"]
+                    item["author"] = item["owner"]
+                elif provider == "e621":
+                    item["post_link"] = "https://e621.net/post/show/" + str(item["id"])
                 item["provider"] = provider
         return content
 
     @cached(ttl=3600, cache=SimpleMemoryCache)
     async def fetch_yan(self, ctx, tags):  # Yande.re fetcher
-        urlstr = "https://yande.re/post.json?limit=100&tags=" + "+".join(tags)
+        urlstr = boorusources.yan + "+".join(tags)
         log.debug(urlstr)
         return await self.fetch_from_booru(urlstr, "Yandere")
 
     @cached(ttl=3600, cache=SimpleMemoryCache)
     async def fetch_gel(self, ctx, tags):  # Gelbooru fetcher
-        urlstr = "https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1&limit=100&tags=" + "+".join(tags)
+        urlstr = boorusources.gel + "+".join(tags)
         log.debug(urlstr)
         return await self.fetch_from_booru(urlstr, "Gelbooru")
 
     @cached(ttl=3600, cache=SimpleMemoryCache)
     async def fetch_safe(self, ctx, tags):  # Safebooru fetcher
-        urlstr = "https://safebooru.org/index.php?page=dapi&s=post&q=index&json=1&limit=100&tags=" + "+".join(tags)
+        urlstr = boorusources.safe + "+".join(tags)
         log.debug(urlstr)
         return await self.fetch_from_booru(urlstr, "Safebooru")
 
     @cached(ttl=3600, cache=SimpleMemoryCache)
     async def fetch_kon(self, ctx, tags):  # Konachan fetcher
-        urlstr = "https://konachan.com/post.json?limit=100&tags=" + "+".join(tags)
+        urlstr = boorusources.kon + "+".join(tags)
         log.debug(urlstr)
         return await self.fetch_from_booru(urlstr, "Konachan")
 
@@ -608,19 +940,19 @@ class BooruCore:
     async def fetch_dan(self, ctx, tags):  # Danbooru fetcher
         if len(tags) > 2:
             return []
-        urlstr = "https://danbooru.donmai.us/posts.json?limit=100&tags=" + "+".join(tags)
+        urlstr = boorusources.dan + "+".join(tags)
         log.debug(urlstr)
         return await self.fetch_from_booru(urlstr, "Danbooru")
 
     @cached(ttl=3600, cache=SimpleMemoryCache)
     async def fetch_r34(self, ctx, tags):  # Rule34 fetcher
-        urlstr = "https://rule34.xxx/index.php?page=dapi&s=post&q=index&json=1&limit=100&tags=" + "+".join(tags)
+        urlstr = boorusources.r34 + "+".join(tags)
         log.debug(urlstr)
         return await self.fetch_from_booru(urlstr, "Rule34")
 
     @cached(ttl=3600, cache=SimpleMemoryCache)
     async def fetch_e621(self, ctx, tags):  # e621 fetcher
-        urlstr = "https://e621.net/post/index.json?limit=100&tags=" + "+".join(tags)
+        urlstr = boorusources.e621 + "+".join(tags)
         log.debug(urlstr)
         return await self.fetch_from_booru(urlstr, "e621")
 
@@ -646,94 +978,36 @@ class BooruCore:
 
             num_pages = len(data)
             for page_num, booru in enumerate(data, 1):
-                # Set variables for owner/author of post
-                booru_author = booru.get("owner") or booru.get("author") or booru.get("uploader_name") or "N/A"
-                if booru["provider"] == "Reddit":
-                    booru_author = booru["data"]["author"]
-
-                # Set variables for tags
-                booru_tags = booru.get("tags") or booru.get("tag_string") or "N/A"
-                if booru["provider"] == "Reddit":
-                    booru_tags = booru["data"]["title"]
-
-                # Set variables for score
-                booru_score = booru.get("score") or "N/A"
-                if booru["provider"] == "Reddit":
-                    booru_score = booru["data"]["score"]
-
-                # Set variables for file url
-                file_url = booru.get("file_url")
-                if booru["provider"] == "Rule34":
-                     file_url = "https://us.rule34.xxx//images/" + booru.get("directory") + "/" + booru.get("image")
-                if booru["provider"] == "Safebooru":
-                     file_url = "https://safebooru.org//images/" + booru.get("directory") + "/" + booru.get("image")
-                if booru["provider"] == "Oboobs":
-                     file_url = "http://media.oboobs.ru/" + booru["preview"]
-                if booru["provider"] == "Obutts":
-                     file_url = "http://media.obutts.ru/" + booru["preview"]
-                booru_url = file_url
-
-                # Set variable for post link
-                if booru["provider"] == "Konachan":
-                    booru_post = "https://konachan.com/post/show/" + str(booru.get("id"))
-                if booru["provider"] == "Gelbooru":
-                    booru_post = "https://gelbooru.com/index.php?page=post&s=view&id=" + str(booru.get("id"))
-                if booru["provider"] == "Rule34":
-                    booru_post = "https://rule34.xxx/index.php?page=post&s=view&id=" + str(booru.get("id"))
-                if booru["provider"] == "Yandere":
-                    booru_post = "https://yande.re/post/show/" + str(booru.get("id"))
-                if booru["provider"] == "Danbooru":
-                    booru_post = "https://danbooru.donmai.us/posts/" + str(booru.get("id"))
-                if booru["provider"] == "Safebooru":
-                    booru_post = "https://safebooru.com/index.php?page=post&s=view&id=" + str(booru.get("id"))
-                if booru["provider"] == "e621":
-                    booru_post = "https://e621.net/post/show/" + str(booru.get("id"))
-                if booru["provider"] == "Reddit":
-                     booru_post = "https://reddit.com" + booru["data"]["permalink"]
-                if booru["provider"] == "Oboobs":
-                     booru_post = "http://media.oboobs.ru/" + booru["preview"]
-                if booru["provider"] == "Obutts":
-                     booru_post = "http://media.obutts.ru/" + booru["preview"]
 
                 # Set colour for each board
-                color = {"Gelbooru": 3395583, "Danbooru": 3395583, "Konachan": 8745592, "Yandere": 2236962, "Rule34": 339933, "Safebooru": 000000, "e621": 000000, "Reddit": 000000, "Oboobs": 000000, "Obutts": 000000}
+                color = {"Gelbooru": 3395583, "Danbooru": 3395583, "Konachan": 8745592, "Yandere": 2236962, "Rule34": 339933, "Safebooru": 000000, "e621": 000000, "Reddit": 000000, "Oboobs": 000000, "Obutts": 000000, "Nekos.life": 000000}
 
                 embed = discord.Embed()
                 embed.color = color[booru["provider"]]
-                embed.title = booru["provider"] + " entry by " + booru_author
-                embed.url = booru_post
-                embed.set_image(url=booru_url)
-                embed.add_field(name="Description / Tags", value="```" + booru_tags[:300] + "```", inline=False)
+                embed.title = booru["provider"] + " entry by " + booru["author"]
+                embed.url = booru["post_link"]
+                embed.set_image(url=booru["file_url"])
+                embed.add_field(name="Description / Tags", value="```" + booru["tags"][:300] + "```", inline=False)
                 embed.add_field(name="Rating", value=booru["rating"])
-                embed.add_field(name="Score", value=booru_score)
+                embed.add_field(name="Score", value=booru["score"])
                 if booru["provider"] == "Reddit":
                     embed.set_footer(text=f"{page_num}/{num_pages} If image doesn't appear, it may be a webm or too big, Powered by {booru['data']['subreddit_name_prefixed']}")
                 else:
                     embed.set_footer(text=f"{page_num}/{num_pages} If image doesn't appear, it may be a webm or too big, Powered by {booru['provider']}")
                 embeds.append(embed)
-
-            await menu(ctx, pages=embeds, controls=DEFAULT_CONTROLS, message=None, page=i, timeout=15)
+            try:
+                await menu(ctx, pages=embeds, controls=DEFAULT_CONTROLS, message=None, page=i, timeout=15)
+            except:
+                log.debug(data[i])
 
     async def show_simple_booru(self, ctx, i, data):  # Shows simple embed
 
             booru = data[i]
-
-            # Set variables for file url
-            file_url = booru.get("file_url")
-            if booru["provider"] == "Rule34":
-                 file_url = "https://us.rule34.xxx//images/" + booru.get("directory") + "/" + booru.get("image")
-            if booru["provider"] == "Safebooru":
-                 file_url = "https://safebooru.org//images/" + booru.get("directory") + "/" + booru.get("image")
-            if booru["provider"] == "Oboobs":
-                 file_url = "http://media.oboobs.ru/" + booru["preview"]
-            if booru["provider"] == "Obutts":
-                 file_url = "http://media.obutts.ru/" + booru["preview"]
-            booru_url = file_url
 
             # Set colour for each board
             color = {"Gelbooru": 3395583, "Danbooru": 3395583, "Konachan": 8745592, "Yandere": 2236962, "Rule34": 339933, "Safebooru": 000000, "e621": 000000, "Reddit": 000000, "Oboobs": 000000, "Obutts": 000000}
 
             embed = discord.Embed()
             embed.color = color[booru["provider"]]
-            embed.set_image(url=booru_url)
+            embed.set_image(url=booru["file_url"])
             await ctx.send(embed=embed)
