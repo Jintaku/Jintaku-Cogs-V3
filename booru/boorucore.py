@@ -1010,4 +1010,7 @@ class BooruCore:
             embed = discord.Embed()
             embed.color = color[booru["provider"]]
             embed.set_image(url=booru["file_url"])
-            await ctx.send(embed=embed)
+            try:
+                await ctx.send(embed=embed)
+            except:
+                log.debug(data[i])
