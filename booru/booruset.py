@@ -64,7 +64,7 @@ class Booruset:
             await self.config.guild(ctx.guild).weebmode.set("on")
             await ctx.send("Weebmode now on, all the anime!")
 
-    @_guild.group(name="onlynsfw")
+    @_guild.group(name="onlynsfw", autohelp=False)
     @checks.admin_or_permissions(manage_guild=True)
     async def _guild_onlynsfw(self, ctx):
         """Only post in nsfw channels"""
@@ -289,9 +289,11 @@ class Booruset:
         else:
             for board in boards:
                 if board not in self.board_names:
+                    board_names_string = ""
                     for board in self.board_names:
                         board_names_string += f" {board},"
                     await ctx.send(f"Reminder that the board names that can be used are {board_names_string}. Please try again")
+                    return
 
         # Fuse input and config
         config_boards = set(config_boards)
