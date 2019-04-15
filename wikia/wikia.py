@@ -104,8 +104,8 @@ class Wikia(BaseCog):
 
     async def search_article(self, ctx, article, domain):
 
-        if await self.config.channel(ctx.channel).url() != "":
-            domain = await self.config.channel(ctx.channel).url()
+        if type(domain) is str:
+            domain = domain
         else:
             domain = domain["url"]
 
