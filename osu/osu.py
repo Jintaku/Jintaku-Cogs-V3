@@ -31,7 +31,6 @@ class Osu(BaseCog):
             async with session.post(f"https://osu.ppy.sh/api/get_user?k={apikey}&u={username}", headers=headers) as response:
                 osu = await response.json()
 
-        # TODO : Pictures somehow would be nice
         if osu:
             # Build Embed
             embed = discord.Embed()
@@ -47,6 +46,7 @@ class Osu(BaseCog):
             embed.add_field(name="Playcount", value=osu[0]["playcount"])
             embed.add_field(name="Total score", value=osu[0]["total_score"])
             embed.add_field(name="Total seconds played", value=osu[0]["total_seconds_played"])
+            embed.set_thumbnail(url="https://a.ppy.sh/{}".format(osu[0]["user_id"]))
             await ctx.send(embed=embed)
         else:
             await ctx.send("No results.")
