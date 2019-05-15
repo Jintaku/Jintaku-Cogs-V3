@@ -509,7 +509,7 @@ class Roleplay(BaseCog):
     @commands.command()
     @commands.bot_has_permissions(embed_links=True)
     async def neko(self, ctx):
-        """Show a waifu!"""
+        """Show a neko!"""
 
         author = ctx.message.author
         images = await self.config.smug()
@@ -523,6 +523,27 @@ class Roleplay(BaseCog):
         # Build Embed
         embed = discord.Embed()
         embed.description = f"**Here's a neko, {author.mention}**"
+        embed.set_footer(text="Made with the help of nekos.life")
+        embed.set_image(url=images[i])
+        await ctx.send(embed=embed)
+        
+    @commands.command()
+    @commands.bot_has_permissions(embed_links=True)
+    async def cat(self, ctx):
+        """Show a cat!"""
+
+        author = ctx.message.author
+        images = await self.config.smug()
+
+        smug = await self.fetch_nekos_life_img(ctx, "cat")
+        images.extend(smug)
+
+        mn = len(images)
+        i = randint(0, mn - 1)
+
+        # Build Embed
+        embed = discord.Embed()
+        embed.description = f"**Here's a cat, {author.mention}**"
         embed.set_footer(text="Made with the help of nekos.life")
         embed.set_image(url=images[i])
         await ctx.send(embed=embed)
