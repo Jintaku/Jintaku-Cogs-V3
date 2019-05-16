@@ -494,8 +494,6 @@ class Roleplay(BaseCog):
         images = await self.config.smug()
 
         smug = await self.fetch_nekos_life_img(ctx, "waifu")
-        images.extend(smug)
-
         mn = len(images)
         i = randint(0, mn - 1)
 
@@ -515,7 +513,6 @@ class Roleplay(BaseCog):
         images = await self.config.smug()
 
         smug = await self.fetch_nekos_life_img(ctx, "neko")
-        images.extend(smug)
 
         mn = len(images)
         i = randint(0, mn - 1)
@@ -536,7 +533,6 @@ class Roleplay(BaseCog):
         images = await self.config.smug()
 
         smug = await self.fetch_nekos_life_img(ctx, "cat")
-        images.extend(smug)
 
         mn = len(images)
         i = randint(0, mn - 1)
