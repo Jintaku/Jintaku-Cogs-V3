@@ -4,7 +4,7 @@ from random import randint
 import aiohttp
 import logging
 
-log = logging.getLogger("8ball")  # Thanks to Sinbad for the example code for logging
+log = logging.getLogger("ball")  # Thanks to Sinbad for the example code for logging
 log.setLevel(logging.DEBUG)
 
 console = logging.StreamHandler()
@@ -17,12 +17,12 @@ log.addHandler(console)
 
 BaseCog = getattr(commands, "Cog", object)
 
-class 8ball(BaseCog):
+class ball(BaseCog):
     """Interact with people!"""
 
     @commands.command()
     @commands.bot_has_permissions(embed_links=True)
-    async def 8ball(self, ctx):
+    async def ball(self, ctx):
         """What is your fortune?"""
 
         author = ctx.message.author
