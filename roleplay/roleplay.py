@@ -540,6 +540,26 @@ class Roleplay(BaseCog):
         embed.set_footer(text="Made with the help of nekos.life")
         embed.set_image(url=images[i])
         await ctx.send(embed=embed)
+        
+        
+    @commands.command()
+    @commands.bot_has_permissions(embed_links=True)
+    async def 8ball(self, ctx):
+        """What is your fortune?"""
+
+        author = ctx.message.author
+
+        ball = await self.fetch_nekos_life_img(ctx, "8ball")
+
+        mn = len(images)
+        i = randint(0, mn - 1)
+
+        # Build Embed
+        embed = discord.Embed()
+        embed.description = f"**8Ball says...**"
+        embed.set_footer(text="Made with the help of nekos.life")
+        embed.set_image(url=images[i])
+        await ctx.send(embed=embed)
 
     async def fetch_nekos_life_gif(self, ctx, rp_action):
 
