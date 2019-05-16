@@ -544,7 +544,7 @@ class Roleplay(BaseCog):
         
     @commands.command()
     @commands.bot_has_permissions(embed_links=True)
-    async def 8ball(self, ctx):
+    async def ball(self, ctx):
         """What is your fortune?"""
 
         author = ctx.message.author
