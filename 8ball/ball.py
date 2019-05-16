@@ -39,7 +39,7 @@ class ball(BaseCog):
         embed.set_image(url=images[i])
         await ctx.send(embed=embed)
 
-    async def fetch_nekos_life_8ball(self, ctx, rp_action):
+    async def fetch_nekos_life_img(self, ctx, rp_action):
 
         async with aiohttp.ClientSession() as session:
             async with session.get(f"https://api.nekos.dev/api/v3/images/sfw/img/{rp_action}/?count=20") as resp:
