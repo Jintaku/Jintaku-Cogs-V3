@@ -1,6 +1,6 @@
-from .ball import Ball
+from .ball import ball
 
 
 def setup(bot):
-    n = Ball()
+    n = ball()
     bot.add_cog(n)
