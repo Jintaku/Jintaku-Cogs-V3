@@ -17,7 +17,7 @@ log.addHandler(console)
 
 BaseCog = getattr(commands, "Cog", object)
 
-class Roleplay(BaseCog):
+class 8ball(BaseCog):
     """Interact with people!"""
 
     @commands.command()
