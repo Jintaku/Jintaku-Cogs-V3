@@ -491,7 +491,6 @@ class Roleplay(BaseCog):
         """Show a waifu!"""
 
         author = ctx.message.author
-        images = await self.config.smug()
 
         smug = await self.fetch_nekos_life_img(ctx, "waifu")
         mn = len(images)
@@ -510,7 +509,6 @@ class Roleplay(BaseCog):
         """Show a neko!"""
 
         author = ctx.message.author
-        images = await self.config.smug()
 
         smug = await self.fetch_nekos_life_img(ctx, "neko")
 
@@ -530,7 +528,6 @@ class Roleplay(BaseCog):
         """Show a cat!"""
 
         author = ctx.message.author
-        images = await self.config.smug()
 
         smug = await self.fetch_nekos_life_img(ctx, "cat")
 
