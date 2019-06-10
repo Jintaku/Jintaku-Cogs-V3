@@ -9,7 +9,7 @@
 `[p]` is your prefix
 
 # Cog list
-## Anilist
+## AniSearch
 
 * `[p]anime <anime-name>` - Displays character data using Anilist
 * `[p]manga <manga-name>` - Displays manga data using Anilist
