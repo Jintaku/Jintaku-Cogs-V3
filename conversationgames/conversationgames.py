@@ -522,7 +522,6 @@ class ConversationGames(BaseCog):
                 "Would you rather eat dog food or cat food?",
                 "If you had nine lives, what would you do that you wouldn't do now?",
                 "If you could play a prank on anyone without getting caught, who would you play it on?",
-                "What would the prank be?",
                 "Have you ever pretended to like a gift? How did you pretend?",
                 "Would you rather not shower for a month, or eat the same meal everyday for a month?",
                 "What animal most closely resembles your eating style?",
