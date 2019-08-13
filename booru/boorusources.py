@@ -28,13 +28,13 @@ redhead = ["redheadxxx", "redheads", "ginger", "FireBush", "FreckledRedheads", "
 
 # OG Boorus sources
 
-dan = "https://danbooru.donmai.us/posts.json?limit=100&tags="
-e621 = "https://e621.net/post/index.json?limit=100&tags="
-r34 = "https://rule34.xxx/index.php?page=dapi&s=post&q=index&json=1&limit=100&tags="
-kon = "https://konachan.com/post.json?limit=100&tags="
-safe = "https://safebooru.org/index.php?page=dapi&s=post&q=index&json=1&limit=100&tags="
-gel = "https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1&limit=100&tags="
-yan = "https://yande.re/post.json?limit=100&tags="
+dan = "https://danbooru.donmai.us/posts.json?limit=200&tags="
+e621 = "https://e621.net/post/index.json?limit=320&tags="
+r34 = "https://rule34.xxx/index.php?page=dapi&s=post&q=index&json=1&limit=1000&tags="
+kon = "https://konachan.com/post.json?limit=1000&tags="
+safe = "https://safebooru.org/index.php?page=dapi&s=post&q=index&json=1&limit=1000&tags="
+gel = "https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1&limit=1000&tags="
+yan = "https://yande.re/post.json?limit=1000&tags="
 
 # Nekos.life NSFW sources
 
