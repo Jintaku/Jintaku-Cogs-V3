@@ -223,7 +223,6 @@ class Roleplay(BaseCog):
                 "https://media1.tenor.com/images/ec2ca0bf12d7b1a30fea702b59e5a7fa/tenor.gif?itemid=13417195",
                 "https://cdn.weeb.sh/images/HkEqiExdf.gif",
                 "https://media1.tenor.com/images/5f73f2a7b302a3800b3613095f8a5c40/tenor.gif?itemid=10005495",
-                "https://media1.tenor.com/images/2c15d00633af18a31a1d45aeb6e7ae0d/tenor.gif?itemid=9152683",
                 "https://media1.tenor.com/images/6b701503b0e5ea725b0b3fdf6824d390/tenor.gif?itemid=12141727",
                 "https://media1.tenor.com/images/069076cc8054bb8b114c5a37eec70a1f/tenor.gif?itemid=13248504",
                 "https://media1.tenor.com/images/fc0ef2ba03d82af0cbd6c5815c3c83d5/tenor.gif?itemid=12141725",
@@ -245,7 +244,6 @@ class Roleplay(BaseCog):
                 "https://media1.tenor.com/images/16267f3a34efb42598bd822effaccd11/tenor.gif?itemid=14137081",
                 "https://media1.tenor.com/images/9730876547cb3939388cf79b8a641da9/tenor.gif?itemid=8073516",
                 "https://media1.tenor.com/images/ce85a2843f52309b85515f56a0a49d06/tenor.gif?itemid=14137077",
-                "https://media1.tenor.com/images/0b8c573239f032bb3156d35b0d5865d2/tenor.gif?itemid=13354957",
             ],
             "feed": [
                 "https://media1.tenor.com/images/93c4833dbcfd5be9401afbda220066ee/tenor.gif?itemid=11223742",
@@ -267,10 +265,8 @@ class Roleplay(BaseCog):
                 "https://img2.gelbooru.com/images/0c/e4/0ce45bee2e1aaed9f1e650438f1e2867.gif",
                 "https://img2.gelbooru.com/images/11/74/1174ccbee672bd3f1129f5dc36964926.gif",
                 "https://media1.tenor.com/images/02f62186ccb7fa8a2667f3216cfd7e13/tenor.gif?itemid=13269751",
-                "https://media1.tenor.com/images/5cbe2cb77056ef2faf395b26fdece8eb/tenor.gif?itemid=14132818",
                 "https://media1.tenor.com/images/d38554c6e23b86c81f8d4a3764b38912/tenor.gif?itemid=11379131",
                 "https://media1.tenor.com/images/05a64a05e5501be2b1a5a734998ad2b2/tenor.gif?itemid=11379130",
-                "https://media1.tenor.com/images/e74babbf6fdcbd8189d18bb5b9379bc7/tenor.gif?itemid=12693902",
             ],
             "poke": [
                 "https://img2.gelbooru.com/images/07/86/078690a58e0b816e8e00cc58e090b499.gif",
