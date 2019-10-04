@@ -15,7 +15,7 @@ class XKCD(BaseCog):
     async def xkcd(self, ctx, *, entry_number=None):
         """Post a random xkcd"""
 
-        # Creates random number between 0 and 2002 (number of xkcd comics at time of writing) and queries xkcd
+        # Creates random number between 0 and 2190 (number of xkcd comics at time of writing) and queries xkcd
         headers = {"content-type": "application/json"}
         url = "https://xkcd.com/info.0.json"
         async with aiohttp.ClientSession() as session:

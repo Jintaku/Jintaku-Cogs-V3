@@ -72,7 +72,7 @@ class Wikia(BaseCog):
 
         # Loop through subdomains to show them in menu
         for subdomains in data["items"]:
-            embed = discord.Embed()
+            embed = discord.Embed(color = await ctx.embed_color())
             embed.title = subdomains["name"] + f" ({subdomains['url']})"
             embed.url = subdomains["url"]
             embed.set_thumbnail(url=subdomains["image"])
@@ -135,7 +135,7 @@ class Wikia(BaseCog):
             article_id = str(articles["id"])
             article = article_data["items"][article_id]
 
-            embed = discord.Embed()
+            embed = discord.Embed(color = await ctx.embed_color())
             embed.title = article["title"]
             embed.url = articles["url"]
             if article["thumbnail"]:
