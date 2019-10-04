@@ -102,9 +102,13 @@ class Confession(BaseCog):
             if rooms == channel.id:
                 confession_room = channel
 
+        if not confession_room:
+            return await ctx.author.send("The confession room does not appear to exist.")
+
         try:
-            await ctx.bot.send_filtered(destination=ctx.guild.get_channel(confession_room), content=confession)
-        except:
-            return await ctx.author.send("I don't have permission to this room or something went wrong")
+            await ctx.bot.send_filtered(destination=confession_room, content=confession)
+        except discord.errors.Forbidden:
+            return await ctx.author.send("I don't have permission to send messages to this room or something went wrong.")
+            
 
         await ctx.author.send("Your confession has been sent, you are forgiven now.")
