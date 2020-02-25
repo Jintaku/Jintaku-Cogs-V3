@@ -902,7 +902,7 @@ class BooruCore:
                 elif provider == "Danbooru":
                     item["post_link"] = "https://danbooru.donmai.us/posts/" + str(item["id"])
                     item["tags"] = item["tag_string"]
-                    item["author"] = item["updater_name"]
+                    item["author"] = "Not Available"
                 elif provider == "Safebooru":
                     item["post_link"] = "https://safebooru.com/index.php?page=post&s=view&id=" + str(item["id"])
                     item["file_url"] = "https://safebooru.org//images/" + item["directory"] + "/" + item["image"]
