@@ -73,13 +73,17 @@ class Wikia(BaseCog):
         # Loop through subdomains to show them in menu
         for subdomains in data["items"]:
             embed = discord.Embed(color = await ctx.embed_color())
-            embed.title = subdomains["name"] + f" ({subdomains['url']})"
+            embed.title = subdomains["name"]
             embed.url = subdomains["url"]
             embed.set_thumbnail(url=subdomains["image"])
             embed.description = subdomains["desc"]
             embed.add_field(name="Language", value=subdomains.get("language", "N/A"))
             embed.add_field(name="Number of articles", value=subdomains["stats"].get("articles", "N/A"))
-            embed.set_footer(text="Powered by Wikia/Fandom.com")
+            embed.add_field(name="Hub", value=subdomains.get("hub", "N/A"))
+            embed.add_field(name="Total Users", value=subdomains["stats"].get("users", "N/A"))
+            embed.add_field(name="Pages", value=subdomains["stats"].get("pages", "N/A"))
+            embed.add_field(name="Admins", value=subdomains["stats"].get("admins", "N/A"))
+            embed.set_footer(text="This wiki was created on {}".format(subdomains.get("creation_date")))
             embeds.append(embed)
 
         await menu(ctx, pages=embeds, controls=SELECT_CONTROLS, message=None, page=0, timeout=60)
@@ -128,7 +132,7 @@ class Wikia(BaseCog):
 
             # Queries api for more information
             async with aiohttp.ClientSession() as session:
-                async with session.post(domain + "/api/v1/Articles/Details?abstract=300&ids=" + str(articles["id"]), headers=headers) as response:
+                async with session.post(domain + "/api/v1/Articles/Details?abstract=500&ids=" + str(articles["id"]), headers=headers) as response:
                     article_data = await response.json()
 
             # Sets variable for better use in embed
@@ -141,7 +145,7 @@ class Wikia(BaseCog):
             if article["thumbnail"]:
                 embed.set_thumbnail(url=article["thumbnail"])
             embed.description = article["abstract"]
-            embed.set_footer(text="Powered by Wikia/Fandom.com")
+            embed.set_footer(text="Last edited by {} | Powered by Wikia/Fandom.com".format(article["revision"].get("user")))
             embeds.append(embed)
 
         await menu(ctx, pages=embeds, controls=DEFAULT_CONTROLS, message=None, page=0, timeout=15)
