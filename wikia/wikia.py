@@ -83,7 +83,7 @@ class Wikia(BaseCog):
             embed.add_field(name="Total Users", value=subdomains["stats"].get("users", "N/A"))
             embed.add_field(name="Pages", value=subdomains["stats"].get("pages", "N/A"))
             embed.add_field(name="Admins", value=subdomains["stats"].get("admins", "N/A"))
-            embed.set_footer(text="This wiki was created on {}".format(subdomains.get("creation_date")))
+            embed.set_footer(text="This wiki was created on {} | Powered by Wikia/Fandom.com".format(subdomains.get("creation_date")))
             embeds.append(embed)
 
         await menu(ctx, pages=embeds, controls=SELECT_CONTROLS, message=None, page=0, timeout=60)
