@@ -20,8 +20,6 @@ class Imdb(BaseCog):
     async def movie(self, ctx, *, title):
         """Search a movie"""
 
-        titlesearch = title.replace(' ', '_')
-
         # Get API key
         apikey = await self.config.apikey()
 
@@ -61,7 +59,7 @@ class Imdb(BaseCog):
                 "plot": "full"
             })
             async with aiohttp.ClientSession() as session:
-                async with session.post(url, headers=headers) as response:
+                async with session.post(url=url, headers=headers) as response:
                     data = await response.json()
 
             # Build Embed
