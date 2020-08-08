@@ -831,17 +831,6 @@ class BooruCore:
             all_content.extend(content)
         return all_content
 
-    @cached(ttl=3600, cache=SimpleMemoryCache, key="trap")
-    async def fetch_trap(self, ctx, tag):  # trap fetcher
-        subreddits = boorusources.trap
-        all_content = []
-        for subreddit in subreddits:
-            urlstr = "https://reddit.com/r/" + subreddit + "/new.json?limit=100"
-            log.debug(urlstr)
-            content = await self.fetch_from_reddit(urlstr, "explicit", "Reddit")
-            all_content.extend(content)
-        return all_content
-
     @cached(ttl=3600, cache=SimpleMemoryCache, key="wild")
     async def fetch_wild(self, ctx, tag):  # wild fetcher
         subreddits = boorusources.wild
