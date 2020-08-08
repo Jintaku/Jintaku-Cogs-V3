@@ -568,7 +568,7 @@ class BooruCore:
                 log.debug("Pruned by exception, error below:")
                 log.debug(ex)
                 content = []
-        if not content or content == [] or content is None or (type(content) is dict and "success" in content.keys() and content["success"] == False):
+        if not content or content == [] or content is None or (type(content) is dict and "error" in content.keys()):
             content = []
             return content
         else:
