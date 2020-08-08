@@ -217,6 +217,8 @@ class BooruCore:
                     continue
             if booru.get("is_deleted"):
                 continue
+            if booru.get("id") is False:
+                continue
             if booru["provider"] == "Danbooru" and "file_url" not in booru:
                 continue
 
