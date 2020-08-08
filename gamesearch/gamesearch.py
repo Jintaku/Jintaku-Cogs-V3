@@ -77,6 +77,9 @@ class Gamesearch(BaseCog):
         async with aiohttp.ClientSession() as session:
             async with session.post(f"https://api-v3.igdb.com/games/", data=game_query, headers=headers) as response:
                 games_data = await response.json()
+                if games_data == []:
+                    await ctx.send("No results.")
+                    return
 
         # Get more information such as cover and platforms and build embed
         embeds = await asyncio.gather(*(self.get_game_embed(headers, game_data) for game_data in games_data))
