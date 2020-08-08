@@ -420,17 +420,6 @@ class BooruCore:
             all_content.extend(content)
         return all_content
 
-    @cached(ttl=600, cache=SimpleMemoryCache, key="nekos_nsfw_trap")
-    async def fetch_nekos_nsfw_trap(self, ctx, tag):  # Nekos nsfw trap fetcher
-        life = boorusources.nekos_nsfw_trap
-        all_content = []
-        for nekos in life:
-            urlstr = "https://api.nekos.dev/api/v3/" + nekos + "/?count=20"
-            log.debug(urlstr)
-            content = await self.fetch_from_nekos(urlstr, "explicit", "Nekos.life")
-            all_content.extend(content)
-        return all_content
-
     @cached(ttl=600, cache=SimpleMemoryCache, key="nekos_nsfw_kitsune")
     async def fetch_nekos_nsfw_kitsune(self, ctx, tag):  # Nekos nsfw kitsune fetcher
         life = boorusources.nekos_nsfw_kitsune

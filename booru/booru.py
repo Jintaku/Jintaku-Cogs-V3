@@ -346,17 +346,6 @@ class Booru(BaseCog, BooruCore, Booruset, Boorualias):
         tag = None
         await self.generic_specific_source(ctx, board, tag)
 
-    @reddits.group(name="trap", autohelp=False)
-    @commands.guild_only()
-    @commands.is_nsfw()
-    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
-    async def _trap(self, ctx):
-        """Images from trap subreddits"""
-
-        board = "trap"
-        tag = None
-        await self.generic_specific_source(ctx, board, tag)
-
     @reddits.group(name="wild", autohelp=False)
     @commands.guild_only()
     @commands.is_nsfw()
@@ -589,17 +578,6 @@ class Booru(BaseCog, BooruCore, Booruset, Boorualias):
         """Images from piercings endpoints"""
 
         board = "nekos_nsfw_piercings"
-        tag = None
-        await self.generic_specific_source(ctx, board, tag)
-
-    @nsfw.group(name="trap", autohelp=False)
-    @commands.guild_only()
-    @commands.is_nsfw()
-    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
-    async def _nekos_nsfw_trap(self, ctx):
-        """Images from trap endpoints"""
-
-        board = "nekos_nsfw_trap"
         tag = None
         await self.generic_specific_source(ctx, board, tag)
 

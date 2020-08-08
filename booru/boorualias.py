@@ -147,16 +147,3 @@ class Boorualias:
 
         await self.generic_alias_booru(ctx, boards, tag)
 
-    @commands.command()
-    @commands.guild_only()
-    @commands.is_nsfw()
-    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
-    async def trap(self, ctx, *, tag=""):
-        """Trap images"""
-
-        tag_default = " trap"
-        tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "safe", "trap", "nekos_nsfw_trap"]
-
-        await self.generic_alias_booru(ctx, boards, tag)
-
