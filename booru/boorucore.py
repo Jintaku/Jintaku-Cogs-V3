@@ -161,7 +161,7 @@ class BooruCore:
         log.debug(tag)
 
         # Checks common to see if any ratings are there
-        ratings = {"rating:safe", "rating:explicit", "rating:questionable", "rating:none"}
+        ratings = {"rating:safe", "rating:explicit", "rating:questionable", "rating:none", "rating:s", "rating:q", "rating:e"}
         if not ratings & tag:
             tag.add("rating:safe")
 
@@ -178,7 +178,8 @@ class BooruCore:
                 await ctx.send("You cannot use booru in sfw channels")
                 return
 
-            if "rating:explicit" in tag or "rating:questionable" in tag or not ratings & tag:
+            # Checks if explicit or questionable or qe
+            if "rating:explicit" in tag or "rating:questionable" in tag or "rating:q" in tag or "rating:e" in tag:
                 await ctx.send("You cannot post nsfw content in sfw channels")
                 return
 
@@ -205,20 +206,28 @@ class BooruCore:
         filters = global_filters | guild_filters
         nsfw_filters = global_nsfw_filters | guild_nsfw_filters
 
-        # Set variable because
+        # Set variable because it needs to be set before it can be appended to
         filtered_data = []
 
         # Filter the content
         for booru in data:
             booru_tags = set(booru["tags"].split())
 
-            if booru["rating"] in "sqe":
-                if filters & booru_tags or (booru["rating"] != "s" and nsfw_filters & booru_tags):
+            # Checks if rating is safe then if filters match with tags
+            if booru["rating"] == "s" or booru["rating"] =="safe":
+                if filters & booru_tags:
                     continue
+            # Checks if rating is explicit or questions then if nsfw fitlers match with tags
+            if booru["rating"] in "qe" or booru["rating"] == "questionable" or booru["rating"] == "explicit":
+                if nsfw_filters & booru_tags:
+                    continue
+            # Checks if deleted
             if booru.get("is_deleted"):
                 continue
+            # Checks if there is an ID because sometimes there's no ID but it's not deleted, I hate this
             if booru.get("id") is False:
                 continue
+            # Another check for Danbooru because sometimes there's no file_url
             if booru["provider"] == "Danbooru" and "file_url" not in booru:
                 continue
 
