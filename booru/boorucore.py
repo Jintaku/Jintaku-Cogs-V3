@@ -859,6 +859,9 @@ class BooruCore:
         async with self.session.get(urlstr, headers={'User-Agent': "Booru (https://github.com/Jintaku/Jintaku-Cogs-V3)"}) as resp:
             try:
                 content = await resp.json(content_type=None)
+                if provider == "e621":
+                    content = content["posts"]
+                    log.debug(content)
             except (ValueError, aiohttp.ContentTypeError) as ex:
                 log.debug("Pruned by exception, error below:")
                 log.debug(ex)
@@ -889,6 +892,10 @@ class BooruCore:
                     item["author"] = item["owner"]
                 elif provider == "e621":
                     item["post_link"] = "https://e621.net/post/show/" + str(item["id"])
+                    item["file_url"] = item["file"]["url"]
+                    item["author"] = "Not Available"
+                    item["tags"] = " ".join(item["tags"]["general"] + item["tags"]["species"] + item["tags"]["character"] + item["tags"]["copyright"])
+                    item["score"] = item["score"]["total"]
                 item["provider"] = provider
         return content
 
