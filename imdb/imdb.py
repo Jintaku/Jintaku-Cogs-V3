@@ -1,7 +1,21 @@
 import discord
 from redbot.core import commands, Config, checks
 import aiohttp
+import logging
 from redbot.core.utils.menus import menu, commands, DEFAULT_CONTROLS
+from urllib.parse import urlencode
+
+# Debug stuff
+log = logging.getLogger("Booru")  # Thanks to Sinbad for the example code for logging
+log.setLevel(logging.DEBUG)
+
+console = logging.StreamHandler()
+
+if logging.getLogger("red").isEnabledFor(logging.DEBUG):
+    console.setLevel(logging.DEBUG)
+else:
+    console.setLevel(logging.INFO)
+log.addHandler(console)
 
 BaseCog = getattr(commands, "Cog", object)
 
@@ -37,7 +51,7 @@ class Imdb(BaseCog):
 
         # Handle if nothing is found
         if data['Response'] == "False":
-            await ctx.send("I couldn't find anything!")
+            await ctx.send("I couldn't find anything! You probably didn't set your API key properly!")
             return
 
         results = data['Search']
@@ -52,6 +66,7 @@ class Imdb(BaseCog):
             async with aiohttp.ClientSession() as session:
                 async with session.post(f"http://www.omdbapi.com/?apikey={apikey}&i={game['imdbID']}&plot=full", headers=headers) as response:
                     data = await response.json()
+                    log.debug(data)
 
             # Build Embed
             embed = discord.Embed()
