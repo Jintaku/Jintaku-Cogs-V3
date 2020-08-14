@@ -2,6 +2,7 @@ import discord
 from redbot.core import commands, Config, checks
 import aiohttp
 from redbot.core.utils.menus import menu, commands, DEFAULT_CONTROLS
+from urllib.parse import urlencode
 
 BaseCog = getattr(commands, "Cog", object)
 
@@ -16,10 +17,8 @@ class Imdb(BaseCog):
 
     @commands.command()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
-    async def movie(self, ctx, title):
+    async def movie(self, ctx, *, title):
         """Search a movie"""
-
-        titlesearch = title.replace(' ', '_')
 
         # Get API key
         apikey = await self.config.apikey()
@@ -28,11 +27,16 @@ class Imdb(BaseCog):
             await ctx.send("No omdbkey set, please set one using [p]omdbkey")
             return
 
+        url = "http://www.omdbapi.com/?"+urlencode({
+            "apikey": apikey,
+            "s": title,
+            "plot": "short"
+        })
         headers = {"accept": "application/json"}
 
         # Queries api for a game
         async with aiohttp.ClientSession() as session:
-            async with session.post(f"http://www.omdbapi.com/?apikey={apikey}&s={titlesearch}&plot=short", headers=headers) as response:
+            async with session.post(url=url, headers=headers) as response:
                 data = await response.json()
 
         # Handle if nothing is found
@@ -49,8 +53,13 @@ class Imdb(BaseCog):
         for game in results:
 
             # Queries api for a movie information
+            url = "http://www.omdbapi.com/?"+urlencode({
+                "apikey": apikey,
+                "i": game['imdbID'],
+                "plot": "full"
+            })
             async with aiohttp.ClientSession() as session:
-                async with session.post(f"http://www.omdbapi.com/?apikey={apikey}&i={game['imdbID']}&plot=full", headers=headers) as response:
+                async with session.post(url=url, headers=headers) as response:
                     data = await response.json()
 
             # Build Embed
