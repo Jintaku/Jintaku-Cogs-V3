@@ -57,7 +57,7 @@ class Gamesearch(BaseCog):
 
     @commands.command()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
-    async def game(self, ctx, game):
+    async def game(self, ctx, *, game):
         """Search IGDB.com for games"""
 
         apikey = await self.config.apikey()
