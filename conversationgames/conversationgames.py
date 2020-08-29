@@ -1,6 +1,5 @@
 import discord
 from redbot.core import commands, Config
-from redbot.core.utils.embed import randomize_colour
 from random import randint
 
 BaseCog = getattr(commands, "Cog", object)
@@ -718,7 +717,7 @@ class ConversationGames(BaseCog):
         embed = discord.Embed()
         embed.title = "Would you rather.."
         embed.description = strings[i]
-        await ctx.send(embed=randomize_colour(embed))
+        await ctx.send(embed=embed)
 
     @commands.command(aliases=["nhie"])
     @commands.bot_has_permissions(embed_links=True)
@@ -733,7 +732,7 @@ class ConversationGames(BaseCog):
         embed = discord.Embed()
         embed.title = "Never have I ever.."
         embed.description = strings[i]
-        await ctx.send(embed=randomize_colour(embed))
+        await ctx.send(embed=embed)
 
     @commands.guild_only()
     @commands.command()
@@ -758,7 +757,7 @@ class ConversationGames(BaseCog):
         embed = discord.Embed()
         embed.title = f"{author.name} asked {user.name}"
         embed.description = strings[rs].format(name=name)
-        await ctx.send(embed=randomize_colour(embed))
+        await ctx.send(embed=embed)
 
     @commands.guild_only()
     @commands.command()
@@ -783,4 +782,4 @@ class ConversationGames(BaseCog):
         embed = discord.Embed()
         embed.title = f"{author.name} dared {user.name}"
         embed.description = strings[rs].format(name=name)
-        await ctx.send(embed=randomize_colour(embed))
+        await ctx.send(embed=embed)
