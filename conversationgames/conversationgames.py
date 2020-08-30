@@ -734,6 +734,7 @@ class ConversationGames(BaseCog):
         embed.description = strings[i]
         await ctx.send(embed=embed)
 
+    @commands.guild_only()
     @commands.command()
     @commands.bot_has_permissions(embed_links=True)
     async def truth(self, ctx, *, user: discord.Member):
@@ -758,6 +759,7 @@ class ConversationGames(BaseCog):
         embed.description = strings[rs].format(name=name)
         await ctx.send(embed=embed)
 
+    @commands.guild_only()
     @commands.command()
     @commands.bot_has_permissions(embed_links=True)
     async def dare(self, ctx, *, user: discord.Member):
