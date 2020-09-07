@@ -876,9 +876,9 @@ class BooruCore:
             content = []
             return content
         else:
+            assigned_content = []
             for item in content:
                 if item.get("id") is None:
-                    content.remove(item)
                     continue
                 if provider == "Konachan":
                     item["post_link"] = "https://konachan.com/post/show/" + str(item["id"])
@@ -906,7 +906,8 @@ class BooruCore:
                     item["tags"] = " ".join(item["tags"]["general"] + item["tags"]["species"] + item["tags"]["character"] + item["tags"]["copyright"])
                     item["score"] = item["score"]["total"]
                 item["provider"] = provider
-        return content
+                assigned_content.append(item)
+        return assigned_content
 
     @cached(ttl=3600, cache=SimpleMemoryCache)
     async def fetch_yan(self, ctx, tags):  # Yande.re fetcher
