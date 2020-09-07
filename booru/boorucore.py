@@ -119,7 +119,7 @@ class BooruCore:
         # Fetch all the stuff!
         async with ctx.typing():
             all_data = await asyncio.gather(*(getattr(self, f"fetch_{board}")(ctx, tag) for board in boards))
-        data = [item for board_data in all_data for item in board_data]
+        data = [item for board_data in all_data if board_data is not None for item in board_data]
 
         # Filter data without using up requests space
         data = await self.filter_posts(ctx, data)
@@ -223,9 +223,6 @@ class BooruCore:
                     continue
             # Checks if deleted
             if booru.get("is_deleted"):
-                continue
-            # Checks if there is an ID because sometimes there's no ID but it's not deleted, I hate this
-            if booru.get("id") is False:
                 continue
             # Another check for Danbooru because sometimes there's no file_url
             if booru["provider"] == "Danbooru" and "file_url" not in booru:
@@ -880,6 +877,9 @@ class BooruCore:
             return content
         else:
             for item in content:
+                if item.get("id") is None:
+                    content.remove(item)
+                    continue
                 if provider == "Konachan":
                     item["post_link"] = "https://konachan.com/post/show/" + str(item["id"])
                 elif provider == "Gelbooru":
