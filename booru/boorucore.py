@@ -119,7 +119,7 @@ class BooruCore:
         # Fetch all the stuff!
         async with ctx.typing():
             all_data = await asyncio.gather(*(getattr(self, f"fetch_{board}")(ctx, tag) for board in boards))
-        data = [item for board_data in all_data for item in board_data]
+        data = [item for board_data in all_data if board_data is not None for item in board_data]
 
         # Filter data without using up requests space
         data = await self.filter_posts(ctx, data)
@@ -223,9 +223,6 @@ class BooruCore:
                     continue
             # Checks if deleted
             if booru.get("is_deleted"):
-                continue
-            # Checks if there is an ID because sometimes there's no ID but it's not deleted, I hate this
-            if booru.get("id") is False:
                 continue
             # Another check for Danbooru because sometimes there's no file_url
             if booru["provider"] == "Danbooru" and "file_url" not in booru:
@@ -879,7 +876,10 @@ class BooruCore:
             content = []
             return content
         else:
+            assigned_content = []
             for item in content:
+                if item.get("id") is None:
+                    continue
                 if provider == "Konachan":
                     item["post_link"] = "https://konachan.com/post/show/" + str(item["id"])
                 elif provider == "Gelbooru":
@@ -906,7 +906,8 @@ class BooruCore:
                     item["tags"] = " ".join(item["tags"]["general"] + item["tags"]["species"] + item["tags"]["character"] + item["tags"]["copyright"])
                     item["score"] = item["score"]["total"]
                 item["provider"] = provider
-        return content
+                assigned_content.append(item)
+        return assigned_content
 
     @cached(ttl=3600, cache=SimpleMemoryCache)
     async def fetch_yan(self, ctx, tags):  # Yande.re fetcher
