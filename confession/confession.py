@@ -106,9 +106,17 @@ class Confession(BaseCog):
             return await ctx.author.send("The confession room does not appear to exist.")
 
         try:
-            await ctx.bot.send_filtered(destination=confession_room, content=confession)
+            embed = discord.Embed(title="I have forgiven another sin", colour=0xf47fff)
+            embed.set_footer(text="type ,confess in my DMs to confess")
+            embed.add_field(name="**Confession**", value=confession)
+
+            await ctx.bot.send_filtered(destination=confession_room, embed=embed)
         except discord.errors.Forbidden:
-            return await ctx.author.send("I don't have permission to send messages to this room or something went wrong.")
+            await ctx.author.send(
+                "I don't have permission to send messages to this room, embed messages or something went wrong."
+            )
+            return
+
             
 
         await ctx.author.send("Your confession has been sent, you are forgiven now.")
