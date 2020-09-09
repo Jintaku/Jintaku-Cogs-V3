@@ -107,7 +107,7 @@ class Confession(BaseCog):
 
         try:
             embed = discord.Embed(title="I have forgiven another sin", colour=0xf47fff)
-            embed.set_footer(text="type ,confess in my DMs to confess")
+            embed.set_footer(text="type [p]confess in my DMs to confess")
             embed.add_field(name="**Confession**", value=confession)
 
             await ctx.bot.send_filtered(destination=confession_room, embed=embed)
