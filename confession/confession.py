@@ -8,8 +8,7 @@ import discord
 BaseCog = getattr(commands, "Cog", object)
 
 
-
-        class Confession(commands.Cog):
+class Confession(commands.Cog):
             def __init__(self):
                 self.config = Config.get_conf(self, identifier=665235, force_registration=True)
                 default_guild = {"confession_room": None, "tracker_room": None}
