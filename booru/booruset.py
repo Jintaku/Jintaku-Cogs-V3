@@ -6,7 +6,7 @@ import contextlib
 
 class Booruset:
 
-    # TODO : Use Reaction menus now that I know how with self
+    # TODO : Use Red internals
     @commands.group()
     @checks.admin_or_permissions()
     async def booruset(self, ctx):

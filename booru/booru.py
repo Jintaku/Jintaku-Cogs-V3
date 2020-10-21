@@ -471,17 +471,6 @@ class Booru(BaseCog, BooruCore, Booruset, Boorualias):
         tag = None
         await self.generic_specific_source(ctx, board, tag)
 
-    @nsfw.group(name="pussy", autohelp=False)
-    @commands.guild_only()
-    @commands.is_nsfw()
-    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
-    async def _nekos_nsfw_pussy(self, ctx):
-        """Images from pussy endpoints"""
-
-        board = "nekos_nsfw_pussy"
-        tag = None
-        await self.generic_specific_source(ctx, board, tag)
-
     @nsfw.group(name="feet", autohelp=False)
     @commands.guild_only()
     @commands.is_nsfw()
