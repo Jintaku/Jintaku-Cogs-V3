@@ -134,16 +134,3 @@ class Boorualias:
 
         await self.generic_alias_booru(ctx, boards, tag)
 
-    @commands.command()
-    @commands.guild_only()
-    @commands.is_nsfw()
-    @commands.bot_has_permissions(embed_links=True, add_reactions=True)
-    async def pussy(self, ctx, *, tag=""):
-        """Pussy images"""
-
-        tag_default = " pussy"
-        tag += tag_default
-        boards = ["dan", "gel", "kon", "yan", "safe", "pussy", "cunnilingus", "nekos_nsfw_pussy", "nekos_nsfw_cunnilingus"]
-
-        await self.generic_alias_booru(ctx, boards, tag)
-
