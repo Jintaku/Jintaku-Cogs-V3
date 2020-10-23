@@ -5,6 +5,6 @@
   "short" : "Display game information from Rawg",
   "description" : "Displays information about games from Rawg with reaction menus",
   "tags" : ["games", "information"],
-  "requirements": ["async_lru"],
+  "requirements": ["aiocache"],
   "hidden" : false
 }
