@@ -98,7 +98,6 @@ class Roleplay(BaseCog):
                 "https://cdn.weeb.sh/images/ryfyLL7D-.gif",
                 "https://cdn.weeb.sh/images/BJwpw_XLM.gif",
                 "https://cdn.weeb.sh/images/r1VzDkmjW.gif",
-                "https://cdn.weeb.sh/images/BJkABImvb.gif",
                 "https://cdn.weeb.sh/images/HkzArUmvZ.gif",
                 "https://cdn.weeb.sh/images/r1A77CZbz.gif",
             ],
