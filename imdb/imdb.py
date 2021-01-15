@@ -94,6 +94,8 @@ class Imdb(BaseCog):
                embed.add_field(name="Box Office", value=data.get('BoxOffice', 'N/A'))
             if data['Metascore']:
                embed.add_field(name="Metascore", value=data.get('Metascore', 'N/A'))
+            if data['imdbRating']:
+               embed.add_field(name="IMDb", value=data.get('imdbRating', 'N/A'))
             embed.set_footer(text="Powered by omdb")
             embeds.append(embed)
 
@@ -165,6 +167,8 @@ class Imdb(BaseCog):
                embed.add_field(name="Box Office", value=data.get('BoxOffice', 'N/A'))
             if data['Metascore']:
                embed.add_field(name="Metascore", value=data.get('Metascore', 'N/A'))
+            if data['imdbRating']:
+               embed.add_field(name="IMDb", value=data.get('imdbRating', 'N/A'))
             embed.set_footer(text="Powered by omdb")
             embeds.append(embed)
 
