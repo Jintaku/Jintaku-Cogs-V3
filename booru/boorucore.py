@@ -11,8 +11,7 @@ from aiocache import cached, SimpleMemoryCache
 
 cache = SimpleMemoryCache()
 
-log = logging.getLogger("BooruCore")  # Thanks to Sinbad for the example code for logging
-log.setLevel(logging.DEBUG)
+log = logging.getLogger("red.jintaku-cogs.booru.core")  # Thanks to Sinbad for the example code for logging
 
 console = logging.StreamHandler()
 
