@@ -12,7 +12,7 @@ from .booruset import Booruset
 from .boorualias import Boorualias
 
 # Debug stuff
-log = logging.getLogger("red.jintaku-cogs.booru")  # Thanks to Sinbad for the example code for logging
+log = logging.getLogger("red.jintaku-cogs.booru")
 
 console = logging.StreamHandler()
 
