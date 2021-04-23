@@ -24,19 +24,21 @@ class XKCD(BaseCog):
             xkcd_latest = await self.get_xkcd(session=session)
             xkcd_max = xkcd_latest.get("num")
 
-            try: # weird hack.
-                if entry_number == "random" or entry_number is None:
-                    num = randint(0, xkcd_max)
-                    xkcd = await self.get_xkcd(num, session=session)
-                elif 0 < int(entry_number) <= xkcd_max:
-                    num = int(entry_number)
-                    xkcd = await self.get_xkcd(num, session=session)
-                else:
-                    num = xkcd_max
-                    xkcd = xkcd_latest
+            try:
+                entry_number = int(entry_number)
             except:
+                pass
+
+            if type(entry_number) is int:
+                assert 0 < entry_number <= xkcd_max
+                num = entry_number
+                xkcd = await self.get_xkcd(num, session=session)
+            elif entry_number == "latest":
                 num = xkcd_max
                 xkcd = xkcd_latest
+            else:
+                num = randint(0, xkcd_max)
+                xkcd = await self.get_xkcd(num, session=session)
 
         # Build Embed
         embed = discord.Embed()
