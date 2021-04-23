@@ -14,10 +14,7 @@ class XKCD(BaseCog):
     @commands.command()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def xkcd(self, ctx, entry_number=None):
-        """Post a random xkcd. If "latest" is specified as the entry number,
-        then it selects the latest one. If "random" or no argument is
-        specified, then it selects a random one. If an invalid entry number is
-        specified, it selects the latest."""
+        """Post a random xkcd. Accepts "latest" as an entry number."""
 
         # Creates random number between 0 and the latest xkcd num and queries xkcd
         async with aiohttp.ClientSession() as session:
@@ -44,14 +41,18 @@ class XKCD(BaseCog):
 
         # Build Embed
         embed = discord.Embed()
-        embed.title = xkcd["title"] + " (" + xkcd["year"] + "/" + xkcd["month"].zfill(2) + "/" + xkcd["day"].zfill(2) + ")"
+        embed.title = (xkcd["title"] + " (" + xkcd["year"]
+                                            + "/" + xkcd["month"].zfill(2)
+                                            + "/" + xkcd["day"].zfill(2) + ")")
         embed.url = "https://xkcd.com/" + str(num) + "/"
         embed.description = xkcd["alt"]
         embed.set_image(url=xkcd["img"])
         embed.set_footer(text="Powered by xkcd")
         await ctx.send(embed=embed)
 
-    async def get_xkcd(self, entry_number: Optional[Union[int, str]] = None, session: Optional[aiohttp.ClientSession] = None, headers: Optional[dict] = None) -> dict:
+    async def get_xkcd(self, entry_number: Optional[Union[int, str]] = None,
+                       session: Optional[aiohttp.ClientSession] = None,
+                       headers: Optional[dict] = None) -> dict:
         """Fetches the xkcd metadata for a certain entry. If unspecified, it's the latest."""
         headers = {"Content-Type": "application/json"} if headers is None else headers
         current_session = aiohttp.ClientSession() if session is None else session
