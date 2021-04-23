@@ -48,8 +48,7 @@ class XKCD(BaseCog):
         await ctx.send(embed=embed)
 
     async def get_xkcd(self, entry_number: Optional[Union[int, str]] = None, session: Optional[aiohttp.ClientSession] = None, headers: Optional[dict] = None) -> dict:
-        """Fetches the xkcd metadata for a certain entry. If unspecified, it's the latest.
-        If an error, returns None."""
+        """Fetches the xkcd metadata for a certain entry. If unspecified, it's the latest."""
         headers = {"Content-Type": "application/json"} if headers is None else headers
         current_session = aiohttp.ClientSession() if session is None else session
         try:
