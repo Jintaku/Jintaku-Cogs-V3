@@ -30,7 +30,9 @@ class XKCD(BaseCog):
                 pass
 
             if type(entry_number) is int:
-                assert 0 < entry_number <= xkcd_max
+                if not 0 < entry_number <= xkcd_max:
+                    await ctx.send("Not a valid xkcd entry.")
+                    return
                 num = entry_number
                 xkcd = await self.get_xkcd(num, session=session)
             elif entry_number == "latest":
