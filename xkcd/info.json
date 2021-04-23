@@ -1,9 +1,10 @@
 {
-  "author": ["Jintaku"],
-  "bot_version": [3,0,0],
-  "description" : "Displays xkcd entries such as description, title and image/comic from xkcd",
-  "hidden": false,
-  "install_msg" : "Share them XKCDs! Show all the comics, have fun!",
-  "short" : "Display random xkcd",
-  "tags" : ["xkcd", "comic", "jokes"]
+    "author": ["Jintaku", "nfitzen"],
+    "bot_version": [3,0,0],
+    "description": "Displays xkcd entries such as description, title and image/comic from xkcd",
+    "hidden": false,
+    "install_msg": "Share them XKCDs! Show all the comics, have fun!",
+    "short": "Display a random xkcd, or the latest one.",
+    "tags": ["xkcd", "comic", "jokes"],
+    "license": "AGPL-3.0"
 }
