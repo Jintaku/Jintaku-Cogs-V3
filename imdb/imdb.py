@@ -6,8 +6,7 @@ from redbot.core.utils.menus import menu, commands, DEFAULT_CONTROLS
 from urllib.parse import urlencode
 
 # Debug stuff
-log = logging.getLogger("Booru")  # Thanks to Sinbad for the example code for logging
-log.setLevel(logging.DEBUG)
+log = logging.getLogger("red.jintaku-cogs.imdb")
 
 console = logging.StreamHandler()
 

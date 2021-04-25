@@ -4,8 +4,7 @@ from random import randint
 import aiohttp
 import logging
 
-log = logging.getLogger("Roleplay")  # Thanks to Sinbad for the example code for logging
-log.setLevel(logging.DEBUG)
+log = logging.getLogger("red.jintaku-cogs.roleplay")
 
 console = logging.StreamHandler()
 
