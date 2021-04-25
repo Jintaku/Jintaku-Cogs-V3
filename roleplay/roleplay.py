@@ -25,17 +25,9 @@ class Roleplay(BaseCog):
         self.config = Config.get_conf(self, identifier=842364413)
         default_global = {
             "hugs": [
-                "https://img2.gelbooru.com/images/ff/63/ff63a3c4329fda2bf1e9704d4e150fea.gif",
-                "https://img2.gelbooru.com/images/2c/e8/2ce81403e0279f1a570711f7472b3abb.gif",
-                "https://img2.gelbooru.com/images/e2/05/e205e349535e22c07865913770dcad5f.gif",
-                "https://img2.gelbooru.com/images/09/f6/09f63a79f70700abb2593862525ade10.gif",
                 "https://safebooru.org//images/1174/5ebeacd87b22a0c5949ecb875667ae75702c2fed.gif",
                 "https://safebooru.org//images/848/4828fc43e39f52abd5bac6b299e822ae02786974.gif",
                 "https://safebooru.org//images/160/ba09bc95bc05b4f47af22671950e66f085c7ea9e.gif",
-                "https://img2.gelbooru.com/images/3f/73/3f73b1c3703d91a9300aebdaab6e26c0.gif",
-                "https://img2.gelbooru.com/images/7d/7c/7d7c8ce0c4e561804f16adc7907a78e8.gif",
-                "https://img2.gelbooru.com/images/5e/8c/5e8c1a33470c62f6907d0ea5a03ae644.gif",
-                "https://img2.gelbooru.com/images/2b/b9/2bb9dc89cf991181bce06279d8d5f0f4.gif",
                 "https://cdn.weeb.sh/images/rJaog0FtZ.gif",
                 "https://cdn.weeb.sh/images/Hyv6uOQPZ.gif",
                 "https://cdn.weeb.sh/images/BJx2l0ttW.gif",
@@ -101,15 +93,6 @@ class Roleplay(BaseCog):
                 "https://cdn.weeb.sh/images/r1A77CZbz.gif",
             ],
             "kiss": [
-                "https://img2.gelbooru.com/images/72/3d/723d7b46a080e459321cb0a46fa4ff84.gif",
-                "https://img2.gelbooru.com/images/14/15/141537ae7a372f093e7d6996b16c245b.gif",
-                "https://img2.gelbooru.com/images/0d/f6/0df60e366022350bdaf7f49390ac90a9.gif",
-                "https://img2.gelbooru.com/images/41/07/41070fe3eff7262f9f607a0a307c9740.gif",
-                "https://img2.gelbooru.com/images/1c/67/1c670a0dc8ab6a43eb8b6781d78600ab.gif",
-                "https://img2.gelbooru.com/images/63/f5/63f5a9a4cf7a872d6982ae6e518d212e.gif",
-                "https://img2.gelbooru.com/images/a1/a8/a1a888b4f4c69e1dc493cbf66a3a855a.gif",
-                "https://img2.gelbooru.com/images/ca/67/ca67e314075bab7fde43bfc9686e7fde.gif",
-                "https://img2.gelbooru.com/images/28/45/2845a2ad83b4f207d7ccfbb98c3a1be6.gif",
                 "https://i.imgur.com/WYkVxW2.gif",
                 "https://i.imgur.com/xu104Xp.gif",
                 "https://i.imgur.com/8jcpBO7.gif",
@@ -128,7 +111,6 @@ class Roleplay(BaseCog):
             ],
             "slap": [
                 "https://cdn.weeb.sh/images/H16aQJFvb.gif",
-                "https://img2.gelbooru.com/images/d2/2c/d22c2eedd00914ce38efb46d797be031.gif",
                 "https://safebooru.org//images/192/fb1c45872a172ab384a22b9d9089b861d366564c.gif",
                 "https://safebooru.org//images/118/968c5b9f042a5262c8c8628cd52a7a6a557e525d.gif",
                 "https://media1.tenor.com/images/d14969a21a96ec46f61770c50fccf24f/tenor.gif?itemid=5509136",
@@ -174,16 +156,12 @@ class Roleplay(BaseCog):
             ],
             "pat": [
                 "https://cdn.weeb.sh/images/r180y1Yvb.gif",
-                "https://img2.gelbooru.com/images/56/b9/56b9297e70fd0312aba34e7ed1608b27.gif",
-                "https://img2.gelbooru.com/images/ce/ea/ceea3600c9de0fb5a2452d1e9f2d714b.gif",
-                "https://img2.gelbooru.com/images/4e/08/4e0895594994c5eedf5a1991f02bd4dc.gif",
-                "https://img2.gelbooru.com/images/c7/41/c741fec81ea5eceb8ebcc7b4dc2bedd5.gif",
                 "http://i.imgur.com/10VrpFZ.gif",
                 "http://i.imgur.com/x0u35IU.gif",
                 "http://i.imgur.com/0gTbTNR.gif",
                 "http://i.imgur.com/hlLCiAt.gif",
                 "http://i.imgur.com/sAANBDj.gif",
-                "https://i.imgur.com/10VrpFZ.gif"
+                "https://i.imgur.com/10VrpFZ.gif",
                 "https://i.imgur.com/x0u35IU.gif",
                 "https://i.imgur.com/sAANBDj.gif",
                 "https://i.imgur.com/wtxwpm1.gif",
@@ -256,23 +234,11 @@ class Roleplay(BaseCog):
                 "https://imgur.com/v7jsPrv",
             ],
             "tickle": [
-                "https://img2.gelbooru.com/images/c4/41/c441cf1fce1fe51420796f6bd0e420e1.gif",
-                "https://img2.gelbooru.com/images/00/a8/00a8b5ad3ceb7b063ed8a4a59f7c8bdf.gif",
-                "https://img2.gelbooru.com/images/51/63/516318277e9438626c12d0543eb5808b.gif",
-                "https://img2.gelbooru.com/images/0c/e4/0ce45bee2e1aaed9f1e650438f1e2867.gif",
-                "https://img2.gelbooru.com/images/11/74/1174ccbee672bd3f1129f5dc36964926.gif",
                 "https://media1.tenor.com/images/02f62186ccb7fa8a2667f3216cfd7e13/tenor.gif?itemid=13269751",
                 "https://media1.tenor.com/images/d38554c6e23b86c81f8d4a3764b38912/tenor.gif?itemid=11379131",
                 "https://media1.tenor.com/images/05a64a05e5501be2b1a5a734998ad2b2/tenor.gif?itemid=11379130",
             ],
             "poke": [
-                "https://img2.gelbooru.com/images/07/86/078690a58e0b816e8e00cc58e090b499.gif",
-                "https://img2.gelbooru.com/images/b7/89/b789369db69022afde47a1ed62598ec6.gif",
-                "https://img2.gelbooru.com/images/49/ec/49ecc543b7b0b680ad0c27c29e942a21.gif",
-                "https://img2.gelbooru.com/images/91/ef/91ef340231f6d537836e23c8ab90a255.gif",
-                "https://img2.gelbooru.com/images/62/d9/62d9a16a640bfcd25dd6159e53fc50d2.gif",
-                "https://img2.gelbooru.com/images/1d/8b/1d8b77bf65858101a82d195deaa39252.gif",
-                "https://img2.gelbooru.com/images/c0/22/c022dc318c7f014d7bac6c2300b9f7a2.gif",
                 "https://media1.tenor.com/images/3b2bfd09965bd77f2a8cb9ba59cedbe4/tenor.gif?itemid=5607667",
                 "https://media1.tenor.com/images/514efe749cb611eb382713596e3427d8/tenor.gif?itemid=13054528",
                 "https://media1.tenor.com/images/8795ff617de989265907eed8029a99a3/tenor.gif?itemid=14629871",
@@ -289,7 +255,6 @@ class Roleplay(BaseCog):
                 "https://i.kym-cdn.com/photos/images/newsfeed/001/161/167/eda.gif",
                 "https://media1.tenor.com/images/d9b3127da3f9419cbb28f9f7c00860d8/tenor.gif?itemid=9588226",
                 "https://media1.tenor.com/images/0097fa7f957477f9edc5ff147bb9a5ad/tenor.gif?itemid=12390496",
-
             ],
         }
         self.config.register_global(**default_global)
