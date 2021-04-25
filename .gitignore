@@ -1,4 +1,18 @@
 # Ignore cached files created by Red #
 ######################################
-*.pyc
+*.py[cod]
 tags.*
+
+# VSCode
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+*.code-workspace
+
+.history
+.ionide
+
+# Python
+.env/
+.venv/
+__pycache__/
