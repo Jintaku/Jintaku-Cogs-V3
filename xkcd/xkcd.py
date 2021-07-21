@@ -7,13 +7,12 @@ from typing import Optional, Union
 
 BaseCog = getattr(commands, "Cog", object)
 
-
 class XKCD(BaseCog):
     """Display XKCD entries"""
 
     @commands.command()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
-    async def xkcd(self, ctx, entry_number=None):
+    async def xkcd(self, ctx, entry_number: Optional[Union[int, str]] = None):
         """Post a random xkcd. Accepts "latest" as an entry number."""
 
         # Creates random number between 0 and the latest xkcd num and queries xkcd
@@ -21,12 +20,7 @@ class XKCD(BaseCog):
             xkcd_latest = await self.get_xkcd(session=session)
             xkcd_max = xkcd_latest.get("num")
 
-            try:
-                entry_number = int(entry_number)
-            except:
-                pass
-
-            if type(entry_number) is int:
+            if isinstance(entry_number, int):
                 if not 0 < entry_number <= xkcd_max:
                     await ctx.send("Not a valid xkcd entry.")
                     return
