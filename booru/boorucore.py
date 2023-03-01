@@ -583,7 +583,7 @@ class BooruCore:
                     elif url.endswith(GOOD_EXTENSIONS):
                         item["file_url"] = url
                     else:
-                    	item["file_url"] = url + ".png"
+                        item["file_url"] = url + ".png"
                 elif url.startswith("https://gfycat.com/"):
                     url_cut = url[19:]
                     if url_cut.islower():
@@ -878,6 +878,8 @@ class BooruCore:
         else:
             assigned_content = []
             for item in content:
+                if type(item) is str:
+                    continue
                 if item.get("id") is None:
                     continue
                 if provider == "Konachan":
