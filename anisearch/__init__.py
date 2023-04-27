@@ -1,6 +1,6 @@
 from .anisearch import AniSearch
 
 
-def setup(bot):
+async def setup(bot):
     n = AniSearch()
-    bot.add_cog(n)
+    await bot.add_cog(n)
