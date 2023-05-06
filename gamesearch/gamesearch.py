@@ -11,15 +11,28 @@ BaseCog = getattr(commands, "Cog", object)
 
 class Gamesearch(BaseCog):
     """Search Rawg.io for games"""
-
+    
+    def __init__(self):
+        self.config = Config.get_conf(self, identifier=7535876897)
+        default_global = {"apikey": ""}
+        self.config.register_global(**default_global)
+        
     @commands.command()
     @cached(ttl=86400, cache=SimpleMemoryCache)
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def game(self, ctx, *, game):
         """Search Rawg.io for games"""
+        
+        # Get API key
+        apikey = await self.config.apikey()
 
+        if apikey == "":
+            await ctx.send("No rawgkey set, please set one using [p]rawgkey")
+            return
+        
         url = "https://api.rawg.io/api/games?"+urlencode({
             "search": game,
+            "key": apikey,
         })
 
         # Queries api for a game
@@ -35,7 +48,7 @@ class Gamesearch(BaseCog):
         for game in results:
           # Build Embed
             async with aiohttp.ClientSession() as session:
-               async with session.get(f"https://api.rawg.io/api/games/{game['id']}") as response:
+               async with session.get(f"https://api.rawg.io/api/games/{game['id']}?key={apikey}") as response:
                   game_details = await response.json()
             embed = discord.Embed()
             embed.title=f"{game['name']}"
@@ -51,3 +64,15 @@ class Gamesearch(BaseCog):
             embeds.append(embed)
 
         await menu(ctx, pages=embeds, controls=DEFAULT_CONTROLS, message=None, page=0, timeout=20)
+
+    @commands.command()
+    @checks.is_owner()
+    async def rawgkey(self, ctx, *, key):
+        """Set a key to use the rawg api"""
+
+        # Load config
+        config_boards = await self.config.apikey()
+
+        # Set new config
+        await self.config.apikey.set(key)
+        await ctx.send("The apikey has been added.")
